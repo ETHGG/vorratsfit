@@ -4,6 +4,10 @@
 - Die Arbeitsumgebung wurde zweimal zurückgesetzt. 0.2.0 und 0.3.0 wurden vollständig aus dem Projektverlauf neu geschrieben.
 - Git-Historie: Basis-Commit und Tag **v0.2.0**, darauf 0.3.0 mit Tag **v0.3.0**. Ältere Phasen-Commits sind nicht mehr vorhanden.
 
+## 0.7.1 – Nutzungstest (mehrere simulierte Tage, 320/390/1280 px, hell/dunkel)
+- [x] Dezimalfelder als Textfeld mit Zahlentastatur (Komma-Eingabe), Werte mit Komma angezeigt
+- [x] Einkaufsliste: Mengenfeld eingeklappt, Herkunft dezenter
+
 ## 0.7.0 – Nacht 16./17.11.2026 (Sicherung des Vorstands: Branch `sicherung-0.6.0`)
 - [x] Untere Leiste mit Vorrat; Plan-Tab mit Umschalter Heute/Woche/Gewicht
 - [x] Fotos zu allen Rezepten (IndexedDB v5 `recipePhotos`, Backup v5, `photos.js`, `views/photo-input.js`)

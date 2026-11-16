@@ -92,7 +92,10 @@ export async function render(container) {
     const checkBtn = h('button', { type: 'button', class: 'check-btn', 'aria-label': `${it.name} abhaken und in den Vorrat übernehmen` }, icon('check', { size: 22 }));
     const purchased = h('input', { type: 'number', name: `p-${it.id}`, min: '0', max: '1000000', step: 'any', inputmode: 'decimal', value: it.amountPurchased ?? '', placeholder: typeof it.amountToBuy === 'number' ? String(it.amountToBuy).replace('.', ',') : '', disabled: it.addedToPantry });
     purchased.id = `pur-${it.id}`;
-    const purchasedField = h('div', { class: 'purchased' }, h('label', { for: `pur-${it.id}` }, `Tatsächlich gekauft (${it.unit})`), purchased);
+    // 0.7: Feld nur bei Bedarf aufklappen – die Liste bleibt im Laden kurz und übersichtlich.
+    const purchasedField = h('details', { class: 'purchased-toggle', open: it.amountPurchased !== null && it.amountPurchased !== undefined && it.amountPurchased !== '' ? true : null },
+      h('summary', {}, 'Andere Menge gekauft?'),
+      h('div', { class: 'purchased' }, h('label', { for: `pur-${it.id}` }, `Tatsächlich gekauft (${it.unit})`), purchased));
     const err = h('p', { class: 'field-error', role: 'alert' });
     purchased.addEventListener('change', async () => {
       const res = await setPurchasedAmount(it.id, purchased.value.trim());

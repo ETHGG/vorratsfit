@@ -6,6 +6,9 @@ import { formatNumber } from '../units.js';
  * Strings werden immer als Textknoten eingefügt.
  */
 export function h(tag, attrs = {}, ...children) {
+  // 0.7: Dezimalfelder als Textfeld mit Zahlentastatur – auf deutschen iPhones lässt sich so „94,6“ mit Komma eingeben
+  // (type="number" verwirft das Komma je nach Browser). Geprüft wird ohnehin mit parseNumber().
+  if (tag === 'input' && attrs?.type === 'number' && attrs.inputmode === 'decimal') attrs = { ...attrs, type: 'text', autocomplete: 'off', 'data-decimal': 'true', ...(typeof attrs.value === 'number' ? { value: String(attrs.value).replace('.', ',') } : {}) };
   const el = document.createElement(tag);
   for (const [key, value] of Object.entries(attrs ?? {})) {
     if (value === undefined || value === null || value === false) continue;

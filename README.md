@@ -2,7 +2,7 @@
 
 **Progressive Web App für Rezepte, Vorräte, Wochenplanung, Einkaufslisten, Ernährungs- und Gewichtstracking – ohne Backend, ohne Konto, alle Daten lokal.**
 
-Version 0.7.0 · Live: <https://ethgg.github.io/vorratsfit/>
+Version 0.7.1 · Live: <https://ethgg.github.io/vorratsfit/>
 
 ## Funktionen
 
@@ -16,6 +16,10 @@ Version 0.7.0 · Live: <https://ethgg.github.io/vorratsfit/>
 | **Gewicht** (Menü „Mehr“) | Gewicht eintragen (ein Eintrag je Tag), **Diagramm** mit 7-Tage-Durchschnitt und Wunschgewicht (4 Wochen / 3 Monate / Alles), **Wochenauswertung**, **Erinnerung nach 7 Tagen**; neuester Eintrag = Profilgewicht |
 | Profil | **Geburtsdatum** statt Alter – das Alter läuft automatisch weiter; unter 18 gelten die Schutzregeln automatisch |
 | Darstellung | Hell, Dunkel (seit 0.3 mit ruhigerem Kontrast), System |
+
+## Neu in 0.7.1 (Nutzungstest über Nacht)
+- **Komma in Zahlenfeldern:** Gewicht, Mengen und Nährwerte lassen sich mit Komma eingeben (z. B. „94,6“) – wichtig für deutsche iPhone-Tastaturen.
+- **Einkaufsliste kürzer:** „Andere Menge gekauft?“ klappt das Mengenfeld nur bei Bedarf auf.
 
 ## Neu in 0.7
 - **Untere Leiste:** Start · Rezepte · **Vorrat** · Einkauf · **Plan** („Heute“, „Woche“ und „Gewicht“ als Umschalter in einem Tab).
@@ -63,7 +67,7 @@ Version 0.7.0 · Live: <https://ethgg.github.io/vorratsfit/>
 
 ## Veröffentlichen (GitHub Pages)
 Settings → Pages → Deploy from a branch → `main` / `(root)`. `.nojekyll` muss im Repository liegen.
-**Bei jeder neuen Version `CACHE_VERSION` in `service-worker.js` erhöhen** (0.7.0 ist gesetzt).
+**Bei jeder neuen Version `CACHE_VERSION` in `service-worker.js` erhöhen** (0.7.1 ist gesetzt).
 
 ## Daten, Update, Datenschutz
 - Persönliche Daten: IndexedDB `vorratsfit-db`, Version 5 (neu: `recipePhotos`). Das Update erweitert die Datenbank, es wird nichts gelöscht.

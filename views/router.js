@@ -6,7 +6,7 @@ export const NAV_ITEMS = Object.freeze([
   { route: 'vorrat-rezepte', label: 'Was koche ich?', short: 'Rezepte', icon: 'pot', primary: true, area: 'rezepte' },
   { route: 'vorrat', label: 'Vorrat', icon: 'pantry', primary: true, area: 'vorrat' },
   { route: 'einkauf', label: 'Einkaufsliste', short: 'Einkauf', icon: 'cart', primary: true, area: 'einkauf' },
-  { route: 'heute', label: 'Heute gegessen', short: 'Plan', icon: 'calendar', primary: true, area: 'heute' },
+  { route: 'heute', label: 'Heute', short: 'Plan', icon: 'calendar', primary: true, area: 'heute' },
   { route: 'woche', label: 'Woche', icon: 'calendar', area: 'woche' },
   { route: 'entdecken', label: 'Rezepte entdecken', icon: 'search', area: 'rezepte' },
   { route: 'gewicht', label: 'Gewicht', icon: 'scale', area: 'gewicht' },
