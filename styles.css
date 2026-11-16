@@ -605,3 +605,17 @@ body[data-route="kochen"] .app-footer { display: none; }
 .water.compact .water-head { margin: 0; flex: 1 1 auto; }
 .water.compact .water-head::before { content: "💧 "; }
 .water.compact .form-actions { margin: 0; }
+
+/* ---------- 0.7 ---------- */
+.photo-input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
+.field .photo-input + .photo-preview { margin-top: .3rem; }
+.photo-btn { cursor: pointer; }
+.section:has(.photo-input:focus-visible) .photo-btn, .field:has(.photo-input:focus-visible) .photo-btn { outline: 3px solid var(--focus); outline-offset: 2px; }
+.transfer-steps { margin: .2rem 0 .6rem; padding-left: 1.3rem; }
+.transfer-steps li { margin: .25rem 0; }
+.hint-chips { display: grid; gap: .45rem; margin: .2rem 0 1rem; }
+.hint-chip { display: flex; align-items: center; min-height: 48px; padding: .55rem .9rem; border-radius: 14px; background: var(--area-soft); color: var(--area-ink); font-weight: 650; text-decoration: none; }
+.hint-chip::after { content: "›"; margin-left: auto; padding-left: .6rem; font-size: 1.3rem; }
+.celebrate { background: linear-gradient(135deg, #fff4d6, #ffe7b0); color: #3b2a10; border-radius: var(--radius); padding: .9rem 1rem; margin: 1rem 0; }
+.celebrate p { margin: .2rem 0; }
+.celebrate a { color: #6b4a0a; font-weight: 650; }

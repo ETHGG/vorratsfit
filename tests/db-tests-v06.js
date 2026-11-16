@@ -2,6 +2,7 @@
 import { openDatabase, getAllItems, DB_VERSION, STORE_NAMES } from '../db.js';
 import { getWater, addWater, listWaterRange } from '../water.js';
 import { saveSettings, getSettings } from '../settings.js';
+import { setPhoto, removePhoto, listPhotos } from '../photos.js';
 import { addDays, todayString } from '../core/utils.js';
 import { eq, assert } from './test-cases.js';
 import { resetTestDb } from './db-tests.js';
@@ -14,7 +15,7 @@ export function buildDbTestsV06() {
   t('S-DB-01 Datenbank Version 4 mit Store „waterLog“ (Index „date“)', async () => {
     await resetTestDb();
     const db = await openDatabase();
-    eq(db.version, DB_VERSION); eq(DB_VERSION, 4);
+    eq(db.version, DB_VERSION); assert(DB_VERSION >= 4);
     assert(STORE_NAMES.includes('waterLog') && db.objectStoreNames.contains('waterLog'));
     eq(Array.from(db.transaction('waterLog').objectStore('waterLog').indexNames), ['date']);
   });
@@ -34,6 +35,18 @@ export function buildDbTestsV06() {
     await saveSettings({ defaultServings: 3 });
     const s = await getSettings();
     eq([s.waterGoalMl, s.shoppingGroupOrder, s.defaultServings], [2500, ['Getränke'], 3]);
+  });
+  t('P-DB-01 Datenbank Version 5: Fotos zu jedem Rezept speichern, ersetzen, entfernen', async () => {
+    await resetTestDb();
+    const db = await openDatabase();
+    eq(db.version, 5); assert(db.objectStoreNames.contains('recipePhotos'));
+    const a = 'data:image/jpeg;base64,/9j/AAAA'; const b = 'data:image/jpeg;base64,/9j/BBBB';
+    await setPhoto('chili-sin-carne', a); await setPhoto('chili-sin-carne', b);
+    eq((await listPhotos()).map((p) => [p.id, p.photo]), [['chili-sin-carne', b]]);
+    await removePhoto('chili-sin-carne');
+    eq((await listPhotos()).length, 0);
+    let threw = false; try { await setPhoto('x', 'javascript:1'); } catch { threw = true; }
+    eq(threw, true);
   });
   return T;
 }

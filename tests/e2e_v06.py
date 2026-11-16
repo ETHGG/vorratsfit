@@ -31,8 +31,9 @@ def register(g, l):
         rows = idb_all(page, 'waterLog')
         check('S-E2E Wasser: 750 ml gespeichert, ein Eintrag für heute', len(rows) == 1 and rows[0]['ml'] == 750 and rows[0]['date'] == today, str(rows))
         check('S-E2E Gläser als Fortschritt mit Textbeschreibung', '3 von 8 Gläsern' in (page.get_attribute('.glasses', 'aria-label') or ''))
+        check('S-E2E (0.7) Heute zeigt alle Erfolge', page.locator('.achievement').count() >= 4)
         page.goto(base + '#/start'); page.wait_for_selector('h1')
-        check('S-E2E Startseite zeigt Wasser und Erfolge', '0,75 l' in page.inner_text('.water') and page.locator('.achievement').count() >= 4)
+        check('S-E2E Startseite zeigt das Wasser', '0,75 l' in page.inner_text('.water'))
 
     def s_leftovers():
         page.goto(base + '#/vorrat-rezepte?resteverwertung=1'); page.wait_for_selector('h1:text-is("Was koche ich?")')
@@ -51,12 +52,31 @@ def register(g, l):
         page.goto(base + '#/einkauf'); page.wait_for_selector('h1')
         check('D-E2E Bereichsfarbe: Einkauf ist orange markiert', page.evaluate("document.body.dataset.area") == 'einkauf' and page.locator('.page-header .hero-art').count() == 1)
         page.goto(base + '#/woche'); page.wait_for_selector('h1')
-        check('D-E2E Bereichsfarbe: Woche violett, aktive Navigation passend', page.evaluate("document.body.dataset.area") == 'woche' and page.get_attribute('.bottom-nav a[data-route="woche"]', 'aria-current') == 'page')
+        check('D-E2E Bereichsfarbe: Woche violett, aktive Navigation passend', page.evaluate("document.body.dataset.area") == 'woche' and page.get_attribute('.bottom-nav a[data-route="heute"]', 'aria-current') == 'page')
         page.goto(base + '#/entdecken'); page.wait_for_selector('.recipe-card .rv')
         check('D-E2E Rezeptkarten mit Bildfläche, 50 Rezepte', page.locator('.recipe-card').count() >= 45)
 
+    def s_photo():
+        import os
+        fx = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixture-photo.jpg')
+        page.goto(base + '#/rezept/chili-sin-carne'); page.wait_for_selector('h1:has-text("Chili sin Carne")')
+        page.set_input_files('#photo-change', fx)
+        page.wait_for_selector('.toast:has-text("Foto gespeichert")'); page.wait_for_selector('.detail-emoji.has-photo img')
+        rows = idb_all(page, 'recipePhotos')
+        check('P-E2E (0.7) Foto für mitgeliefertes Rezept gespeichert und verkleinert (≤ 900 px)', len(rows) == 1 and rows[0]['id'] == 'chili-sin-carne' and rows[0]['photo'].startswith('data:image/jpeg') and len(rows[0]['photo']) < 400000, str(len(rows)))
+        w = page.evaluate("document.querySelector('.detail-emoji.has-photo img').naturalWidth")
+        check('P-E2E Foto ersetzt die Bildfläche (max. 900 px breit)', w == 900, str(w))
+        page.goto(base + '#/entdecken'); page.wait_for_selector('.recipe-card')
+        check('P-E2E Foto erscheint auch auf der Rezeptkarte', page.locator('.recipe-card:has-text("Chili sin Carne") .rv.has-photo img').count() >= 1)
+        page.goto(base + '#/rezept/chili-sin-carne'); page.wait_for_selector('button:has-text("Foto entfernen")')
+        page.click('button:has-text("Foto entfernen")'); page.wait_for_selector('.toast:has-text("Foto entfernt")')
+        check('P-E2E Foto entfernen', len(idb_all(page, 'recipePhotos')) == 0)
+        page.goto(base + '#/backup'); page.wait_for_selector('h1:text-is("Backup")')
+        check('B-E2E (0.7) „Daten an anderes Gerät senden“ vorhanden', page.locator('button:has-text("an anderes Gerät senden")').count() == 1)
+
     return {
         'before_update': [
+            ('Rezeptfotos & Übertragen (0.7)', s_photo, ('Datenschutz & Einrichtung',)),
             ('Kochmodus (0.6)', s_cook, ('Datenschutz & Einrichtung',)),
             ('Wasser & Erfolge (0.6)', s_water, ('Datenschutz & Einrichtung',)),
             ('Resteverwertung (0.6)', s_leftovers, ('Datenschutz & Einrichtung', 'Vorrat')),

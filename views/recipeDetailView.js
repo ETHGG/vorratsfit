@@ -1,9 +1,11 @@
 // views/recipeDetailView.js – Rezeptdetail mit Portionsskalierung, Vorratsabgleich, Einkaufsvorschau.
 import { h, clear, stepper, icon, dialog, toast, withBusy, emptyState, fmtMinutes, confirmDialog, errorBox } from './dom.js';
 import { pageHeader, section, statusBadge, tagList, estimateNote, allergyDisclaimer, favoriteButton, recipeArt } from './components.js';
-import { state, analysisContext, refreshFavorites, shoppingContext, refreshRecipes } from './state.js';
+import { state, analysisContext, refreshFavorites, shoppingContext, refreshRecipes, refreshPhotos } from './state.js';
+import { setPhoto, removePhoto } from '../photos.js';
+import { shrinkPhoto } from './photo-input.js';
 import { routeHref, navigate } from './router.js';
-import { analyzeRecipe, toggleFavorite, deleteCustomRecipe, deleteCachedRecipe, saveCustomRecipe } from '../recipes.js';
+import { analyzeRecipe, toggleFavorite, deleteCustomRecipe, deleteCachedRecipe } from '../recipes.js';
 import { previewAddRecipe, addRecipeToShopping } from '../shopping.js';
 import { addPlanEntry, listAllPlan, cookUnplanned } from '../planner.js';
 import { cookWithPreview } from './todayView.js';
@@ -182,21 +184,25 @@ export async function render(container, { id, params }) {
     section('Nährwerte pro Portion', nutritionTable(r)),
     section('Quelle', sourceInfo),
   );
-  if (r.origin === 'custom') {
-    // 0.6: eigenes Foto hinzufügen oder ändern
+  {
+    // 0.7: eigenes Foto zu jedem Rezept – z. B. nach dem Nachkochen
+    const has = !!(state.photos.get(r.id) || r.photo);
     const pin = h('input', { type: 'file', accept: 'image/*', capture: 'environment', class: 'photo-input', id: 'photo-change', 'aria-label': 'Foto für dieses Rezept wählen' });
     pin.addEventListener('change', async () => {
       try {
-        const { shrinkPhoto } = await import('./customRecipeView.js');
         const photo = pin.files?.[0] ? await shrinkPhoto(pin.files[0]) : null;
         if (!photo) return;
-        await saveCustomRecipe({ ...r, photo });
-        await refreshRecipes();
-        toast('Foto gespeichert.', 'success');
+        await setPhoto(r.id, photo);
+        await refreshPhotos();
+        toast('Foto gespeichert. 📸', 'success');
         window.dispatchEvent(new HashChangeEvent('hashchange'));
       } catch (err) { toast(err.message, 'error'); }
     });
-    container.append(section('Foto', h('label', { for: 'photo-change', class: 'photo-label' }, r.photo ? '📷 Foto ändern' : '📷 Foto hinzufügen'), pin));
+    const rm = has && state.photos.get(r.id) ? h('button', { type: 'button', class: 'btn btn-link' }, 'Foto entfernen') : null;
+    rm?.addEventListener('click', async () => { await removePhoto(r.id); await refreshPhotos(); toast('Foto entfernt.'); window.dispatchEvent(new HashChangeEvent('hashchange')); });
+    container.append(section('Dein Foto',
+      h('p', { class: 'small muted' }, has ? 'So sieht dein Gericht aus – das Foto bleibt nur auf diesem Gerät.' : 'Schon nachgekocht? Mach ein Foto – es ersetzt die Bildfläche und bleibt nur auf diesem Gerät.'),
+      h('div', { class: 'form-actions' }, h('label', { for: 'photo-change', class: 'btn btn-secondary photo-btn' }, has ? '📷 Foto ändern' : '📷 Foto hinzufügen'), rm), pin));
   }
   if (r.origin === 'custom' || r.origin === 'external') {
     const del = h('button', { type: 'button', class: 'btn btn-danger' }, icon('trash', { size: 16 }), r.origin === 'custom' ? ' Eigenes Rezept löschen' : ' Gespeichertes Rezept entfernen');

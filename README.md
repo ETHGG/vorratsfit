@@ -2,7 +2,7 @@
 
 **Progressive Web App für Rezepte, Vorräte, Wochenplanung, Einkaufslisten, Ernährungs- und Gewichtstracking – ohne Backend, ohne Konto, alle Daten lokal.**
 
-Version 0.6.0 · Live: <https://ethgg.github.io/vorratsfit/>
+Version 0.7.0 · Live: <https://ethgg.github.io/vorratsfit/>
 
 ## Funktionen
 
@@ -16,6 +16,14 @@ Version 0.6.0 · Live: <https://ethgg.github.io/vorratsfit/>
 | **Gewicht** (Menü „Mehr“) | Gewicht eintragen (ein Eintrag je Tag), **Diagramm** mit 7-Tage-Durchschnitt und Wunschgewicht (4 Wochen / 3 Monate / Alles), **Wochenauswertung**, **Erinnerung nach 7 Tagen**; neuester Eintrag = Profilgewicht |
 | Profil | **Geburtsdatum** statt Alter – das Alter läuft automatisch weiter; unter 18 gelten die Schutzregeln automatisch |
 | Darstellung | Hell, Dunkel (seit 0.3 mit ruhigerem Kontrast), System |
+
+## Neu in 0.7
+- **Untere Leiste:** Start · Rezepte · **Vorrat** · Einkauf · **Plan** („Heute“, „Woche“ und „Gewicht“ als Umschalter in einem Tab).
+- **Eigene Fotos für alle Rezepte** – auch die mitgelieferten: nachkochen, fotografieren, das Foto ersetzt die Bildfläche (nur lokal, im Backup).
+- **Startseite gestrafft:** Heute (Ring, Wasser, Geplantes), Hinweise nur bei Bedarf (läuft ab, Einkauf offen, Gewicht fällig, Backup alt), Rezeptideen passend zur Tageszeit, nur neu erreichte Erfolge. Alle Erfolge stehen unter „Plan → Heute“.
+- **Daten an anderes Gerät senden:** Backup-Datei direkt per AirDrop, Nachrichten oder Mail teilen (kein Server).
+- **Allergene geprüft:** alle 94 Zutaten durchgesehen; Currypulver bleibt bewusst mit Senf/Sellerie markiert (in vielen Mischungen enthalten).
+- Datenbank Version 5 (neu: `recipePhotos`), Backup Version 5.
 
 ## Neu in 0.6 – neue Funktionen
 - **Kochmodus:** ein Schritt pro Bildschirm in großer Schrift, automatisch erkannte Timer mit Ton/Vibration, Bildschirm bleibt an, Bedienung per Wischen-Knöpfen oder Pfeiltasten.
@@ -55,11 +63,11 @@ Version 0.6.0 · Live: <https://ethgg.github.io/vorratsfit/>
 
 ## Veröffentlichen (GitHub Pages)
 Settings → Pages → Deploy from a branch → `main` / `(root)`. `.nojekyll` muss im Repository liegen.
-**Bei jeder neuen Version `CACHE_VERSION` in `service-worker.js` erhöhen** (0.6.0 ist gesetzt).
+**Bei jeder neuen Version `CACHE_VERSION` in `service-worker.js` erhöhen** (0.7.0 ist gesetzt).
 
 ## Daten, Update, Datenschutz
-- Persönliche Daten: IndexedDB `vorratsfit-db`, Version 4 (neu: `waterLog`). Das Update erweitert die Datenbank, es wird nichts gelöscht.
-- Backup Version 4 (inkl. Gewichts- und Wasserverlauf). Backups aus 0.1–0.5 werden eingelesen.
+- Persönliche Daten: IndexedDB `vorratsfit-db`, Version 5 (neu: `recipePhotos`). Das Update erweitert die Datenbank, es wird nichts gelöscht.
+- Backup Version 5 (inkl. Gewichts-, Wasserverlauf und Rezeptfotos). Backups aus 0.1–0.6 werden eingelesen.
 - Externe Abfragen (standardmäßig aus) enthalten nie Alter, Geburtsdatum, Gewicht, Ziele, Plan oder Tagebuch – automatisch per Netzwerkmitschnitt geprüft.
 
 ## Bekannte Einschränkungen

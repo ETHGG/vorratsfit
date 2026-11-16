@@ -4,9 +4,9 @@ import { APP_VERSION } from './core/models.js';
 import { exportAllData, importAllData, BACKUP_STORES, STORE_NORMALIZERS, getMeta, setMeta } from './db.js';
 
 export const BACKUP_FORMAT = 'vorratsfit-backup';
-export const BACKUP_VERSION = 4;
-export const MAX_INPUT_CHARS = 8_000_000; // ca. 8 MB Text
-export const MAX_FILE_BYTES = 10 * 1024 * 1024;
+export const BACKUP_VERSION = 5;
+export const MAX_INPUT_CHARS = 60_000_000; // ca. 60 MB Text (0.7: Fotos im Backup)
+export const MAX_FILE_BYTES = 60 * 1024 * 1024;
 export const LONG_CODE_THRESHOLD = 60_000; // darüber besser als JSON-Datei übertragen
 const MAX_RECORDS_PER_STORE = 20_000;
 
@@ -78,6 +78,8 @@ const BACKUP_MIGRATIONS = {
   2: (data) => ({ ...data, weightLog: data.weightLog ?? [] }),
   // 3 → 4 (0.6): Wasser-Tracker ergänzen.
   3: (data) => ({ ...data, waterLog: data.waterLog ?? [] }),
+  // 4 → 5 (0.7): Rezeptfotos ergänzen.
+  4: (data) => ({ ...data, recipePhotos: data.recipePhotos ?? [] }),
 };
 
 /** Entfernt gefährliche Schlüssel (Prototyp-Verschmutzung) rekursiv. */
@@ -167,7 +169,7 @@ export function buildImportPreview(incoming, current) {
 export const STORE_LABELS = Object.freeze({
   profile: 'Profil', pantry: 'Vorrat (inkl. Gewürze)', favorites: 'Favoriten', customRecipes: 'Eigene Rezepte',
   cachedRecipes: 'Gespeicherte Online-Rezepte', shoppingList: 'Einkaufsliste', selectedRecipes: 'Ausgewählte Rezepte und Portionen', settings: 'Einstellungen',
-  mealPlan: 'Wochenplan', foodLog: 'Ernährungstagebuch', quickFoods: 'Schnell-Lebensmittel', weightLog: 'Gewichtsverlauf', waterLog: 'Wasser',
+  mealPlan: 'Wochenplan', foodLog: 'Ernährungstagebuch', quickFoods: 'Schnell-Lebensmittel', weightLog: 'Gewichtsverlauf', waterLog: 'Wasser', recipePhotos: 'Rezeptfotos',
 });
 
 export async function createBackupFromDatabase() {

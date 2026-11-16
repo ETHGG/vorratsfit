@@ -1,6 +1,11 @@
 // views/todayView.js – Tagesbilanz und „Heute gegessen“: geplante Mahlzeiten kochen/essen, Schnellerfassen, Tagebuch.
 import { h, clear, icon, svg, toast, withBusy, confirmDialog, field, showFieldErrors, emptyState, stepper, select } from './dom.js';
-import { pageHeader, section, waterWidget } from './components.js';
+import { pageHeader, section, waterWidget, achievementList } from './components.js';
+import { computeAchievements } from '../core/achievements.js';
+import { listWaterRange } from '../water.js';
+import { listFoodLogRange } from '../foodlog.js';
+import { listWeights } from '../weight.js';
+import { planTabs } from './components.js';
 import { getWater, addWater } from '../water.js';
 import { state, shoppingContext } from './state.js';
 import { routeHref } from './router.js';
@@ -126,10 +131,23 @@ export async function render(container, { params }) {
   const ownBox = h('div', {});
   const title = h('p', { class: 'week-range' });
 
+  const achBox = h('div', {});
+  async function drawAchievements() {
+    const today = todayString();
+    const [foodLog, plans, water, weights] = await Promise.all([listFoodLogRange(addDays(today, -30), today), listAllPlan(), listWaterRange(addDays(today, -6), today), listWeights()]);
+    const p = state.profile;
+    const list = computeAchievements({
+      today, foodLog, kcalTarget: getTargets(p)?.kcalTarget ?? null, weights, cookedCount: new Set(plans.filter((e) => e.cooked).map((e) => e.mealPrepGroupId || e.id)).size,
+      water, waterGoalMl: state.settings?.waterGoalMl ?? 2000, goal: p?.goal ?? null, minor: (p?.age ?? 99) < 18,
+    });
+    clear(achBox).append(achievementList(list));
+  }
+
   async function reload() {
     const { entries, logs, balance } = await loadDayBalance(date);
     title.textContent = `${formatDayLabel(date)}${date === todayString() ? ' (heute)' : ''}`;
     clear(balanceBox).append(balanceCard(balance));
+    await drawAchievements();
     clear(waterBox).append(waterWidget({ ml: await getWater(date), goal: state.settings?.waterGoalMl ?? 2000, onChange: async (d) => (await addWater(date, d)).ml }));
     drawMeals(entries);
     drawLog(logs);
@@ -350,6 +368,7 @@ export async function render(container, { params }) {
 
   container.append(
     pageHeader('Heute', 'Was du heute isst – und wie viel noch geht.'),
+    planTabs('heute'),
     h('div', { class: 'day-nav' }, prev, title, next),
     section('Tagesbilanz', balanceBox),
     section('Wasser', waterBox),
@@ -358,6 +377,7 @@ export async function render(container, { params }) {
     section('Zuletzt gegessen', recentBox),
     section('Schnell erfassen', quickBox, h('details', { class: 'more' }, h('summary', {}, 'Eigenes Schnell-Lebensmittel anlegen'), qForm, ownBox)),
     section('Tagebuch', logBox),
+    section('Deine Erfolge', achBox),
   );
   await reload();
 }

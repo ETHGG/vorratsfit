@@ -85,8 +85,8 @@ export function buildTestsV06() {
     eq(models.normalizeRecipe({ title: 'x', photo: 'data:image/svg+xml;base64,PHN2Zz4=' }).photo, null);
   });
 
-  t('B-01 Backup-Format 4 enthält den Wasserverlauf; Backups Version 3 werden ergänzt', async () => {
-    eq(BACKUP_VERSION, 4);
+  t('B-01 Backup-Format (ab 4) enthält den Wasserverlauf; Backups Version 3 werden ergänzt', async () => {
+    assert(BACKUP_VERSION >= 4, 'ab Version 4');
     const water = [models.normalizeWaterEntry({ date: TODAY, ml: 750 })];
     const b = await createBackupObject({ waterLog: water });
     const r = await parseBackupInput(JSON.stringify(b));
@@ -95,6 +95,28 @@ export function buildTestsV06() {
     const old = { format: 'vorratsfit-backup', backupVersion: 3, appVersion: '0.3.0', data: data3, checksum: await sha256Hex(canonicalStringify(data3)) };
     const r3 = await parseBackupInput(JSON.stringify(old));
     assert(r3.ok && r3.meta.migrated, r3.errors?.join(' ')); eq(r3.data.waterLog, []);
+  });
+  return T;
+}
+
+export function buildTestsV07() {
+  const T = [];
+  const t = (name, fn) => T.push({ name, fn });
+  t('P-01 Rezeptfoto: nur Bild-Daten-URLs, Rezept-ID Pflicht', () => {
+    const ok = 'data:image/jpeg;base64,/9j/4AAQ';
+    eq(models.normalizeRecipePhoto({ id: 'chili-sin-carne', photo: ok }).photo, ok);
+    eq(models.normalizeRecipePhoto({ id: 'x', photo: 'data:text/html;base64,PGI+' }).photo, null);
+    let threw = false; try { models.normalizeRecipePhoto({ photo: ok }); } catch { threw = true; }
+    eq(threw, true);
+  });
+  t('P-02 Backup-Format 5 enthält Rezeptfotos; Version 4 wird ergänzt', async () => {
+    eq(BACKUP_VERSION, 5);
+    const photo = models.normalizeRecipePhoto({ id: 'chili-sin-carne', photo: 'data:image/jpeg;base64,/9j/4AAQ' });
+    const r = await parseBackupInput(JSON.stringify(await createBackupObject({ recipePhotos: [photo] })));
+    assert(r.ok, r.errors?.join(' ')); eq(r.data.recipePhotos[0].id, 'chili-sin-carne');
+    const d4 = { waterLog: [] };
+    const r4 = await parseBackupInput(JSON.stringify({ format: 'vorratsfit-backup', backupVersion: 4, data: d4, checksum: await sha256Hex(canonicalStringify(d4)) }));
+    assert(r4.ok && r4.meta.migrated); eq(r4.data.recipePhotos, []);
   });
   return T;
 }

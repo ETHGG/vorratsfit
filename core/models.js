@@ -3,7 +3,7 @@
 import { uuid, nowIso, sanitizeText, sanitizeMultiline, normalizeText, parseNumber, isValidDateString, isPlainObject, isSafeHttpUrl, ageFromBirthDate, roundTo } from './utils.js';
 import { normalizeUnit, roundQuantity } from '../units.js';
 
-export const APP_VERSION = '0.6.0';
+export const APP_VERSION = '0.7.0';
 
 export const CATEGORIES = Object.freeze([
   'Fleisch und Fisch', 'vegetarische Proteinquellen', 'Milchprodukte', 'Ersatzprodukte', 'Gemüse', 'Obst',
@@ -509,4 +509,15 @@ export function normalizeWaterEntry(raw = {}, now = nowIso()) {
     createdAt: iso(raw.createdAt, now),
     updatedAt: iso(raw.updatedAt, now),
   };
+}
+
+/** 0.7: Eigenes Foto zu einem beliebigen Rezept (auch mitgelieferte). Nur lokal; Bild-Daten-URL, max. ca. 1,5 MB. */
+export const PHOTO_RE = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/;
+export function isValidPhoto(v) {
+  return typeof v === 'string' && v.length <= 2_000_000 && PHOTO_RE.test(v);
+}
+export function normalizeRecipePhoto(raw = {}, now = nowIso()) {
+  const id = str(raw.id, 100);
+  if (!id) throw new Error('Rezeptfoto ohne Rezept-ID');
+  return { id, photo: isValidPhoto(raw.photo) ? raw.photo : null, createdAt: iso(raw.createdAt, now), updatedAt: iso(raw.updatedAt, now) };
 }

@@ -1,6 +1,7 @@
 // views/plannerView.js – Wochenplaner: Mahlzeiten pro Tag einplanen, verschieben, Portionen ändern, löschen.
 import { h, clear, icon, dialog, toast, withBusy, confirmDialog, field, select, stepper, emptyState } from './dom.js';
 import { pageHeader, section } from './components.js';
+import { planTabs } from './components.js';
 import { state, shoppingContext } from './state.js';
 import { routeHref, navigate } from './router.js';
 import { listPlan, listAllPlan, addPlanEntry, updatePlanEntry, deletePlanEntry, clearPlanRange, deleteMealPrepBox, addMealPrep } from '../planner.js';
@@ -193,7 +194,7 @@ export async function render(container, { params }) {
 
   const prev = h('button', { type: 'button', class: 'btn btn-icon', 'aria-label': 'Vorherige Woche' }, icon('chevronLeft'));
   const next = h('button', { type: 'button', class: 'btn btn-icon', 'aria-label': 'Nächste Woche' }, icon('chevronRight'));
-  const today = h('button', { type: 'button', class: 'btn' }, 'Heute');
+  const today = h('button', { type: 'button', class: 'btn' }, 'Zur aktuellen Woche');
   const go = (m) => { monday = m; history.replaceState(null, '', routeHref(`woche?start=${monday}`)); reload(); };
   prev.addEventListener('click', () => go(addDays(monday, -7)));
   next.addEventListener('click', () => go(addDays(monday, 7)));
@@ -252,6 +253,7 @@ export async function render(container, { params }) {
 
   container.append(
     pageHeader('Woche', 'Plane entspannt – Geplantes landet automatisch auf der Einkaufsliste.'),
+    planTabs('woche'),
     h('div', { class: 'day-nav' }, prev, rangeLabel, next),
     h('p', { class: 'week-today' }, today),
     daysBox,

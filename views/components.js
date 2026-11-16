@@ -40,7 +40,7 @@ export function allergyDisclaimer() {
  */
 export function recipeArt(recipe, extraClass = '') {
   const cls = `rv rv-${recipe.mealType || 'mittagessen'} ${extraClass}`.trim();
-  const photo = recipe.photo || (recipe.imageUrl && state.settings?.externalImages && state.online ? recipe.imageUrl : null);
+  const photo = state.photos?.get(recipe.id) || recipe.photo || (recipe.imageUrl && state.settings?.externalImages && state.online ? recipe.imageUrl : null);
   if (photo) {
     const box = h('div', { class: `${cls} has-photo`, 'aria-hidden': 'true' });
     box.append(h('img', { class: 'rv-photo', src: photo, alt: '', loading: 'lazy', referrerpolicy: 'no-referrer' }));
@@ -221,4 +221,11 @@ export function achievementList(items) {
         h('span', { class: 'small muted ach-text' }, a.text),
         h('span', { class: 'meter ach-meter', 'aria-hidden': 'true' }, bar)));
   }));
+}
+
+/** 0.7: Umschalter „Heute | Woche“ im gemeinsamen Plan-Tab. */
+export function planTabs(current) {
+  const tabs = [['heute', 'Heute'], ['woche', 'Woche'], ['gewicht', 'Gewicht']];
+  return h('nav', { class: 'segmented', 'aria-label': 'Plan-Ansicht' }, ...tabs.map(([route, label]) =>
+    h('a', { href: routeHref(route), class: 'segment', 'aria-current': route === current ? 'page' : null }, label)));
 }

@@ -2,11 +2,11 @@
 // Grundsatz: Schemaänderungen nur über versionierte Migrationen; niemals Stores oder die Datenbank löschen.
 import {
   normalizePantryItem, normalizeShoppingItem, normalizeSelectedRecipe, normalizeFavorite,
-  normalizeSettings, normalizeProfile, normalizeRecipe, normalizeMealPlanEntry, normalizeFoodLogEntry, normalizeQuickFood, normalizeWeightEntry, normalizeWaterEntry,
+  normalizeSettings, normalizeProfile, normalizeRecipe, normalizeMealPlanEntry, normalizeFoodLogEntry, normalizeQuickFood, normalizeWeightEntry, normalizeWaterEntry, normalizeRecipePhoto,
 } from './core/models.js';
 
 export const DEFAULT_DB_NAME = 'vorratsfit-db';
-export const DB_VERSION = 4;
+export const DB_VERSION = 5;
 
 /** Stores aus Version 1 (0.1). Diese Liste wird nie verändert – sie beschreibt Migration 1. */
 const V1_STORE_NAMES = Object.freeze([
@@ -19,13 +19,15 @@ const V2_STORE_NAMES = Object.freeze(['mealPlan', 'foodLog', 'quickFoods']);
 const V3_STORE_NAMES = Object.freeze(['weightLog']);
 /** Stores, die mit Version 4 (0.6) hinzukommen. */
 const V4_STORE_NAMES = Object.freeze(['waterLog']);
+/** Stores, die mit Version 5 (0.7) hinzukommen. */
+const V5_STORE_NAMES = Object.freeze(['recipePhotos']);
 
-export const STORE_NAMES = Object.freeze([...V1_STORE_NAMES, ...V2_STORE_NAMES, ...V3_STORE_NAMES, ...V4_STORE_NAMES]);
+export const STORE_NAMES = Object.freeze([...V1_STORE_NAMES, ...V2_STORE_NAMES, ...V3_STORE_NAMES, ...V4_STORE_NAMES, ...V5_STORE_NAMES]);
 
 /** Stores, die in Backups enthalten sind (metadata ist intern). */
 export const BACKUP_STORES = Object.freeze([
   'profile', 'pantry', 'favorites', 'customRecipes', 'cachedRecipes', 'shoppingList', 'selectedRecipes', 'settings',
-  'mealPlan', 'foodLog', 'quickFoods', 'weightLog', 'waterLog',
+  'mealPlan', 'foodLog', 'quickFoods', 'weightLog', 'waterLog', 'recipePhotos',
 ]);
 
 export const STORE_NORMALIZERS = Object.freeze({
@@ -42,6 +44,7 @@ export const STORE_NORMALIZERS = Object.freeze({
   quickFoods: normalizeQuickFood,
   weightLog: normalizeWeightEntry,
   waterLog: normalizeWaterEntry,
+  recipePhotos: normalizeRecipePhoto,
 });
 
 const STORE_INDEXES = Object.freeze({
@@ -75,6 +78,8 @@ const MIGRATIONS = Object.freeze({
   3: (db) => createStores(db, V3_STORE_NAMES),
   // 0.6: Wasser-Tracker. Nur ergänzen.
   4: (db) => createStores(db, V4_STORE_NAMES),
+  // 0.7: eigene Fotos zu allen Rezepten. Nur ergänzen.
+  5: (db) => createStores(db, V5_STORE_NAMES),
 });
 
 /** Hilfsfunktion für künftige Migrationen: Datensätze mit sicheren Standardwerten ergänzen. */

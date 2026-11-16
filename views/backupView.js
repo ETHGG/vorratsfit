@@ -7,7 +7,37 @@ import {
   backupFileName, STORE_LABELS, LONG_CODE_THRESHOLD, MAX_FILE_BYTES, markBackupCreated,
 } from '../backup.js';
 
+/** 0.7: Backup als Datei teilen (iPhone: AirDrop, Nachrichten, Mail …) – Fallback: herunterladen. */
+async function shareBackupFile() {
+  const backup = await createBackupFromDatabase();
+  const json = JSON.stringify(backup);
+  const name = backupFileName();
+  const file = new File([json], name, { type: 'application/json' });
+  await markBackupCreated(backup.createdAt);
+  if (navigator.canShare?.({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], title: 'VorratsFit-Backup' });
+      return 'shared';
+    } catch (err) {
+      if (err?.name === 'AbortError') return 'aborted';
+    }
+  }
+  const url = URL.createObjectURL(file);
+  const a = document.createElement('a');
+  a.href = url; a.download = name; document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  return 'downloaded';
+}
+
 export async function render(container) {
+  const transferBtn = h('button', { type: 'button', class: 'btn btn-primary' }, icon('backup', { size: 18 }), ' Daten an anderes Gerät senden');
+  transferBtn.addEventListener('click', () => withBusy(transferBtn, async () => {
+    try {
+      const r = await shareBackupFile();
+      if (r === 'shared') toast('Gesendet. Auf dem anderen Gerät: VorratsFit → Backup → Datei auswählen.', 'success');
+      else if (r === 'downloaded') toast('Backup-Datei gespeichert. Übertrage sie auf das andere Gerät und wähle sie dort unter „Backup wiederherstellen“ aus.', 'success');
+    } catch (err) { toast(`Senden fehlgeschlagen: ${err.message}`, 'error'); }
+  }));
   const exportOut = h('div', { 'aria-live': 'polite' });
   const createBtn = h('button', { type: 'button', class: 'btn btn-primary' }, 'Backup erstellen');
   createBtn.addEventListener('click', () => withBusy(createBtn, async () => {
@@ -49,14 +79,14 @@ export async function render(container) {
   }));
 
   const importArea = h('textarea', { name: 'code', rows: '5', class: 'code', spellcheck: 'false', placeholder: 'Backup-Code oder JSON hier einfügen' });
-  const fileInput = h('input', { type: 'file', name: 'file', accept: 'application/json,.json' });
+  const fileInput = h('input', { type: 'file', name: 'file', accept: 'application/json,.json,text/plain' });
   const checkBtn = h('button', { type: 'button', class: 'btn btn-primary' }, 'Backup prüfen');
   const preview = h('div', { 'aria-live': 'polite' });
 
   fileInput.addEventListener('change', async () => {
     const f = fileInput.files?.[0];
     if (!f) return;
-    if (f.size > MAX_FILE_BYTES) { clear(preview); preview.append(errorBox('Die Datei ist größer als 10 MB und wird nicht gelesen.')); return; }
+    if (f.size > MAX_FILE_BYTES) { clear(preview); preview.append(errorBox('Die Datei ist größer als 60 MB und wird nicht gelesen.')); return; }
     importArea.value = await f.text();
     checkBtn.click();
   });
@@ -98,8 +128,15 @@ export async function render(container) {
 
   container.append(
     pageHeader('Backup', 'Sichere deine Daten oder übertrage sie auf ein anderes Gerät.'),
+    section('Auf ein anderes Gerät übertragen',
+      h('ol', { class: 'transfer-steps' },
+        h('li', {}, 'Hier auf „Daten an anderes Gerät senden“ tippen – auf dem iPhone z. B. per AirDrop, Nachrichten oder Mail.'),
+        h('li', {}, 'Auf dem neuen Gerät VorratsFit öffnen → Menü „Mehr“ → „Backup & Übertragen“.'),
+        h('li', {}, 'Unter „Backup wiederherstellen“ die empfangene Datei auswählen und importieren.')),
+      h('div', { class: 'form-actions' }, transferBtn),
+      h('p', { class: 'small muted' }, 'Es wird nichts über einen Server übertragen – die Datei geht direkt von Gerät zu Gerät.')),
     h('p', { class: 'notice notice-warn' }, icon('alert', { size: 16 }), h('span', {}, 'Deine Daten liegen nur im Browser dieses Geräts. Wenn du Website-Daten löschst oder den Browser zurücksetzt, gehen sie verloren. Erstelle regelmäßig ein Backup.')),
-    section('Backup erstellen', h('p', { class: 'small' }, 'Enthalten: Profil, Vorrat inkl. Gewürze, Favoriten, eigene Rezepte, gespeicherte Online-Rezepte, Einkaufsliste, ausgewählte Rezepte mit Portionen, Wochenplan, Ernährungstagebuch, Gewichtsverlauf, eigene Schnell-Lebensmittel und Einstellungen. Nicht enthalten: Häufigkeit der Schnellerfassung und gewählter Einkaufszeitraum (Geräteeinstellungen).'), createBtn, exportOut),
+    section('Backup erstellen', h('p', { class: 'small' }, 'Enthalten: Profil, Vorrat inkl. Gewürze, Favoriten, eigene Rezepte, gespeicherte Online-Rezepte, Einkaufsliste, ausgewählte Rezepte mit Portionen, Wochenplan, Ernährungstagebuch, Gewichts- und Wasserverlauf, eigene Rezeptfotos, eigene Schnell-Lebensmittel und Einstellungen. Nicht enthalten: Häufigkeit der Schnellerfassung und gewählter Einkaufszeitraum (Geräteeinstellungen).'), createBtn, exportOut),
     section('Backup wiederherstellen',
       field({ label: 'Backup-Code oder JSON', input: importArea }),
       field({ label: 'Oder JSON-Datei auswählen', input: fileInput }),

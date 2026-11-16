@@ -1,6 +1,7 @@
 // views/weightView.js – Gewicht eintragen, Verlauf als Diagramm, Wochenauswertung, Erinnerung.
 import { h, clear, icon, field, toast, withBusy, showFieldErrors, confirmDialog, chip, svg, emptyState } from './dom.js';
 import { pageHeader, section } from './components.js';
+import { planTabs } from './components.js';
 import { state, refreshProfile } from './state.js';
 import { routeHref } from './router.js';
 import { listWeights, saveWeight, deleteWeight } from '../weight.js';
@@ -127,6 +128,7 @@ export async function render(container) {
 
   container.append(
     pageHeader('Gewicht', 'Dein Verlauf – der neueste Eintrag passt dein Tagesziel automatisch an.'),
+    planTabs('gewicht'),
     reminderBox,
     section('Gewicht eintragen', form),
     section('Verlauf', chipsBox, chartBox),

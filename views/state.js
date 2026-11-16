@@ -4,6 +4,7 @@ import { loadCatalog, getAllRecipes, listFavorites } from '../recipes.js';
 import { getProfile, getMealTargets } from '../profile.js';
 import { getSettings } from '../settings.js';
 import { listPantry } from '../pantry.js';
+import { listPhotos } from '../photos.js';
 
 export const state = {
   catalog: null,
@@ -14,6 +15,7 @@ export const state = {
   favorites: new Set(),
   online: typeof navigator !== 'undefined' ? navigator.onLine : true,
   pantryServings: null,
+  photos: new Map(),
 };
 
 export async function loadBase() {
@@ -21,7 +23,11 @@ export async function loadBase() {
   state.catalog = catalog;
   state.profile = profile;
   state.settings = settings;
-  await Promise.all([refreshRecipes(), refreshFavorites()]);
+  await Promise.all([refreshRecipes(), refreshFavorites(), refreshPhotos()]);
+}
+
+export async function refreshPhotos() {
+  try { state.photos = new Map((await listPhotos()).map((p) => [p.id, p.photo])); } catch { state.photos = new Map(); }
 }
 
 export async function refreshRecipes() {
