@@ -9,12 +9,11 @@ import { addPlanEntry, listAllPlan, cookUnplanned } from '../planner.js';
 import { cookWithPreview } from './todayView.js';
 import { planConsumption } from '../core/cooking.js';
 import { planLabel } from '../core/demand.js';
-import { checkRecipe } from '../core/restrictions.js';
+import { checkRecipe, recipeAllergens } from '../core/restrictions.js';
 import { planDialog, planMealPrep } from './plannerView.js';
 import { formatAmount } from '../units.js';
 import { nutritionStatusLabel, confidenceLabel } from '../nutrition.js';
 import { allergenLabel, deviceLabel, mealTypeLabel } from '../core/models.js';
-import { recipeAllergens } from '../core/restrictions.js';
 
 function nutritionTable(r) {
   const n = r.nutritionPerServing;
@@ -159,7 +158,6 @@ export async function render(container, { id, params }) {
   const visual = r.imageUrl && state.settings?.externalImages && state.online
     ? h('img', { class: 'detail-img', src: r.imageUrl, alt: `Foto: ${r.title}`, referrerpolicy: 'no-referrer', loading: 'lazy' })
     : h('div', { class: 'detail-emoji', 'aria-hidden': 'true' }, r.emoji || '🍽️');
-
   const sourceInfo = h('p', { class: 'small' }, `Datenquelle: ${r.source}. Lizenz: ${r.license}.`, r.sourceUrl ? h('span', {}, ' ', h('a', { href: r.sourceUrl, target: '_blank', rel: 'noopener noreferrer' }, 'Originalrezept öffnen')) : null);
 
   container.append(

@@ -177,3 +177,13 @@ export function weekdayIndex(dateString) {
   const [y, m, d] = dateString.split('-').map(Number);
   return (new Date(Date.UTC(y, m - 1, d)).getUTCDay() + 6) % 7;
 }
+
+/** Alter in ganzen Jahren aus einem Geburtsdatum (JJJJ-MM-TT) zum Stichtag. 29.02. gilt in Nicht-Schaltjahren ab 01.03. */
+export function ageFromBirthDate(birthDate, today = todayString()) {
+  if (!isValidDateString(birthDate) || !isValidDateString(today) || birthDate > today) return null;
+  const [by, bm, bd] = birthDate.split('-').map(Number);
+  const [ty, tm, td] = today.split('-').map(Number);
+  let age = ty - by;
+  if (tm < bm || (tm === bm && td < bd)) age -= 1;
+  return age;
+}

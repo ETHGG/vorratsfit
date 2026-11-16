@@ -3,19 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https://www.themealdb.com; connect-src 'self' https://www.themealdb.com https://world.openfoodfacts.org; media-src 'self' blob:; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https://www.themealdb.com; connect-src 'self' https://www.themealdb.com https://world.openfoodfacts.org; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="referrer" content="no-referrer">
-  <meta name="description" content="VorratsFit – Rezepte aus deinem Vorrat, intelligente Einkaufsliste und persönliche Ernährungsziele. Alle Daten bleiben auf deinem Gerät.">
   <meta name="theme-color" content="#2f7d5b">
-  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Rezepte aus deinem Vorrat, intelligente Einkaufsliste und persönliche Ernährungsziele – alle Daten bleiben lokal.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="VorratsFit">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>VorratsFit</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./assets/icons/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="./assets/icons/icon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
   <link rel="stylesheet" href="./styles.css">
   <script type="module" src="./app.js"></script>
@@ -23,30 +21,21 @@
 <body>
   <a class="skip-link" href="#main">Zum Inhalt springen</a>
   <header class="app-header">
-    <a class="brand" href="#/start" aria-label="VorratsFit Startseite">
-      <img src="./assets/icons/favicon.svg" alt="" width="28" height="28">
-      <span>VorratsFit</span>
-    </a>
+    <a class="brand" href="#/start"><img src="./assets/icons/favicon.svg" alt="" width="28" height="28"> VorratsFit</a>
   </header>
   <div id="offline-banner" class="banner banner-offline" role="status" hidden></div>
-  <div id="update-banner" class="banner banner-update" role="region" aria-label="Update verfügbar" hidden></div>
+  <div id="update-banner" class="banner banner-update" role="status" hidden></div>
   <div class="layout">
-    <nav class="side-nav" aria-label="Hauptnavigation">
-      <ul id="side-nav"></ul>
-    </nav>
-    <main id="main" tabindex="-1">
-      <noscript><p class="notice notice-error">VorratsFit benötigt JavaScript.</p></noscript>
-      <div class="loading" role="status"><span class="spinner" aria-hidden="true"></span>VorratsFit wird geladen …</div>
-    </main>
+    <nav class="side-nav" aria-label="Hauptnavigation"><ul id="side-nav"></ul></nav>
+    <main id="main" tabindex="-1"><p class="loading">VorratsFit wird geladen …</p></main>
   </div>
   <footer class="app-footer" id="footer-disclaimer"></footer>
-  <nav class="bottom-nav" aria-label="Schnellnavigation">
+  <nav class="bottom-nav" aria-label="Navigation">
     <ul id="bottom-nav"></ul>
-    <div id="more-panel" class="more-panel" hidden>
-      <ul id="more-menu"></ul>
-    </div>
+    <div id="more-panel" class="more-panel" hidden><ul id="more-menu"></ul></div>
   </nav>
   <div id="toast-region" class="toast-region" aria-live="polite"></div>
   <div id="sr-live" class="sr-only" aria-live="polite"></div>
+  <noscript>VorratsFit benötigt JavaScript.</noscript>
 </body>
 </html>

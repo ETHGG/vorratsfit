@@ -4,9 +4,11 @@ from playwright.sync_api import sync_playwright
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
 class Quiet(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *a):
         pass
+
 
 def main():
     ap = argparse.ArgumentParser()
@@ -28,7 +30,7 @@ def main():
             pg.goto(f'http://127.0.0.1:{a.port}/vorratsfit/tests/index.html')
             try:
                 pg.wait_for_function('document.body.dataset.done', timeout=180000)
-            except Exception as e:  # Abbruch ist selbst ein Fehler
+            except Exception as e:
                 print(f'✘ Browser-Testlauf nicht abgeschlossen: {e}'.splitlines()[0])
             results = pg.evaluate('window.__testResults || []')
             for r in results:
@@ -43,6 +45,7 @@ def main():
         httpd.shutdown()
         shutil.rmtree(tmp, ignore_errors=True)
     sys.exit(code)
+
 
 if __name__ == '__main__':
     main()

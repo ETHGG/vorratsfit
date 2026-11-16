@@ -4,7 +4,7 @@ import { APP_VERSION } from './core/models.js';
 import { exportAllData, importAllData, BACKUP_STORES, STORE_NORMALIZERS, getMeta, setMeta } from './db.js';
 
 export const BACKUP_FORMAT = 'vorratsfit-backup';
-export const BACKUP_VERSION = 2;
+export const BACKUP_VERSION = 3;
 export const MAX_INPUT_CHARS = 8_000_000; // ca. 8 MB Text
 export const MAX_FILE_BYTES = 10 * 1024 * 1024;
 export const LONG_CODE_THRESHOLD = 60_000; // darüber besser als JSON-Datei übertragen
@@ -74,6 +74,8 @@ const BACKUP_MIGRATIONS = {
   },
   // 1 → 2 (0.2): neue Bereiche ergänzen. Bestehende Daten bleiben unverändert.
   1: (data) => ({ ...data, mealPlan: data.mealPlan ?? [], foodLog: data.foodLog ?? [], quickFoods: data.quickFoods ?? [] }),
+  // 2 → 3 (0.3): Gewichtsverlauf ergänzen.
+  2: (data) => ({ ...data, weightLog: data.weightLog ?? [] }),
 };
 
 /** Entfernt gefährliche Schlüssel (Prototyp-Verschmutzung) rekursiv. */
@@ -163,7 +165,7 @@ export function buildImportPreview(incoming, current) {
 export const STORE_LABELS = Object.freeze({
   profile: 'Profil', pantry: 'Vorrat (inkl. Gewürze)', favorites: 'Favoriten', customRecipes: 'Eigene Rezepte',
   cachedRecipes: 'Gespeicherte Online-Rezepte', shoppingList: 'Einkaufsliste', selectedRecipes: 'Ausgewählte Rezepte und Portionen', settings: 'Einstellungen',
-  mealPlan: 'Wochenplan', foodLog: 'Ernährungstagebuch', quickFoods: 'Schnell-Lebensmittel',
+  mealPlan: 'Wochenplan', foodLog: 'Ernährungstagebuch', quickFoods: 'Schnell-Lebensmittel', weightLog: 'Gewichtsverlauf',
 });
 
 export async function createBackupFromDatabase() {

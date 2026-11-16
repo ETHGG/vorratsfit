@@ -1,11 +1,14 @@
 // app.js – Einstiegspunkt: Initialisierung, Navigation, Datenschutzhinweis, Offline- und Update-Hinweise.
-import { h, clear, icon, dialog, errorBox, loading } from './views/dom.js';
+import { h, clear, icon, dialog, errorBox, loading, toast } from './views/dom.js';
 import { NAV_ITEMS, parseHash, routeHref } from './views/router.js';
-import { state, loadBase } from './views/state.js';
+import { state, loadBase, refreshProfile } from './views/state.js';
 import { allergyDisclaimer } from './views/components.js';
 import { applyTheme, isPrivacyAcknowledged, acknowledgePrivacy } from './settings.js';
 import { initServiceWorker, activateUpdate, UPDATE_TEXT } from './app-update.js';
-import { onVersionChange, onBlocked, NEWER_VERSION_TEXT } from './db.js';
+import { onVersionChange, onBlocked, NEWER_VERSION_TEXT, getMeta, setMeta } from './db.js';
+import { saveProfile } from './profile.js';
+import { validateBirthDate } from './core/body.js';
+import { todayString } from './core/utils.js';
 
 export const PRIVACY_TEXT = 'Deine persönlichen Daten werden ausschließlich auf diesem Gerät gespeichert. Rezept- und Produktabfragen an externe Anbieter enthalten keine Angaben zu Alter, Gewicht, Kalorienziel oder persönlichen Gesundheitsdaten.';
 export const OFFLINE_TEXT = 'Du bist offline. Lokale und bereits gespeicherte Rezepte stehen weiterhin zur Verfügung.';
@@ -18,6 +21,7 @@ const VIEWS = {
   einkauf: () => import('./views/shoppingView.js'),
   woche: () => import('./views/plannerView.js'),
   heute: () => import('./views/todayView.js'),
+  gewicht: () => import('./views/weightView.js'),
   vorrat: () => import('./views/pantryView.js'),
   tagesziel: () => import('./views/goalsView.js'),
   profil: () => import('./views/profileView.js'),
@@ -127,6 +131,37 @@ async function showPrivacyNoticeIfNeeded() {
   await acknowledgePrivacy();
 }
 
+/**
+ * 0.3: Einmalige Abfrage des Geburtsdatums für Profile aus älteren Versionen.
+ * „Später“ ist möglich – dann bleibt das bisherige Alter, und die Abfrage erscheint nicht erneut
+ * (das Geburtsdatum kann jederzeit im Profil ergänzt werden).
+ */
+async function askBirthDateOnce() {
+  const p = state.profile;
+  if (!p || p.birthDate || (await getMeta('birthDatePrompted'))) return;
+  const input = h('input', { type: 'date', name: 'birthDate', max: todayString(), 'aria-label': 'Geburtsdatum' });
+  const choice = await dialog({
+    title: 'Neu: Geburtsdatum statt Alter',
+    body: [
+      h('p', {}, `Bisher ist dein Alter fest gespeichert (${p.age ?? '–'} Jahre). Mit deinem Geburtsdatum rechnet VorratsFit dein Alter automatisch aus und führt es weiter – dein Tagesziel bleibt so immer aktuell.`),
+      h('label', { class: 'label', for: 'birth-prompt' }, 'Geburtsdatum'), input,
+      h('p', { class: 'small muted' }, 'Das Datum bleibt ausschließlich auf diesem Gerät.'),
+    ],
+    buttons: [{ label: 'Später im Profil', value: 'later' }, { label: 'Speichern', value: 'ok', variant: 'primary' }],
+    dismissValue: 'later',
+    onMount: () => { input.id = 'birth-prompt'; input.focus(); },
+  });
+  if (choice === 'ok') {
+    const msg = validateBirthDate(input.value, todayString());
+    if (msg) { toast(`Nicht gespeichert: ${msg} Du kannst es im Profil nachtragen.`, 'error'); }
+    else {
+      const res = await saveProfile({ ...p, birthDate: input.value }, p);
+      if (res.ok) { await refreshProfile(); toast(`Gespeichert. Dein Alter: ${state.profile.age} Jahre.`, 'success'); await renderRoute(); }
+    }
+  }
+  await setMeta('birthDatePrompted', true);
+}
+
 async function init() {
   applyTheme();
   window.matchMedia?.('(prefers-color-scheme: dark)').addEventListener?.('change', () => applyTheme());
@@ -160,6 +195,7 @@ async function init() {
   window.addEventListener('hashchange', renderRoute);
   await renderRoute();
   document.documentElement.dataset.ready = 'true';
+  await askBirthDateOnce();
 }
 
 init();

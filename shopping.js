@@ -1,10 +1,9 @@
 // shopping.js – Einkaufsliste: Rezepte hinzufügen, neu berechnen, manuelle Artikel,
 // transaktionssicheres Abhaken mit Vorratsübernahme und kontrolliertes Rückgängigmachen.
 import { runTransaction, getAllItems } from './db.js';
-import { normalizeShoppingItem, normalizeSelectedRecipe, normalizePantryItem, CATEGORIES, shoppingGroupFor } from './core/models.js';
+import { normalizeShoppingItem, normalizeSelectedRecipe, normalizePantryItem, normalizeMealPlanEntry, CATEGORIES, shoppingGroupFor } from './core/models.js';
 import { aggregateNeeds, computePlan, mergePlanIntoList, previewForRecipe, undoAnalysis } from './core/shopping-logic.js';
 import { buildDemand } from './core/demand.js';
-import { normalizeMealPlanEntry } from './core/models.js';
 import { ingredientKey, catalogEntryFor } from './core/catalog.js';
 import { normalizeUnit, convertWithIngredient, roundQuantity } from './units.js';
 import { parseNumber, nowIso, uuid, normalizeText, sanitizeText, todayString } from './core/utils.js';
@@ -185,9 +184,6 @@ function findPantryTarget(pantry, item, catalog, entry) {
   return candidates[0] ?? null;
 }
 
-/**
- * Abhaken mit automatischer Vorratsübernahme – transaktionssicher und idempotent.
- */
 /** Kern des Abhakens innerhalb einer Transaktion (wird von Einzel- und Gesamtübernahme genutzt). */
 async function checkInTx(t, id, catalog) {
   const raw = await t.get('shoppingList', id);

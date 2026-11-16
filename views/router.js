@@ -6,6 +6,7 @@ export const NAV_ITEMS = Object.freeze([
   { route: 'einkauf', label: 'Einkaufsliste', short: 'Einkauf', icon: 'cart', primary: true },
   { route: 'start', label: 'Start', icon: 'home' },
   { route: 'heute', label: 'Heute gegessen', icon: 'check' },
+  { route: 'gewicht', label: 'Gewicht', icon: 'scale' },
   { route: 'vorrat', label: 'Vorrat', icon: 'pantry' },
   { route: 'favoriten', label: 'Favoriten', icon: 'heart' },
   { route: 'tagesziel', label: 'Tagesziel', icon: 'target' },

@@ -1,7 +1,7 @@
 // tests/db-tests-v02.js – IndexedDB-Tests für Version 0.2 (nur Browser, eigene Test-Datenbank).
 import {
   configureDatabase, closeDatabase, openDatabase, putItem, getItem, getAllItems, importAllData,
-  BACKUP_STORES, DB_VERSION, onBlocked,
+  BACKUP_STORES, DB_VERSION, onBlocked, deleteItem, runTransaction,
 } from '../db.js';
 import { normalizePantryItem, normalizeShoppingItem, normalizeMealPlanEntry, normalizeFoodLogEntry, normalizeQuickFood } from '../core/models.js';
 import { createBackupObject, encodeBackupCode, parseBackupInput, LONG_CODE_THRESHOLD } from '../backup.js';
@@ -9,10 +9,12 @@ import { wipeAllPersonalData } from '../settings.js';
 import { assert, eq } from './test-cases.js';
 import { createCatalog } from '../core/catalog.js';
 import { addDays, todayString } from '../core/utils.js';
-import { setPurchasedAmount, recomputeShoppingList, getShoppingState, addManualItem, checkShoppingItem, addRecipeToShopping, previewShoppingRange, applyShoppingRange, clearShoppingRange, getShoppingRange } from '../shopping.js';
+import {
+  setPurchasedAmount, recomputeShoppingList, getShoppingState, addManualItem, checkShoppingItem, addRecipeToShopping,
+  previewShoppingRange, applyShoppingRange, clearShoppingRange, getShoppingRange, checkAllOpen, previewCheckAll,
+} from '../shopping.js';
 import { addPlanEntry, updatePlanEntry, deletePlanEntry, listPlan, clearPlanRange, cookPlanEntry, uncookPlanEntry, addMealPrep, deleteMealPrepBox } from '../planner.js';
 import { markPlanEaten, logQuickFood, listFoodLog, deleteFoodLog, saveQuickFood } from '../foodlog.js';
-import { checkAllOpen, previewCheckAll } from '../shopping.js';
 import { addBulkToPantry, addFrequentItem, frequentItems } from '../pantry.js';
 import { parseBulkLines } from '../core/quick-entry.js';
 import { planEntryStatus } from '../core/plan-logic.js';
@@ -25,7 +27,7 @@ function deleteDb(name) {
 }
 
 /** Legt eine Datenbank exakt im Schema von 0.1 (Version 1) an und füllt sie. */
-function createV1Database(name, records) {
+export function createV1Database(name, records) {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(name, 1);
     req.onupgradeneeded = () => {
@@ -47,7 +49,7 @@ function createV1Database(name, records) {
   });
 }
 
-async function freshName() {
+export async function freshName() {
   await closeDatabase();
   await deleteDb(TEST_DB);
   configureDatabase(TEST_DB);
@@ -62,8 +64,7 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
   const T = [];
   const t = (name, fn) => T.push({ name, fn });
 
-  // ---------- Phase 0 ----------
-  t('P1-01 DB: Datenbank aus 0.1 (Version 1) öffnet in 0.2 vollständig, neue Bereiche leer', async () => {
+  t('P1-01 DB: Datenbank aus 0.1 (Version 1) öffnet vollständig, neue Bereiche leer', async () => {
     await freshName();
     const v1 = await createV1Database(TEST_DB, {
       profile: [{ id: 'main', nickname: 'Erik', age: 30 }],
@@ -85,20 +86,20 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
     eq([(await getAllItems('mealPlan')).length, (await getAllItems('foodLog')).length, (await getAllItems('quickFoods')).length], [0, 0, 0]);
   });
 
-  t('N0-01 DB: Neuinstallation legt alle v2-Bereiche mit Datums-Index an', async () => {
+  t('N0-01 DB: Neuinstallation legt alle Bereiche mit Datums-Index an', async () => {
     await freshName();
     const db = await openDatabase();
-    eq(db.version, 2);
+    eq(db.version, DB_VERSION);
     for (const s of [...V1_STORES, 'mealPlan', 'foodLog', 'quickFoods']) assert(db.objectStoreNames.contains(s), `${s} fehlt`);
     const tx = db.transaction(['mealPlan', 'foodLog'], 'readonly');
     assert(tx.objectStore('mealPlan').indexNames.contains('date'), 'Index mealPlan.date');
     assert(tx.objectStore('foodLog').indexNames.contains('date'), 'Index foodLog.date');
   });
 
-  t('P1-02 DB: Backup aus 0.1 wird in 0.2 importiert', async () => {
+  t('P1-02 DB: Backup aus 0.1 wird importiert', async () => {
     await resetTestDb();
     const legacy = await createBackupObject({ pantry: [normalizePantryItem({ id: 'p1', name: 'Reis', amount: 500, unit: 'g' })] });
-    legacy.backupVersion = 1; // Struktur eines 0.1-Backups (gleiche Daten, alte Version)
+    legacy.backupVersion = 1;
     const parsed = await parseBackupInput(JSON.stringify(legacy));
     eq(parsed.ok, true, parsed.errors?.join(' '));
     await importAllData(parsed.data, 'replace');
@@ -162,7 +163,6 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
   t('N0-06 DB: offene alte Verbindung blockiert das Upgrade – App wartet, löscht nichts, migriert danach', async () => {
     await freshName();
     const v1 = await createV1Database(TEST_DB, { pantry: [normalizePantryItem({ id: 'p1', name: 'Reis', amount: 500, unit: 'g' })] });
-    // Wie ein alter Tab ohne Reaktion auf versionchange: Verbindung bleibt offen.
     let blocked = 0;
     const off = onBlocked(() => { blocked += 1; });
     const opening = openDatabase();
@@ -171,7 +171,7 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
     v1.close();
     const db = await opening;
     off();
-    eq(db.version, 2);
+    eq(db.version, DB_VERSION);
     eq((await getItem('pantry', 'p1')).amount, 500, 'keine Daten verloren');
   });
 
@@ -185,7 +185,6 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
     await freshName();
   });
 
-  // ---------- Phase 1b ----------
   t('P1-03 DB: Woche planen, Einkaufsliste neu berechnen – Plan-Artikel bleiben', async () => {
     await resetTestDb();
     await putItem('mealPlan', plan('m1', 1));
@@ -207,7 +206,6 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
     const bohnen = (await getShoppingState()).items.find((i) => i.ingredientId === 'kidneybohnen');
     await checkShoppingItem(bohnen.id, catalog);
     const before = await getItem('shoppingList', bohnen.id);
-    const { deleteItem } = await import('../db.js');
     await deleteItem('mealPlan', 'm1');
     await recomputeShoppingList(ctx);
     eq(await getItem('shoppingList', bohnen.id), before, 'abgehakter Artikel unverändert');
@@ -226,7 +224,6 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
     await recomputeShoppingList(ctx);
     const z2 = (await getShoppingState()).items.find((i) => i.ingredientId === 'zwiebel');
     eq([z2.amountToBuy, z2.id], [5, z1.id], 'Portionen 4 → 8: 4 + 1, gleiche ID');
-    const { deleteItem } = await import('../db.js');
     await deleteItem('mealPlan', 'm2');
     await recomputeShoppingList(ctx);
     const st = await getShoppingState();
@@ -242,7 +239,6 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
     eq([z.amountToBuy, z.recipeSources.map((s) => s.sourceType).sort().join()], [4, 'plan,single']);
   });
 
-  // ---------- Phase 1 ----------
   t('N1-03 DB: Eintrag verschieben ändert den Bedarf nicht, Portionen ändern aktualisieren die Liste', async () => {
     await resetTestDb();
     const res = await addPlanEntry({ date: day(1), mealType: 'abendessen', recipeId: 'chili-sin-carne', servings: 4 }, ctx);
@@ -275,8 +271,7 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
     map.set(custom.id, custom);
     const res = await addPlanEntry({ date: day(1), mealType: 'mittagessen', recipeId: 'custom-x', servings: 2 }, { ...ctx, recipesById: map });
     eq(res.ok, true);
-    const without = { ...ctx, recipesById };
-    const rc = await recomputeShoppingList(without);
+    const rc = await recomputeShoppingList({ ...ctx, recipesById });
     eq(rc.skipped.length, 1);
     eq(rc.skipped[0].reason, 'Rezept nicht mehr verfügbar');
     const entry = (await listPlan(day(0), day(6)))[0];
@@ -311,7 +306,6 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
     assert(!(await getShoppingState()).items.some((i) => i.ingredientId === 'kidneybohnen'), 'Bohnen entfernt');
   });
 
-  // ---------- Phase 2 ----------
   const stock = async () => {
     await putItem('pantry', normalizePantryItem({ id: 'reis', name: 'Reis (trocken)', ingredientId: 'reis', amount: 500, unit: 'g' }));
     await putItem('pantry', normalizePantryItem({ id: 'zw', name: 'Zwiebel', ingredientId: 'zwiebel', amount: 5, unit: 'Stück' }));
@@ -441,14 +435,12 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
     const e = await planChili(0);
     await markPlanEaten(e.id, ctx);
     const kcal = (await listFoodLog(day(0)))[0].kcal;
-    const empty = { ...ctx, recipesById: new Map() };
-    await recomputeShoppingList(empty);
+    await recomputeShoppingList({ ...ctx, recipesById: new Map() });
     eq((await listFoodLog(day(0)))[0].kcal, kcal);
   });
 
   t('P3-09 DB: 1.000 Tagebucheinträge – Tagesansicht über den Datums-Index unter 500 ms', async () => {
     await resetTestDb();
-    const { runTransaction } = await import('../db.js');
     await runTransaction(['foodLog'], 'readwrite', async (tx) => {
       for (let i = 0; i < 1000; i += 1) await tx.put('foodLog', normalizeFoodLogEntry({ id: `f${i}`, date: day(-(i % 100)), name: 'X', kcal: 100, protein: 5 }));
     });
@@ -459,7 +451,6 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
     assert(ms < 500, `${ms.toFixed(0)} ms`);
   });
 
-  // ---------- Phase 4 ----------
   t('N4-03 DB: Wochenliste zweimal erzeugen ergibt keine doppelten Artikel', async () => {
     await resetTestDb();
     await addPlanEntry({ date: day(1), mealType: 'abendessen', recipeId: 'chili-sin-carne', servings: 4 }, ctx);
@@ -498,7 +489,6 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
     assert((await getShoppingState()).items.some((i) => i.ingredientId === 'linsen_rot'), 'nach „Alle“ wieder enthalten');
   });
 
-  // ---------- Phase 3 ----------
   const prep = async (n = 4, start = 1) => (await addMealPrep({ recipeId: 'haehnchen-meal-prep-boxen', boxes: n, startDate: day(start), mealType: 'mittagessen' }, ctx)).entries;
   const chickenStock = () => putItem('pantry', normalizePantryItem({ id: 'h', name: 'Hähnchenbrustfilet', ingredientId: 'haehnchenbrust', amount: 1000, unit: 'g' }));
 
@@ -541,7 +531,6 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
     eq((await getItem('pantry', 'h')).amount, 1000);
   });
 
-  // ---------- Phase 5 ----------
   const shopItems = async () => {
     await putItem('pantry', normalizePantryItem({ id: 'zw', name: 'Zwiebel', ingredientId: 'zwiebel', amount: 1, unit: 'Stück' }));
     await addPlanEntry({ date: day(1), mealType: 'abendessen', recipeId: 'chili-sin-carne', servings: 4 }, ctx);
@@ -629,10 +618,8 @@ export function buildDbTestsV02(ingredientsData = [], recipesData = { recipes: [
     eq((await addFrequentItem({ name: 'Reis (trocken)', ingredientId: 'reis', amount: 500, unit: 'g', category: 'Reis und Nudeln' }, catalog)).status, 'increased');
   });
 
-  // ---------- Phase 7 ----------
   t('N7-04 DB: großes Tagebuch – Backup-Code sehr lang (Hinweis), JSON-Export und Import funktionieren', async () => {
     await resetTestDb();
-    const { runTransaction } = await import('../db.js');
     await runTransaction(['foodLog'], 'readwrite', async (tx) => {
       for (let i = 0; i < 1500; i += 1) await tx.put('foodLog', normalizeFoodLogEntry({ id: `f${i}`, date: day(-(i % 365)), name: `Eintrag ${i}`, kcal: 100 + (i % 50), protein: 5 }));
     });

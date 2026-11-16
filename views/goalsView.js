@@ -37,7 +37,6 @@ export async function render(container) {
     row('Fett-Mindestmenge', `mind. ${t.fatMin} g`, est),
     row('Verbleibende Kohlenhydrate', `ca. ${t.carbs} g`, est),
     row('Ballaststoffziel', `mind. ${t.fiber} g`, est));
-
   container.append(section('Deine Werte', dl,
     ...t.notes.map((n) => h('p', { class: 'notice notice-warn' }, icon('alert', { size: 16 }), h('span', {}, n))),
     h('p', { class: 'disclaimer' }, icon('info', { size: 14 }), 'Alle Werte sind Schätzungen nach der Mifflin-St.-Jeor-Formel. Sie ersetzen keine ärztliche oder ernährungsmedizinische Beratung. VorratsFit stellt keine Diagnosen und gibt keine Gewichtsprognosen.')));

@@ -2,16 +2,14 @@
 import { h, clear, icon, dialog, toast, withBusy, confirmDialog, field, select, stepper, emptyState } from './dom.js';
 import { pageHeader, section } from './components.js';
 import { state, shoppingContext } from './state.js';
-import { routeHref } from './router.js';
+import { routeHref, navigate } from './router.js';
 import { listPlan, listAllPlan, addPlanEntry, updatePlanEntry, deletePlanEntry, clearPlanRange, deleteMealPrepBox, addMealPrep } from '../planner.js';
 import { previewShoppingRange, applyShoppingRange } from '../shopping.js';
-import { navigate } from './router.js';
-import { formatAmount } from '../units.js';
+import { formatAmount, formatNumber } from '../units.js';
 import { weekStart, weekDays, formatDayLabel, formatWeekRange, canPlanRecipe, planEntryStatus, mealPrepShelfWarning, MIN_BOXES, MAX_BOXES } from '../core/plan-logic.js';
-import { MEAL_TYPES, mealTypeLabel } from '../core/models.js';
+import { MEAL_TYPES } from '../core/models.js';
 import { addDays, todayString, isValidDateString } from '../core/utils.js';
 import { recipeNutritionFor } from '../core/day-balance.js';
-import { formatNumber } from '../units.js';
 
 /** Dialog zum Einplanen eines Rezepts. Gibt die Eingaben zurück oder null. */
 export async function planDialog({ title, date, mealType, recipeId = null, servings = null, fixedRecipe = null }) {
@@ -87,8 +85,8 @@ export async function render(container, { params }) {
   let monday = weekStart(isValidDateString(requested) ? requested : todayString());
   const daysBox = h('div', { class: 'week', 'aria-live': 'polite' });
   const rangeLabel = h('p', { class: 'week-range' });
-
   let groups = new Map();
+
   async function reload() {
     const days = weekDays(monday);
     const entries = await listPlan(days[0], days[6]);

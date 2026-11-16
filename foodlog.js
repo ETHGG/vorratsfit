@@ -4,6 +4,7 @@ import { runTransaction } from './db.js';
 import { normalizeFoodLogEntry, normalizeQuickFood, normalizeMealPlanEntry } from './core/models.js';
 import { recipeNutritionFor, logDateTime } from './core/day-balance.js';
 import { nowIso, uuid, sanitizeText, parseNumber, isValidDateString } from './core/utils.js';
+import { recentFoods as pickRecent } from './core/food.js';
 
 const inFlight = new Set();
 
@@ -108,4 +109,29 @@ export async function saveQuickFood(input) {
 
 export async function deleteQuickFood(id) {
   await runTransaction(['quickFoods'], 'readwrite', (t) => t.delete('quickFoods', id));
+}
+
+// ---------- Freies Ess-Tracking (0.3) ----------
+/** Beliebiges Lebensmittel erfassen (Werte für die erfasste Menge, als Kopie). Verändert nie den Vorrat. */
+export async function logFood({ name, kcal, protein = null, carbs = null, fat = null, fiber = null, amountLabel = null }, { date = null, now = new Date() } = {}) {
+  const dt = logDateTime(now);
+  const log = normalizeFoodLogEntry({
+    id: uuid(), date: isValidDateString(date) ? date : dt.date, time: dt.time, source: 'food',
+    name, kcal, protein, carbs, fat, fiber, amountLabel, portions: 1,
+  });
+  await runTransaction(['foodLog'], 'readwrite', (t) => t.put('foodLog', log));
+  return log;
+}
+
+/** Einträge eines Zeitraums (über den Datums-Index). */
+export async function listFoodLogRange(from, to) {
+  const rows = await runTransaction(['foodLog'], 'readonly', (t) => t.getAllInRange('foodLog', 'date', from, to));
+  return rows.map((r) => normalizeFoodLogEntry(r));
+}
+
+/** „Zuletzt gegessen“ aus den letzten 30 Tagen (ohne Plan-Mahlzeiten). */
+export async function listRecentFoods(today, limit = 8) {
+  const [y, m, d] = today.split('-').map(Number);
+  const from = new Date(Date.UTC(y, m - 1, d - 30)).toISOString().slice(0, 10);
+  return pickRecent(await listFoodLogRange(from, today), limit);
 }

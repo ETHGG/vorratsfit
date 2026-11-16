@@ -1,7 +1,7 @@
 // tests/test-cases-v02.js – Logiktests für Version 0.2 (Node + Browser).
 // Jeder Test trägt die Nummer aus dem Testkatalog in CLAUDE.md, Abschnitt 7.
 import * as models from '../core/models.js';
-import { normalizeShoppingItem } from '../core/models.js';
+import { normalizeShoppingItem, normalizePantryItem, normalizeMealPlanEntry, normalizeSelectedRecipe } from '../core/models.js';
 import { canonicalStringify, todayString } from '../core/utils.js';
 import { createBackupObject, parseBackupInput, sha256Hex, BACKUP_VERSION } from '../backup.js';
 import { assert, eq } from './test-cases.js';
@@ -12,11 +12,10 @@ import { dayBalance, sumNutrition, recipeNutritionFor, logDateTime } from '../co
 import { planConsumption } from '../core/cooking.js';
 import { parseBulkLines, MAX_BULK_LINES } from '../core/quick-entry.js';
 import { buildShareText } from '../core/share-text.js';
-import { normalizeShoppingItem as nsi } from '../core/models.js';
 import { calcTargets } from '../nutrition.js';
 import { aggregateNeeds, computePlan, mergePlanIntoList, previewForRecipe } from '../core/shopping-logic.js';
-import { normalizePantryItem, normalizeMealPlanEntry, normalizeSelectedRecipe } from '../core/models.js';
 
+const nsi = normalizeShoppingItem;
 const ING = (id, name, amount, unit, extra = {}) => ({ ingredientId: id, name, normalizedName: name.toLowerCase(), amount, unit, category: 'Sonstiges', optional: false, substitutes: [], allergenTags: [], ...extra });
 const P = (name, amount, unit, extra = {}) => normalizePantryItem({ name, amount, unit, ...extra });
 const TODAY = '2026-03-02'; // Montag
@@ -34,8 +33,7 @@ export function buildTestsV02(ingredientsData = []) {
   const T = [];
   const t = (name, fn) => T.push({ name, fn });
 
-  // ---------- Phase 0 ----------
-  t('P1-02 Logik: Backup aus 0.1 (Version 1) wird in 0.2 gelesen, neue Bereiche leer', async () => {
+  t('P1-02 Logik: Backup aus 0.1 (Version 1) wird gelesen, neue Bereiche leer', async () => {
     const data = { pantry: [{ id: 'p1', name: 'Reis', amount: 500, unit: 'g' }], shoppingList: [{ id: 's1', name: 'Zwiebel', amountToBuy: 2, unit: 'Stück', recipeSources: [{ recipeId: 'a', title: 'A', servings: 2, amount: 2, unit: 'Stück' }] }] };
     const backup = { format: 'vorratsfit-backup', backupVersion: 1, appVersion: '0.1.0', createdAt: '2026-01-01T00:00:00.000Z', data, checksum: await sha256Hex(canonicalStringify(data)) };
     const parsed = await parseBackupInput(JSON.stringify(backup));
@@ -58,10 +56,9 @@ export function buildTestsV02(ingredientsData = []) {
     eq(parsed.data.mealPlan[0].mealPrepGroupId, 'g1');
   });
 
-  t('N0-04 Backup aus neuerer Version (v3) wird abgelehnt; 0.2-Backups tragen Version 2', async () => {
-    eq(BACKUP_VERSION, 2);
+  t('N0-04 Backup aus neuerer Version wird abgelehnt', async () => {
     const data = { pantry: [] };
-    const future = { format: 'vorratsfit-backup', backupVersion: 3, data, checksum: await sha256Hex(canonicalStringify(data)) };
+    const future = { format: 'vorratsfit-backup', backupVersion: BACKUP_VERSION + 1, data, checksum: await sha256Hex(canonicalStringify(data)) };
     const parsed = await parseBackupInput(JSON.stringify(future));
     eq(parsed.ok, false);
     assert(parsed.errors[0].includes('neueren App-Version'), parsed.errors[0]);
@@ -87,7 +84,6 @@ export function buildTestsV02(ingredientsData = []) {
     eq(models.normalizeFoodLogEntry({ date: '2026-03-02', time: '25:99' }).time, null);
   });
 
-  // ---------- Phase 1b: gemeinsame Bedarfsquelle ----------
   t('P1-04 Einzelrezept + Plan werden gemeinsam berechnet und zusammengeführt', () => {
     const { plan } = demandPlan({ selected: [normalizeSelectedRecipe({ recipeId: 'curry', servings: 2 })], plan: [planEntry('m1', '2026-03-03')], pantry: [P('Zwiebel', 1, 'Stück')] });
     const z = plan.find((p) => p.ingredientId === 'zwiebel');
@@ -116,7 +112,6 @@ export function buildTestsV02(ingredientsData = []) {
   });
 
   t('N1b-04 Vorschau „Fehlende Zutaten prüfen“ berücksichtigt geplanten Bedarf', () => {
-    // Vorrat 1 Zwiebel deckt den Plan; das zusätzliche Einzelrezept braucht 1 weitere.
     const { plan } = demandPlan({ selected: [normalizeSelectedRecipe({ recipeId: 'curry', servings: 2 })], plan: [planEntry('m1', '2026-03-03')], pantry: [P('Zwiebel', 1, 'Stück')] });
     const pv = previewForRecipe('curry', plan);
     eq(pv.needed.find((p) => p.ingredientId === 'zwiebel').amountToBuy, 1);
@@ -138,7 +133,6 @@ export function buildTestsV02(ingredientsData = []) {
     eq(planLabel('2026-03-08', 'fruehstueck'), 'Plan So Frühstück');
   });
 
-  // ---------- Phase 1: Wochenplaner ----------
   t('N1-01 Logik: ausgeschlossenes Rezept kann nicht eingeplant werden, Begründung vorhanden', () => {
     const r = canPlanRecipe(nuts, { allergies: ['erdnuesse'] }, catalog);
     eq(r.allowed, false);
@@ -175,7 +169,6 @@ export function buildTestsV02(ingredientsData = []) {
       assert(days.includes(d), `${d} liegt in seiner Woche`);
     }
     eq(weekDays(weekStart('2026-03-29')), ['2026-03-23', '2026-03-24', '2026-03-25', '2026-03-26', '2026-03-27', '2026-03-28', '2026-03-29']);
-    // Lokales Datum zur Uhrzeit kurz vor/nach Mitternacht am Umstellungstag
     eq(todayString(new Date(2026, 2, 29, 0, 30)), '2026-03-29');
     eq(todayString(new Date(2026, 9, 25, 23, 59)), '2026-10-25');
   });
@@ -194,7 +187,6 @@ export function buildTestsV02(ingredientsData = []) {
     eq([ok.ok, ok.values.servings], [true, 4]);
   });
 
-  // ---------- Phase 2: Tagesbilanz, Kochen, Essen ----------
   const adult = { weightKg: 80, heightCm: 180, age: 30, sex: 'male', activityLevel: 'moderate', goal: 'maintain', mealsPerDay: 3 };
   const log = (kcal, protein = 10, portions = 1) => ({ kcal, protein, carbs: 10, fat: 5, portions });
 
@@ -275,7 +267,6 @@ export function buildTestsV02(ingredientsData = []) {
     eq([b.target, b.text], [2000, 'noch 800 kcal']);
   });
 
-  // ---------- Phase 4: Wochen-Einkaufsliste ----------
   const rangeDemand = (plan, range, pantry = []) => {
     const { selections } = buildDemand({ selected: [], planEntries: plan, recipesById, profile: null, catalog, today: TODAY, range });
     return computePlan(aggregateNeeds(selections, catalog), pantry, catalog);
@@ -307,7 +298,6 @@ export function buildTestsV02(ingredientsData = []) {
     eq(rangeDemand(plan, { from: '2026-05-01', to: '2026-05-07' }).length, 0, 'leerer Zeitraum');
   });
 
-  // ---------- Phase 3: Meal Prep ----------
   const boxes = (start, n, recipeId = 'curry') => buildMealPrepEntries({ recipe: recipesById.get(recipeId), boxes: n, startDate: start, mealType: 'mittagessen', groupId: 'g1' }).map((e) => normalizeMealPlanEntry(e));
 
   t('N3-01 Gruppe Start Freitag, 4 Boxen: gesamter Bedarf in der Woche des Kochtags', () => {
@@ -347,7 +337,6 @@ export function buildTestsV02(ingredientsData = []) {
     eq(validateMealPrepInput({ boxes: '15', startDate: '2026-03-02', mealType: 'mittagessen', recipeId: 'curry' }).ok, false, 'höchstens 14');
   });
 
-  // ---------- Phase 5: Schnellerfassen ----------
   t('P3-02 Schnellerfassen: 5 Zeilen ergeben 5 Einträge', () => {
     const r = parseBulkLines('500 g Hähnchen\n1 kg Reis\n6 Eier\n2 Paprika\n1 l Milch', catalog);
     eq(r.items.length, 5);
@@ -372,7 +361,6 @@ export function buildTestsV02(ingredientsData = []) {
     eq(parseBulkLines('0 g Reis', catalog).items[0].status, 'check', 'Menge 0 nicht übernehmen');
   });
 
-  // ---------- Phase 6: Teilen ----------
   const items = [
     nsi({ id: 'a', name: 'Paprika', amountToBuy: 3, unit: 'Stück', category: 'Gemüse', recipeSources: [{ recipeId: 'r', title: 'Rezept', servings: 2, amount: 3, unit: 'Stück' }] }),
     nsi({ id: 'b', name: 'Hähnchenbrustfilet', amountToBuy: 500, amountPurchased: 600, unit: 'g', category: 'Fleisch und Fisch', recipeSources: [{ recipeId: 'r', title: 'Rezept', servings: 2, amount: 500, unit: 'g' }] }),
@@ -395,7 +383,6 @@ export function buildTestsV02(ingredientsData = []) {
     eq(buildShareText([]), '');
   });
 
-  // ---------- Phase 7: Release ----------
   t('N7-02 Logik: <script> in Plan-Namen und Schnell-Lebensmitteln bleibt reiner Text', () => {
     const evil = '<img src=x onerror=alert(1)><script>alert(1)</script>';
     const q = models.normalizeQuickFood({ name: evil, kcal: 100 });
@@ -406,8 +393,8 @@ export function buildTestsV02(ingredientsData = []) {
     assert(text.includes('<script>'), 'Text bleibt Text; Ausgabe erfolgt nur über textContent (statische Prüfung)');
   });
 
-  t('Release: App-Version 0.2.0', () => {
-    eq(models.APP_VERSION, '0.2.0');
+  t('Release: App-Version gesetzt', () => {
+    assert(/^\d+\.\d+\.\d+$/.test(models.APP_VERSION), models.APP_VERSION);
   });
 
   return T;

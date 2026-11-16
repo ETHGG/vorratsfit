@@ -1,9 +1,8 @@
 // service-worker.js – Offline-App-Shell mit versioniertem Programm-Cache.
 // WICHTIG: Dieser Service Worker verwaltet ausschließlich Programmdateien (Cache Storage).
 // Persönliche Daten liegen in IndexedDB und werden hier niemals gelesen, verändert oder gelöscht.
-
 const CACHE_PREFIX = 'vorratsfit-app-';
-const CACHE_VERSION = '0.2.0';
+const CACHE_VERSION = '0.3.0';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 
 // Relative Pfade: funktionieren unter jedem Unterpfad (z. B. /vorratsfit/ auf GitHub Pages).
@@ -22,6 +21,7 @@ const APP_SHELL = [
   './shopping.js',
   './planner.js',
   './foodlog.js',
+  './weight.js',
   './nutrition.js',
   './backup.js',
   './api.js',
@@ -40,6 +40,8 @@ const APP_SHELL = [
   './core/day-balance.js',
   './core/quick-entry.js',
   './core/share-text.js',
+  './core/body.js',
+  './core/food.js',
   './views/dom.js',
   './views/router.js',
   './views/state.js',
@@ -51,6 +53,7 @@ const APP_SHELL = [
   './views/shoppingView.js',
   './views/plannerView.js',
   './views/todayView.js',
+  './views/weightView.js',
   './views/pantryView.js',
   './views/goalsView.js',
   './views/profileView.js',
@@ -91,7 +94,6 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
-
   if (req.mode === 'navigate') {
     const scopePath = new URL(self.registration.scope).pathname;
     const isAppShell = url.pathname === scopePath || url.pathname === `${scopePath}index.html`;
@@ -111,7 +113,6 @@ self.addEventListener('fetch', (event) => {
     })());
     return;
   }
-
   event.respondWith((async () => {
     const cache = await caches.open(CACHE_NAME);
     const cached = await cache.match(req, { ignoreSearch: true });

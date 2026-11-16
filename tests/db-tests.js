@@ -31,7 +31,6 @@ export function buildDbTests(ingredientsData, recipesData) {
   const ctx = { recipesById, profile: null, catalog };
   const T = [];
   const t = (name, fn) => T.push({ name, fn: async () => { await resetTestDb(); await fn(); } });
-
   const chickenItem = (extra = {}) => normalizeShoppingItem({ id: 'shop-chicken', key: 'id:haehnchenbrust', ingredientId: 'haehnchenbrust', name: 'Hähnchenbrustfilet', amountNeeded: 800, amountAvailable: 300, amountToBuy: 500, unit: 'g', category: 'Fleisch und Fisch', recipeSources: [{ recipeId: 'x', title: 'X', servings: 4, amount: 800, unit: 'g' }], manuallyAdded: false, ...extra });
 
   t('11 DB: 500 g benötigt, 600 g gekauft, 300 g vorhanden → 900 g', async () => {

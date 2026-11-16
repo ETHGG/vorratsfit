@@ -5,7 +5,7 @@ import { state, refreshProfile } from './state.js';
 import { navigate } from './router.js';
 import { saveProfile, PROFILE_LIMITS, validateProfileInput } from '../profile.js';
 import { ACTIVITY_LEVELS, GOALS, SEXES, DEVICES, DIETS, ALLERGENS } from '../core/models.js';
-import { sanitizeText } from '../core/utils.js';
+import { sanitizeText, todayString } from '../core/utils.js';
 
 const STEPS = [
   { id: 'basis', title: 'Über dich' },
@@ -30,6 +30,7 @@ function checkboxGroup(legend, name, options, selected = [], hint = null) {
 function listText(arr) {
   return (arr ?? []).join(', ');
 }
+
 function parseList(text) {
   return String(text ?? '').split(/[,;\n]/).map((s) => sanitizeText(s, 60)).filter(Boolean).slice(0, 50);
 }
@@ -45,7 +46,7 @@ export async function render(container, { wizard = false } = {}) {
     h('fieldset', { class: 'step', 'data-step': '0' },
       h('legend', { class: 'step-legend' }, STEPS[0].title),
       field({ label: 'Spitzname (optional)', input: h('input', { type: 'text', name: 'nickname', value: p.nickname ?? '', maxlength: '40', autocomplete: 'nickname' }) }),
-      field({ label: 'Alter (Jahre)', input: numInput('age', p.age, { step: '1', inputmode: 'numeric' }) }),
+      field({ label: 'Geburtsdatum', input: h('input', { type: 'date', name: 'birthDate', value: p.birthDate ?? '', max: todayString(), required: true }), hint: p.birthDate || !p.age ? 'Dein Alter wird daraus automatisch berechnet und läuft mit.' : `Bisher gespeichert: ${p.age} Jahre. Mit Geburtsdatum wird das Alter automatisch weitergeführt.` }),
       field({ label: 'Körpergröße (cm)', input: numInput('heightCm', p.heightCm) }),
       field({ label: 'Gewicht (kg)', input: numInput('weightKg', p.weightKg) }),
       field({ label: 'Wunschgewicht (kg, optional)', input: numInput('targetWeightKg', p.targetWeightKg) }),
@@ -86,7 +87,7 @@ export async function render(container, { wizard = false } = {}) {
     const extra = parseList(fd.get('customDevices'));
     return {
       nickname: fd.get('nickname'),
-      age: fd.get('age'), heightCm: fd.get('heightCm'), weightKg: fd.get('weightKg'), targetWeightKg: fd.get('targetWeightKg'),
+      birthDate: fd.get('birthDate'), heightCm: fd.get('heightCm'), weightKg: fd.get('weightKg'), targetWeightKg: fd.get('targetWeightKg'),
       sex: fd.get('sex'), activityLevel: fd.get('activityLevel'), trainingSessionsPerWeek: fd.get('trainingSessionsPerWeek'),
       trainingDurationMinutes: fd.get('trainingDurationMinutes'), goal: fd.get('goal'), weeklyChangeKg: fd.get('weeklyChangeKg'),
       mealsPerDay: fd.get('mealsPerDay'), maxCookingMinutes: fd.get('maxCookingMinutes'),
@@ -122,7 +123,6 @@ export async function render(container, { wizard = false } = {}) {
     showFieldErrors(form, {});
     show(Math.min(STEPS.length - 1, step + 1));
   });
-
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     await withBusy(save, async () => {
@@ -145,7 +145,7 @@ export async function render(container, { wizard = false } = {}) {
   form.append(progress, ...stepEls, formError, h('div', { class: 'form-actions' }, back, next, save));
   container.append(
     pageHeader(wizard ? 'Willkommen bei VorratsFit' : 'Profil', wizard ? 'Richte dein Profil in vier kurzen Schritten ein. Alle Angaben bleiben ausschließlich auf diesem Gerät.' : 'Deine Angaben werden nur lokal gespeichert und nie an externe Dienste übertragen.'),
-    h('p', { class: 'notice notice-info' }, icon('info', { size: 16 }), h('span', {}, 'Pflichtfelder: Alter, Größe, Gewicht, Mahlzeiten pro Tag und maximale Kochzeit.')),
+    h('p', { class: 'notice notice-info' }, icon('info', { size: 16 }), h('span', {}, 'Pflichtfelder: Geburtsdatum, Größe, Gewicht, Mahlzeiten pro Tag und maximale Kochzeit.')),
     form,
   );
   show(0);

@@ -47,7 +47,6 @@ export function buildTests(ingredientsData) {
     const r = computeToBuy(1250, 'ml', [{ amount: 1, unit: 'l' }]);
     eq(r.toBuy, 250); eq(r.unit, 'ml');
   });
-
   t('06 Portionen: 2 Personen 400 g → 4 Personen 800 g', () => {
     eq(scaleAmount(400, 2, 4), 800);
     const s = scaleRecipe(chicken4, 4);
@@ -66,7 +65,6 @@ export function buildTests(ingredientsData) {
     const pv = previewForRecipe('C', plan);
     eq(pv.sufficient.map((p) => p.ingredientId).sort(), ['olivenoel', 'reis']);
   });
-
   t('08 Mehrere Rezepte: 3 + 4 Zwiebeln, Vorrat 2 → 5 kaufen', () => {
     const needs = aggregateNeeds([{ recipeId: 'A', servings: 2, recipe: recipeA }, { recipeId: 'B', servings: 2, recipe: recipeB }], catalog);
     const plan = computePlan(needs, [P('Zwiebel', 2, 'Stück')], catalog);
@@ -100,14 +98,12 @@ export function buildTests(ingredientsData) {
     assert(!merged2.items.some((i) => i.ingredientId === 'reis'), 'offener Reis wird entfernt');
     eq(merged2.removed.length, 1);
   });
-
   t('14a Rückgängig-Analyse verhindert negative Mengen', () => {
     const item = normalizeShoppingItem({ name: 'Hähnchen', checked: true, addedToPantry: true, pantryAmountAdded: 600, pantryAmountAfter: 900, unit: 'g' });
     const u = undoAnalysis(item, { amount: 200 });
     eq(u.removable, 200, 'höchstens vorhandene Menge');
     eq(u.changed, true, 'Bestand verändert -> Warnung');
   });
-
   t('17a Altes Einkaufslisten-Objekt bekommt Standardwerte', () => {
     const old = normalizeShoppingItem({ id: 'x', name: 'Milch', amount: 2, unit: 'l', checked: true });
     eq(old.amountToBuy, 2); eq(old.amountPurchased, null); eq(old.addedToPantry, true, 'abgehakt ohne Info -> als übernommen werten (keine Doppelbuchung)');
@@ -115,7 +111,6 @@ export function buildTests(ingredientsData) {
     const old2 = normalizeShoppingItem({ id: 'y', name: 'Eier', amount: 6, unit: 'Stk' });
     eq(old2.addedToPantry, false); eq(old2.unit, 'Stück'); eq(old2.checked, false);
   });
-
   t('20 Unbekannte Einheiten werden nicht spekulativ umgerechnet', () => {
     eq(convert(1, 'Stück', 'g'), null, 'Stück -> g ohne Stammdaten');
     eq(convert(1, 'EL', 'g'), null, 'EL -> g');
@@ -137,7 +132,6 @@ export function buildTests(ingredientsData) {
     eq(formatAmount(2, 'Prise'), '2 Prisen');
     eq(parseNumber('1,5'), 1.5); eq(parseNumber('1e999'), null);
   });
-
   t('21 Rezept mit hinterlegtem Allergen wird ausgeschlossen', () => {
     const r = { id: 'nut', title: 'Erdnuss-Bowl', defaultServings: 1, ingredients: [ING('erdnussmus', 'Erdnussmus', 30, 'g'), ING('reis', 'Reis', 80, 'g')], spices: [], allergenDataComplete: true };
     const res = checkRecipe(r, { allergies: ['erdnuesse'] }, catalog);
@@ -169,7 +163,6 @@ export function buildTests(ingredientsData) {
     eq(checkRecipe(unknownLocal, { allergies: ['soja'] }, catalog).status, 'unknown');
     eq(checkRecipe(unknownLocal, {}, catalog).status, 'ok', 'ohne Allergien kein Ausschluss');
   });
-
   t('N1 Mifflin-St.-Jeor und Zielbegrenzung', () => {
     eq(calcBmr({ weightKg: 80, heightCm: 180, age: 30, sex: 'male' }).value, 1780);
     eq(calcBmr({ weightKg: 80, heightCm: 180, age: 30, sex: 'female' }).value, 1614);
@@ -193,7 +186,6 @@ export function buildTests(ingredientsData) {
     const full = computeRecipeNutrition({ defaultServings: 2, ingredients: [ING('reis', 'Reis', 200, 'g')] }, catalog);
     eq(full.perServing.kcal, 350); eq(full.status, 'calculated');
   });
-
   t('S1 Bewertung: maximal 100 Punkte, Gewürze geringer gewichtet', () => {
     const recipe = { ...chicken4, totalMinutes: 20, devices: ['herd'], nutritionPerServing: { kcal: 600, protein: 50 }, spices: [ING('salz', 'Salz', 1, 'Prise')] };
     const scaled = scaleRecipe(recipe, 2);
@@ -206,11 +198,10 @@ export function buildTests(ingredientsData) {
     const ev2 = evaluateAgainstPantry(scaled, [...pantry, P('Salz', 500, 'g')], catalog);
     eq(ev2.matchPercent, 100);
   });
-
   t('B1 Backup: Code-Roundtrip mit Umlauten und Prüfsumme', async () => {
     const data = { profile: [{ id: 'main', nickname: 'Jörg 🍗' }], pantry: [P('Hähnchen', 300, 'g')] };
     const backup = await createBackupObject(data);
-    eq(backup.format, 'vorratsfit-backup'); eq(backup.backupVersion, BACKUP_VERSION); // 0.2: Version 2 laut CLAUDE.md Abschnitt 5
+    eq(backup.format, 'vorratsfit-backup'); eq(backup.backupVersion, BACKUP_VERSION);
     eq(backup.checksum, await sha256Hex(canonicalStringify(backup.data)));
     const code = encodeBackupCode(backup);
     assert(/^[A-Za-z0-9_-]+$/.test(code), 'Base64URL');

@@ -81,6 +81,7 @@ function pantryForm(item, { onSaved, submitLabel = 'Hinzufügen', spiceDefault =
       h('div', { class: 'form-actions' }, lookupBtn, scanBtn, !barcodeScanSupported() ? h('span', { class: 'hint' }, 'Kamera-Scan wird von diesem Browser nicht unterstützt – bitte Barcode eintippen.') : null),
       productInfo),
     h('div', { class: 'form-actions' }, submit));
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     withBusy(submit, async () => {
@@ -195,7 +196,7 @@ export async function render(container) {
     clear(addHolder);
     addHolder.append(pantryForm(null, {
       spiceDefault: filters.tab === 'spices',
-      onSaved: async () => { renderAddForm(); await reload(); addHolder.querySelector('input[name="name"]')?.focus(); },
+      onSaved: async () => { renderAddForm(); await reload(); await drawFrequent(); addHolder.querySelector('input[name="name"]')?.focus(); },
     }));
   };
 

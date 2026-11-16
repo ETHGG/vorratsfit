@@ -16,11 +16,11 @@ export const DEFAULT_QUICK_FOODS = Object.freeze([
   { id: 'default-nuesse', name: 'Nüsse', portionLabel: '30 g', kcal: 180, protein: 6, carbs: 3, fat: 16 },
 ]);
 
-const KEYS = ['kcal', 'protein', 'carbs', 'fat'];
+const KEYS = ['kcal', 'protein', 'carbs', 'fat', 'fiber'];
 
 /** Summe (Werte je Portion × Portionen). complete = false, sobald kcal oder Protein fehlen. */
 export function sumNutrition(items) {
-  const out = { kcal: 0, protein: 0, carbs: 0, fat: 0, complete: true, count: 0 };
+  const out = { kcal: 0, protein: 0, carbs: 0, fat: 0, fiber: 0, complete: true, count: 0, macrosComplete: true };
   for (const it of items ?? []) {
     const portions = typeof it.portions === 'number' && it.portions > 0 ? it.portions : 1;
     out.count += 1;
@@ -28,6 +28,7 @@ export function sumNutrition(items) {
       const v = it[k];
       if (typeof v === 'number' && Number.isFinite(v)) out[k] += v * portions;
       else if (k === 'kcal' || k === 'protein') out.complete = false;
+      else if (k !== 'fiber') out.macrosComplete = false;
     }
   }
   for (const k of KEYS) out[k] = Math.round(out[k] * 10) / 10;
@@ -74,6 +75,25 @@ export function dayBalance({ targets, logs = [], planned = [] }) {
   if (!eaten.complete) text += ' (unvollständig: bei einigen Einträgen fehlen Nährwerte)';
   return {
     status: 'ok', target, proteinMin: targets.proteinMin ?? null, proteinMax: targets.proteinMax ?? null,
+    macros: macroRows(eaten, targets),
     eaten, planned: plannedSum, remaining: over ? 0 : diff, over, minor: !!targets.minor, incomplete: !eaten.complete, text,
   };
+}
+
+/**
+ * Makro-Übersicht (0.3): gegessen vs. Ziel je Nährstoff. Ziele stammen aus calcTargets (Schätzungen):
+ * Protein als Bereich, Kohlenhydrate als Richtwert („ca.“), Fett und Ballaststoffe als Mindestmenge („mind.“).
+ */
+export function macroRows(eaten, targets) {
+  const t = targets ?? {};
+  const row = (id, label, value, target, kind) => ({
+    id, label, eaten: value, target: typeof target === 'number' ? target : null, kind,
+    percent: typeof target === 'number' && target > 0 ? Math.round((value / target) * 100) : null,
+  });
+  return [
+    row('protein', 'Protein', eaten.protein, t.proteinMin ?? null, 'range'),
+    row('carbs', 'Kohlenhydrate', eaten.carbs, t.carbs ?? null, 'approx'),
+    row('fat', 'Fett', eaten.fat, t.fatMin ?? null, 'min'),
+    row('fiber', 'Ballaststoffe', eaten.fiber, t.fiber ?? null, 'min'),
+  ].map((r) => (r.id === 'protein' && typeof t.proteinMax === 'number' ? { ...r, targetMax: t.proteinMax } : r));
 }

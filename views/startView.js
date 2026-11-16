@@ -11,6 +11,9 @@ import { formatAmount } from '../units.js';
 import { getLastBackupDate } from '../backup.js';
 import { loadDayBalance, balanceCard } from './todayView.js';
 import { todayString } from '../core/utils.js';
+import { listWeights } from '../weight.js';
+import { weightReminder } from '../core/body.js';
+import { formatNumber } from '../units.js';
 
 export async function render(container) {
   const p = state.profile;
@@ -28,6 +31,15 @@ export async function render(container) {
     h('a', { class: 'tile', href: routeHref('vorrat') }, icon('pantry', { size: 28 }), h('span', { class: 'tile-title' }, 'Vorrat'), h('span', { class: 'tile-sub' }, `${ctx.pantry.length} Einträge`)));
 
   container.append(pageHeader(p?.nickname ? `Hallo ${p.nickname}!` : 'VorratsFit', 'Rezepte, Vorräte, Einkaufslisten und Ernährungsziele – alles lokal auf deinem Gerät.'), tiles);
+
+  if (p) {
+    const weights = await listWeights();
+    const r = weightReminder(weights, todayString());
+    const last = weights[weights.length - 1];
+    container.append(section('Gewicht',
+      r.due ? h('p', { class: 'notice notice-info' }, icon('scale', { size: 16 }), h('span', {}, r.text)) : h('p', {}, `Zuletzt: ${formatNumber(last.weightKg, 1)} kg am ${last.date.split('-').reverse().join('.')}`),
+      h('a', { class: 'btn', href: routeHref('gewicht') }, r.due ? 'Gewicht eintragen' : 'Verlauf ansehen')));
+  }
 
   const today = await loadDayBalance(todayString());
   container.append(section('Heute', balanceCard(today.balance, { compact: true }), h('a', { class: 'btn', href: routeHref('heute') }, 'Tagesbilanz öffnen')));

@@ -1,9 +1,9 @@
 // core/models.js – Konstanten, Datenmodelle und Normalisierer mit sicheren Standardwerten.
 // Normalisierer werden bei DB-Migrationen, beim Speichern und beim Backup-Import verwendet.
-import { uuid, nowIso, sanitizeText, sanitizeMultiline, normalizeText, parseNumber, isValidDateString, isPlainObject, isSafeHttpUrl } from './utils.js';
+import { uuid, nowIso, sanitizeText, sanitizeMultiline, normalizeText, parseNumber, isValidDateString, isPlainObject, isSafeHttpUrl, ageFromBirthDate, roundTo } from './utils.js';
 import { normalizeUnit, roundQuantity } from '../units.js';
 
-export const APP_VERSION = '0.2.0';
+export const APP_VERSION = '0.3.0';
 
 export const CATEGORIES = Object.freeze([
   'Fleisch und Fisch', 'vegetarische Proteinquellen', 'Milchprodukte', 'Ersatzprodukte', 'Gemüse', 'Obst',
@@ -288,7 +288,9 @@ export function normalizeProfile(raw = {}, now = nowIso()) {
   return {
     id: 'main',
     nickname: str(raw.nickname, 40),
-    age: num(raw.age),
+    // 0.3: Geburtsdatum. Ist es vorhanden, wird das Alter bei jedem Laden neu berechnet (läuft automatisch weiter).
+    birthDate: isValidDateString(raw.birthDate) ? raw.birthDate : null,
+    age: isValidDateString(raw.birthDate) ? ageFromBirthDate(raw.birthDate) : num(raw.age),
     heightCm: num(raw.heightCm),
     weightKg: num(raw.weightKg),
     targetWeightKg: num(raw.targetWeightKg),
@@ -425,7 +427,7 @@ export function normalizeMealPlanEntry(raw = {}, now = nowIso()) {
   };
 }
 
-export const FOOD_LOG_SOURCES = Object.freeze(['plan', 'recipe', 'quick']);
+export const FOOD_LOG_SOURCES = Object.freeze(['plan', 'recipe', 'quick', 'food']);
 
 /** Eintrag im Ernährungstagebuch. Nährwerte werden als Kopie gespeichert; unbekannt = null (nie 0). */
 export function normalizeFoodLogEntry(raw = {}, now = nowIso()) {
@@ -444,6 +446,7 @@ export function normalizeFoodLogEntry(raw = {}, now = nowIso()) {
     fat: nutrientOrNull(raw.fat),
     fiber: nutrientOrNull(raw.fiber),
     portions: Math.min(50, Math.max(0.1, parseNumber(raw.portions) ?? 1)),
+    amountLabel: str(raw.amountLabel, 40) || null,
     nutritionComplete: typeof raw.nutritionComplete === 'boolean' ? raw.nutritionComplete : (kcal !== null && protein !== null),
     createdAt: iso(raw.createdAt, now),
     updatedAt: iso(raw.updatedAt, now),
@@ -460,6 +463,21 @@ export function normalizeQuickFood(raw = {}, now = nowIso()) {
     carbs: nutrientOrNull(raw.carbs),
     fat: nutrientOrNull(raw.fat),
     portionLabel: str(raw.portionLabel, 40) || '1 Portion',
+    createdAt: iso(raw.createdAt, now),
+    updatedAt: iso(raw.updatedAt, now),
+  };
+}
+
+// ---------- Version 0.3: Gewichtsverlauf ----------
+/** Gewichtseintrag. Je Tag genau ein Eintrag (ID = „w-JJJJ-MM-TT“). Ungültige Werte bleiben null. */
+export function normalizeWeightEntry(raw = {}, now = nowIso()) {
+  const date = isValidDateString(raw.date) ? raw.date : null;
+  const w = parseNumber(raw.weightKg);
+  return {
+    id: date ? `w-${date}` : idOrNew(raw.id),
+    date,
+    weightKg: w !== null && w >= 30 && w <= 350 ? roundTo(w, 1) : null,
+    note: str(raw.note, 120),
     createdAt: iso(raw.createdAt, now),
     updatedAt: iso(raw.updatedAt, now),
   };

@@ -2,11 +2,11 @@
 // Grundsatz: Schemaänderungen nur über versionierte Migrationen; niemals Stores oder die Datenbank löschen.
 import {
   normalizePantryItem, normalizeShoppingItem, normalizeSelectedRecipe, normalizeFavorite,
-  normalizeSettings, normalizeProfile, normalizeRecipe, normalizeMealPlanEntry, normalizeFoodLogEntry, normalizeQuickFood,
+  normalizeSettings, normalizeProfile, normalizeRecipe, normalizeMealPlanEntry, normalizeFoodLogEntry, normalizeQuickFood, normalizeWeightEntry,
 } from './core/models.js';
 
 export const DEFAULT_DB_NAME = 'vorratsfit-db';
-export const DB_VERSION = 2;
+export const DB_VERSION = 3;
 
 /** Stores aus Version 1 (0.1). Diese Liste wird nie verändert – sie beschreibt Migration 1. */
 const V1_STORE_NAMES = Object.freeze([
@@ -15,13 +15,15 @@ const V1_STORE_NAMES = Object.freeze([
 ]);
 /** Stores, die mit Version 2 (0.2) hinzukommen. */
 const V2_STORE_NAMES = Object.freeze(['mealPlan', 'foodLog', 'quickFoods']);
+/** Stores, die mit Version 3 (0.3) hinzukommen. */
+const V3_STORE_NAMES = Object.freeze(['weightLog']);
 
-export const STORE_NAMES = Object.freeze([...V1_STORE_NAMES, ...V2_STORE_NAMES]);
+export const STORE_NAMES = Object.freeze([...V1_STORE_NAMES, ...V2_STORE_NAMES, ...V3_STORE_NAMES]);
 
 /** Stores, die in Backups enthalten sind (metadata ist intern). */
 export const BACKUP_STORES = Object.freeze([
   'profile', 'pantry', 'favorites', 'customRecipes', 'cachedRecipes', 'shoppingList', 'selectedRecipes', 'settings',
-  'mealPlan', 'foodLog', 'quickFoods',
+  'mealPlan', 'foodLog', 'quickFoods', 'weightLog',
 ]);
 
 export const STORE_NORMALIZERS = Object.freeze({
@@ -36,6 +38,7 @@ export const STORE_NORMALIZERS = Object.freeze({
   mealPlan: normalizeMealPlanEntry,
   foodLog: normalizeFoodLogEntry,
   quickFoods: normalizeQuickFood,
+  weightLog: normalizeWeightEntry,
 });
 
 const STORE_INDEXES = Object.freeze({
@@ -43,6 +46,7 @@ const STORE_INDEXES = Object.freeze({
   shoppingList: [['normalizedName', 'normalizedName']],
   mealPlan: [['date', 'date'], ['mealPrepGroupId', 'mealPrepGroupId']],
   foodLog: [['date', 'date']],
+  weightLog: [['date', 'date']],
 });
 
 function createStores(db, names) {
@@ -63,6 +67,8 @@ const MIGRATIONS = Object.freeze({
     createStores(db, V2_STORE_NAMES);
     migrateRecords(tx, 'shoppingList', (r) => normalizeShoppingItem(r));
   },
+  // 0.3: Gewichtsverlauf. Bestehende Daten bleiben unverändert (Profil bekommt das Geburtsdatum erst auf Nachfrage).
+  3: (db) => createStores(db, V3_STORE_NAMES),
 });
 
 /** Hilfsfunktion für künftige Migrationen: Datensätze mit sicheren Standardwerten ergänzen. */

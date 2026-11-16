@@ -99,7 +99,7 @@ export async function render(container) {
   container.append(
     pageHeader('Backup', 'Sichere deine Daten oder übertrage sie auf ein anderes Gerät.'),
     h('p', { class: 'notice notice-warn' }, icon('alert', { size: 16 }), h('span', {}, 'Deine Daten liegen nur im Browser dieses Geräts. Wenn du Website-Daten löschst oder den Browser zurücksetzt, gehen sie verloren. Erstelle regelmäßig ein Backup.')),
-    section('Backup erstellen', h('p', { class: 'small' }, 'Enthalten: Profil, Vorrat inkl. Gewürze, Favoriten, eigene Rezepte, gespeicherte Online-Rezepte, Einkaufsliste, ausgewählte Rezepte mit Portionen, Wochenplan, Ernährungstagebuch, eigene Schnell-Lebensmittel und Einstellungen. Nicht enthalten: Häufigkeit der Schnellerfassung und gewählter Einkaufszeitraum (Geräteeinstellungen).'), createBtn, exportOut),
+    section('Backup erstellen', h('p', { class: 'small' }, 'Enthalten: Profil, Vorrat inkl. Gewürze, Favoriten, eigene Rezepte, gespeicherte Online-Rezepte, Einkaufsliste, ausgewählte Rezepte mit Portionen, Wochenplan, Ernährungstagebuch, Gewichtsverlauf, eigene Schnell-Lebensmittel und Einstellungen. Nicht enthalten: Häufigkeit der Schnellerfassung und gewählter Einkaufszeitraum (Geräteeinstellungen).'), createBtn, exportOut),
     section('Backup wiederherstellen',
       field({ label: 'Backup-Code oder JSON', input: importArea }),
       field({ label: 'Oder JSON-Datei auswählen', input: fileInput }),

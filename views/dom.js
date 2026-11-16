@@ -72,7 +72,17 @@ const ICONS = {
   trash: 'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13',
   edit: 'M4 20h4L19 9l-4-4L4 16zM14 6l4 4',
   offline: 'M2 8a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0M12 19h.01M3 3l18 18',
+  scale: 'M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zM8 9a5 5 0 0 1 8 0M12 9l1.5-2',
+  food: 'M7 3v8a2 2 0 0 0 2 2v8M11 3v8M15 3c-1.5 2-1.5 6 0 8v10',
 };
+
+/** SVG-Element sicher erzeugen (nur Attribute, kein Markup-Text). */
+export function svg(tag, attrs = {}, ...children) {
+  const el = document.createElementNS(SVG_NS, tag);
+  for (const [k, v] of Object.entries(attrs)) if (v !== null && v !== undefined) el.setAttribute(k, String(v));
+  for (const c of children) if (c !== null && c !== undefined) el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  return el;
+}
 
 export function icon(name, { size = 20, label = null } = {}) {
   const svg = document.createElementNS(SVG_NS, 'svg');
@@ -111,7 +121,7 @@ export function announce(message) {
 /** Modaler Dialog mit Schaltflächen. Gibt die gewählte value zurück (oder dismissValue bei Abbruch). */
 export function dialog({ title, body = [], buttons = [{ label: 'OK', value: 'ok', variant: 'primary' }], dismissValue = null, onMount = null }) {
   return new Promise((resolve) => {
-    const titleId = `dlg-${Math.random().toString(36).slice(2)}`;
+    const titleId = `dlg-${Math.random().toString(36).slice(2, 8)}`;
     const dlg = h('dialog', { class: 'dialog', 'aria-labelledby': titleId });
     const inner = h('div', { class: 'dialog-inner' });
     inner.append(h('h2', { id: titleId, class: 'dialog-title' }, title));
@@ -151,7 +161,7 @@ export function field({ label, input, hint = null, error = null, id = null }) {
   input.id = fid;
   const hintId = `${fid}-hint`;
   const errId = `${fid}-err`;
-  const describedBy = [hint ? hintId : null, `${errId}`].filter(Boolean).join(' ');
+  const describedBy = [hint ? hintId : null, errId].filter(Boolean).join(' ');
   input.setAttribute('aria-describedby', describedBy);
   return h('div', { class: 'field' },
     h('label', { for: fid }, label),
@@ -168,7 +178,7 @@ export function showFieldErrors(form, errors) {
     const input = form.querySelector(`[name="${CSS.escape(name)}"]`);
     if (!input) continue;
     input.setAttribute('aria-invalid', 'true');
-    const err = form.querySelector(`#${CSS.escape(`${input.id}-err`)}`);
+    const err = form.querySelector(`#${CSS.escape(input.id)}-err`);
     if (err) err.textContent = msg;
     if (!first) first = input;
   }
@@ -204,7 +214,7 @@ export function fmtKcal(v) {
   return typeof v === 'number' && Number.isFinite(v) ? `${formatNumber(v, 0)} kcal` : 'kcal unbekannt';
 }
 export function fmtGram(v, label = '') {
-  return typeof v === 'number' && Number.isFinite(v) ? `${formatNumber(v, 1)} g${label ? ` ${label}` : ''}` : `unbekannt${label ? ` (${label})` : ''}`;
+  return typeof v === 'number' && Number.isFinite(v) ? `${formatNumber(v, 1)} g${label ? ` ${label}` : ''}` : `${label ? `${label} ` : ''}unbekannt`;
 }
 export function fmtMinutes(v) {
   return typeof v === 'number' && Number.isFinite(v) ? `${formatNumber(v, 0)} Min.` : 'Zeit unbekannt';

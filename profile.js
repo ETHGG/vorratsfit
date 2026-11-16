@@ -1,7 +1,8 @@
 // profile.js – Profil laden, validieren und speichern. Daten bleiben ausschließlich lokal.
 import { getItem, putItem } from './db.js';
 import { normalizeProfile, ACTIVITY_LEVELS, GOALS, SEXES } from './core/models.js';
-import { parseNumber, nowIso } from './core/utils.js';
+import { parseNumber, nowIso, ageFromBirthDate, todayString } from './core/utils.js';
+import { validateBirthDate } from './core/body.js';
 import { calcTargets, perMealTargets } from './nutrition.js';
 
 export const PROFILE_LIMITS = Object.freeze({
@@ -20,10 +21,20 @@ export const PROFILE_LIMITS = Object.freeze({
 /**
  * Validiert Formulareingaben. Gibt verständliche Fehlermeldungen je Feld zurück.
  */
-export function validateProfileInput(input) {
+export function validateProfileInput(input, today = todayString()) {
   const errors = {};
   const values = {};
+  // 0.3: Geburtsdatum hat Vorrang; das Alter wird daraus berechnet. Ohne Geburtsdatum gilt das bisherige Alter (ältere Profile).
+  const birth = typeof input.birthDate === 'string' ? input.birthDate.trim() : '';
+  const hasAge = input.age !== undefined && input.age !== null && String(input.age).trim() !== '';
+  let birthDate = null;
+  if (birth || !hasAge) {
+    const err = validateBirthDate(birth, today);
+    if (err) errors.birthDate = err;
+    else { birthDate = birth; input = { ...input, age: ageFromBirthDate(birth, today) }; }
+  }
   for (const [field, lim] of Object.entries(PROFILE_LIMITS)) {
+    if (field === 'age' && (errors.birthDate || birthDate)) { values.age = birthDate ? input.age : null; continue; }
     const raw = input[field];
     const empty = raw === undefined || raw === null || (typeof raw === 'string' && raw.trim() === '');
     if (empty) {
@@ -43,7 +54,7 @@ export function validateProfileInput(input) {
     errors.targetWeightKg = 'Beim Ziel „Gewicht reduzieren“ sollte das Wunschgewicht unter dem aktuellen Gewicht liegen.';
   }
   if (Object.keys(errors).length) return { ok: false, errors, profile: null };
-  const profile = normalizeProfile({ ...input, ...values, weeklyChangeKg: values.weeklyChangeKg ?? 0, updatedAt: nowIso() });
+  const profile = normalizeProfile({ ...input, ...values, birthDate, weeklyChangeKg: values.weeklyChangeKg ?? 0, updatedAt: nowIso() });
   return { ok: true, errors: {}, profile };
 }
 

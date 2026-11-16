@@ -1,5 +1,5 @@
 // pantry.js – Vorratsverwaltung (CRUD, Suche, Filter, Ablaufdaten).
-import { getAllItems, putItem, deleteItem, getItem, runTransaction, getMeta } from './db.js';
+import { getAllItems, deleteItem, getItem, runTransaction, getMeta } from './db.js';
 import { normalizePantryItem, CATEGORIES } from './core/models.js';
 import { normalizeText, parseNumber, isValidDateString, daysUntil, todayString, nowIso, uuid } from './core/utils.js';
 import { normalizeUnit, roundQuantity, convertWithIngredient } from './units.js';

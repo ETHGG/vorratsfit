@@ -1,4 +1,4 @@
-// tests/run-all.mjs – führt ALLE Testarten aus und bricht bei keinem Fehler ab (CLAUDE.md, Abschnitt 8.2).
+// tests/run-all.mjs – führt ALLE Testarten aus und bricht bei keinem Fehler ab.
 // Am Ende: Zusammenfassung je Testart und Liste aller Fehlschläge. Exit-Code 1, sobald etwas fehlschlägt
 // oder ein Teil nicht ausgeführt werden konnte.
 import { spawnSync } from 'node:child_process';
@@ -63,7 +63,7 @@ for (const [key, label, script, re] of [
   ['e2e', 'E2E', 'tests/e2e.py', /(\d+)\/(\d+) E2E-Prüfungen bestanden/],
 ]) {
   if (!wanted.includes(key)) continue;
-  if (!py) { parts.push({ name: label, ok: false, blocked: 'nicht ausgeführt – Blockade: Python mit Playwright nicht verfügbar (siehe CLAUDE.md 8.1)', failures: [], count: null, out: '' }); continue; }
+  if (!py) { parts.push({ name: label, ok: false, blocked: 'nicht ausgeführt – Blockade: Python mit Playwright nicht verfügbar', failures: [], count: null, out: '' }); continue; }
   const r = run(py, [script, ...chromeArgs]);
   const failures = failuresFrom(r.out);
   if (r.timedOut) failures.push(`${label}: Zeitlimit überschritten`);
@@ -88,5 +88,5 @@ if (all.length || blocked.length) {
   all.forEach((f) => console.log(`  ✘ ${f}`));
   blocked.forEach((p) => console.log(`  ✘ [${p.name}] ${p.blocked}`));
 }
-console.log(all.length || blocked.length || parts.some((p) => !p.ok) ? '\nERGEBNIS: FEHLER – jeder Fehlschlag muss behoben werden (CLAUDE.md 8.3).' : '\nERGEBNIS: alle Tests bestanden.');
+console.log(all.length || blocked.length || parts.some((p) => !p.ok) ? '\nERGEBNIS: FEHLER – jeder Fehlschlag muss behoben werden.' : '\nERGEBNIS: alle Tests bestanden.');
 process.exit(all.length || blocked.length || parts.some((p) => !p.ok) ? 1 : 0);

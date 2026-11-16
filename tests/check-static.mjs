@@ -15,7 +15,6 @@ function walk(dir, out = []) {
   }
   return out;
 }
-
 const files = walk('');
 const appJs = files.filter((f) => f.endsWith('.js'));
 
@@ -40,7 +39,11 @@ const mustCache = files.filter((f) => /\.(js|css|html|json|webmanifest|png|svg)$
 for (const f of mustCache) if (!shell.includes(f)) problems.push(`service-worker.js: ${f} fehlt im App-Shell-Cache`);
 for (const f of shell) if (f && !files.includes(f)) problems.push(`service-worker.js: ${f} existiert nicht`);
 if (/indexedDB|localStorage/.test(sw.replace(/\/\/.*$/gm, ''))) problems.push('service-worker.js greift auf IndexedDB/localStorage zu');
-ok.push(`P3-11 Service Worker: ${shell.length} Einträge geprüft, alle Programmdateien im App-Shell-Cache`);
+const pkg = JSON.parse(read('package.json'));
+const cacheVersion = sw.match(/const CACHE_VERSION = '([^']+)'/)?.[1];
+const appVersion = read('core/models.js').match(/export const APP_VERSION = '([^']+)'/)?.[1];
+if (!(pkg.version === cacheVersion && cacheVersion === appVersion)) problems.push(`Versionen uneinheitlich: package ${pkg.version}, CACHE_VERSION ${cacheVersion}, APP_VERSION ${appVersion}`);
+ok.push(`P3-11 Service Worker: ${shell.length} Einträge geprüft, alle Programmdateien im App-Shell-Cache, Version ${cacheVersion}`);
 
 const html = read('index.html');
 for (const m of html.matchAll(/(?:href|src)="([^"]+)"/g)) {

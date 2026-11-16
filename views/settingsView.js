@@ -17,7 +17,6 @@ export async function render(container) {
   const s = state.settings;
   const theme = select('theme', THEMES, getTheme());
   theme.addEventListener('change', () => { setTheme(theme.value); toast('Darstellung geändert.'); });
-
   const save = async (patch, msg) => { await saveSettings(patch); await refreshSettings(); toast(msg, 'success'); };
 
   const days = h('input', { type: 'number', name: 'expiryWarningDays', min: '0', max: '30', step: '1', value: s.expiryWarningDays, inputmode: 'numeric' });
@@ -57,7 +56,7 @@ export async function render(container) {
     const input = h('input', { type: 'text', autocomplete: 'off', 'aria-label': 'Zur Bestätigung LÖSCHEN eingeben' });
     const choice = await dialog({
       title: 'Alle Daten löschen?',
-      body: [h('p', {}, 'Profil, Vorrat, Einkaufsliste, Wochenplan, Ernährungstagebuch, Favoriten, eigene Rezepte und Einstellungen werden unwiderruflich von diesem Gerät gelöscht. Erstelle vorher ein Backup, wenn du die Daten behalten möchtest.'), h('p', {}, 'Gib zur Bestätigung LÖSCHEN ein:'), input],
+      body: [h('p', {}, 'Profil, Vorrat, Einkaufsliste, Wochenplan, Ernährungstagebuch, Gewichtsverlauf, Favoriten, eigene Rezepte und Einstellungen werden unwiderruflich von diesem Gerät gelöscht. Erstelle vorher ein Backup, wenn du die Daten behalten möchtest.'), h('p', {}, 'Gib zur Bestätigung LÖSCHEN ein:'), input],
       buttons: [{ label: 'Abbrechen', value: 'cancel' }, { label: 'Endgültig löschen', value: 'wipe', variant: 'danger' }],
       dismissValue: 'cancel',
     });
