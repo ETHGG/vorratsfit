@@ -31,6 +31,7 @@ const VIEWS = {
   einstellungen: () => import('./views/settingsView.js'),
   rezept: () => import('./views/recipeDetailView.js'),
   'eigenes-rezept': () => import('./views/customRecipeView.js'),
+  kochen: () => import('./views/cookView.js'),
 };
 
 const main = document.getElementById('main');
@@ -58,7 +59,7 @@ function buildNavigation() {
 }
 
 function markActive(name) {
-  const routeName = name === 'rezept' || name === 'eigenes-rezept' ? 'entdecken' : name === 'einrichtung' ? 'profil' : name;
+  const routeName = name === 'rezept' || name === 'eigenes-rezept' || name === 'kochen' ? 'entdecken' : name === 'einrichtung' ? 'profil' : name;
   const primary = NAV_ITEMS.find((n) => n.route === routeName)?.primary ? routeName : PRIMARY_FOR[routeName];
   document.querySelectorAll('[data-route]').forEach((a) => {
     const inBottom = !!a.closest('#bottom-nav');

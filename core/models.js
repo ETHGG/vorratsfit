@@ -3,7 +3,7 @@
 import { uuid, nowIso, sanitizeText, sanitizeMultiline, normalizeText, parseNumber, isValidDateString, isPlainObject, isSafeHttpUrl, ageFromBirthDate, roundTo } from './utils.js';
 import { normalizeUnit, roundQuantity } from '../units.js';
 
-export const APP_VERSION = '0.5.0';
+export const APP_VERSION = '0.6.0';
 
 export const CATEGORIES = Object.freeze([
   'Fleisch und Fisch', 'vegetarische Proteinquellen', 'Milchprodukte', 'Ersatzprodukte', 'Gemüse', 'Obst',
@@ -286,6 +286,9 @@ export function normalizeSettings(raw = {}, now = nowIso()) {
     externalImages: bool(raw.externalImages, false),
     expiryWarningDays: days !== null ? Math.round(Math.min(30, Math.max(0, days))) : 3,
     defaultServings: servings !== null ? Math.round(Math.min(20, Math.max(1, servings))) : 2,
+    // 0.6: Wasserziel und eigene Reihenfolge der Supermarkt-Gänge
+    waterGoalMl: (() => { const w = parseNumber(raw.waterGoalMl); return w !== null ? Math.round(Math.min(6000, Math.max(500, w))) : 2000; })(),
+    shoppingGroupOrder: Array.isArray(raw.shoppingGroupOrder) ? raw.shoppingGroupOrder.filter((g) => SHOPPING_GROUPS.includes(g)).filter((g, i, a) => a.indexOf(g) === i) : [],
     updatedAt: iso(raw.updatedAt, now),
   };
 }
@@ -355,6 +358,8 @@ export function normalizeRecipe(raw = {}, now = nowIso()) {
   const total = parseNumber(raw.totalMinutes);
   const sourceUrl = isSafeHttpUrl(raw.sourceUrl) ? raw.sourceUrl : null;
   const imageUrl = isSafeHttpUrl(raw.imageUrl) && String(raw.imageUrl).startsWith('https://') ? raw.imageUrl : null;
+  // 0.6: eigenes Foto (nur lokal, als verkleinertes JPEG/WebP-Daten-URL, max. ca. 1,5 MB)
+  const photo = typeof raw.photo === 'string' && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(raw.photo) && raw.photo.length <= 2_000_000 ? raw.photo : null;
   return {
     id: idOrNew(raw.id),
     title: str(raw.title, 120) || 'Rezept ohne Titel',
@@ -381,6 +386,7 @@ export function normalizeRecipe(raw = {}, now = nowIso()) {
     source: str(raw.source, 80) || 'Eigenes Rezept',
     sourceUrl,
     imageUrl,
+    photo,
     emoji: str(raw.emoji, 8) || '🍽️',
     license: str(raw.license, 200) || 'Eigenes Rezept (privat)',
     origin: ['local', 'custom', 'external'].includes(raw.origin) ? raw.origin : 'custom',
@@ -486,6 +492,20 @@ export function normalizeWeightEntry(raw = {}, now = nowIso()) {
     date,
     weightKg: w !== null && w >= 30 && w <= 350 ? roundTo(w, 1) : null,
     note: str(raw.note, 120),
+    createdAt: iso(raw.createdAt, now),
+    updatedAt: iso(raw.updatedAt, now),
+  };
+}
+
+/** 0.6: Wasser – ein Eintrag je Tag (Summe in ml). */
+export const WATER_MAX_ML = 10000;
+export function normalizeWaterEntry(raw = {}, now = nowIso()) {
+  const date = isValidDateString(raw.date) ? raw.date : null;
+  const ml = parseNumber(raw.ml);
+  return {
+    id: date ? `water-${date}` : idOrNew(raw.id),
+    date,
+    ml: ml !== null ? Math.round(Math.min(WATER_MAX_ML, Math.max(0, ml))) : 0,
     createdAt: iso(raw.createdAt, now),
     updatedAt: iso(raw.updatedAt, now),
   };

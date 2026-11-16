@@ -170,8 +170,8 @@ export function buildTestsV03(ingredientsData = []) {
     eq([s.carbs, s.macrosComplete, s.complete], [0, false, true]);
   });
 
-  t('D-01 Backup Version 3 mit Gewichtsverlauf; Backup aus 0.2 (Version 2) wird migriert', async () => {
-    eq(BACKUP_VERSION, 3);
+  t('D-01 Backup (ab Version 3) mit Gewichtsverlauf; Backup aus 0.2 (Version 2) wird migriert', async () => {
+    assert(BACKUP_VERSION >= 3, 'mindestens Version 3 (0.6: 4)');
     const b = await createBackupObject({ weightLog: [models.normalizeWeightEntry({ date: TODAY, weightKg: 94.8 })] });
     const parsed = await parseBackupInput(JSON.stringify(b));
     eq([parsed.ok, parsed.data.weightLog[0].weightKg], [true, 94.8]);

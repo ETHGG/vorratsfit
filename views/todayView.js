@@ -1,6 +1,7 @@
 // views/todayView.js – Tagesbilanz und „Heute gegessen“: geplante Mahlzeiten kochen/essen, Schnellerfassen, Tagebuch.
 import { h, clear, icon, svg, toast, withBusy, confirmDialog, field, showFieldErrors, emptyState, stepper, select } from './dom.js';
-import { pageHeader, section } from './components.js';
+import { pageHeader, section, waterWidget } from './components.js';
+import { getWater, addWater } from '../water.js';
 import { state, shoppingContext } from './state.js';
 import { routeHref } from './router.js';
 import { listPlan, listAllPlan, cookPlanEntry, uncookPlanEntry } from '../planner.js';
@@ -117,6 +118,7 @@ export async function cookWithPreview(entry, servingsTotal) {
 export async function render(container, { params }) {
   const requested = params?.get('datum');
   let date = isValidDateString(requested) ? requested : todayString();
+  const waterBox = h('div', {});
   const balanceBox = h('div', { 'aria-live': 'polite' });
   const mealsBox = h('div', {});
   const logBox = h('div', { 'aria-live': 'polite' });
@@ -128,6 +130,7 @@ export async function render(container, { params }) {
     const { entries, logs, balance } = await loadDayBalance(date);
     title.textContent = `${formatDayLabel(date)}${date === todayString() ? ' (heute)' : ''}`;
     clear(balanceBox).append(balanceCard(balance));
+    clear(waterBox).append(waterWidget({ ml: await getWater(date), goal: state.settings?.waterGoalMl ?? 2000, onChange: async (d) => (await addWater(date, d)).ml }));
     drawMeals(entries);
     drawLog(logs);
     await drawQuick();
@@ -349,6 +352,7 @@ export async function render(container, { params }) {
     pageHeader('Heute', 'Was du heute isst – und wie viel noch geht.'),
     h('div', { class: 'day-nav' }, prev, title, next),
     section('Tagesbilanz', balanceBox),
+    section('Wasser', waterBox),
     section('Geplante Mahlzeiten', mealsBox),
     section('Lebensmittel erfassen', fForm, h('details', { class: 'more' }, h('summary', {}, 'Eigene Werte eintragen (z. B. Restaurant)'), cForm)),
     section('Zuletzt gegessen', recentBox),

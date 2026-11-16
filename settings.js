@@ -38,7 +38,7 @@ export function applyTheme(theme = getTheme()) {
   if (theme === 'system') root.removeAttribute('data-theme');
   else root.setAttribute('data-theme', theme);
   const dark = theme === 'dark' || (theme === 'system' && window.matchMedia?.('(prefers-color-scheme: dark)').matches);
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#14201b' : '#2f7d5b');
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#171513' : '#faf6ef');
 }
 
 /** Löscht alle persönlichen Daten – NUR nach ausdrücklicher Bestätigung durch den Nutzer (eine Transaktion). */

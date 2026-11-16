@@ -24,6 +24,9 @@ export async function render(container) {
   const servings = h('input', { type: 'number', name: 'defaultServings', min: '1', max: '20', step: '1', value: s.defaultServings, inputmode: 'numeric' });
   servings.addEventListener('change', () => save({ defaultServings: servings.value }, 'Standard-Portionen gespeichert.'));
 
+  const water = h('input', { type: 'number', name: 'waterGoalMl', min: '500', max: '6000', step: '250', value: s.waterGoalMl, inputmode: 'numeric' });
+  water.addEventListener('change', () => save({ waterGoalMl: water.value }, 'Wasserziel gespeichert.'));
+
   const storageBox = h('div', { 'aria-live': 'polite' });
   async function drawStorage() {
     clear(storageBox);
@@ -56,7 +59,7 @@ export async function render(container) {
     const input = h('input', { type: 'text', autocomplete: 'off', 'aria-label': 'Zur Bestätigung LÖSCHEN eingeben' });
     const choice = await dialog({
       title: 'Alle Daten löschen?',
-      body: [h('p', {}, 'Profil, Vorrat, Einkaufsliste, Wochenplan, Ernährungstagebuch, Gewichtsverlauf, Favoriten, eigene Rezepte und Einstellungen werden unwiderruflich von diesem Gerät gelöscht. Erstelle vorher ein Backup, wenn du die Daten behalten möchtest.'), h('p', {}, 'Gib zur Bestätigung LÖSCHEN ein:'), input],
+      body: [h('p', {}, 'Profil, Vorrat, Einkaufsliste, Wochenplan, Ernährungstagebuch, Gewichtsverlauf, Wasser, Favoriten, eigene Rezepte und Einstellungen werden unwiderruflich von diesem Gerät gelöscht. Erstelle vorher ein Backup, wenn du die Daten behalten möchtest.'), h('p', {}, 'Gib zur Bestätigung LÖSCHEN ein:'), input],
       buttons: [{ label: 'Abbrechen', value: 'cancel' }, { label: 'Endgültig löschen', value: 'wipe', variant: 'danger' }],
       dismissValue: 'cancel',
     });
@@ -72,7 +75,8 @@ export async function render(container) {
     section('Darstellung', field({ label: 'Farbschema', input: theme })),
     section('Allgemein',
       field({ label: 'Warnung vor Ablauf (Tage)', input: days }),
-      field({ label: 'Standard-Personenzahl', input: servings })),
+      field({ label: 'Standard-Personenzahl', input: servings }),
+      field({ label: 'Wasserziel pro Tag (ml)', input: water, hint: 'Richtwert für Erwachsene: etwa 1,5–2 Liter. Bei Hitze oder Sport mehr.' })),
     section('Externe Datenquellen (optional)',
       h('p', { class: 'small' }, 'VorratsFit funktioniert vollständig ohne Internet. Externe Abfragen enthalten niemals Angaben zu Alter, Gewicht, Kalorienziel oder Gesundheitsdaten – nur Suchbegriffe oder Barcodes.'),
       toggle('Online-Rezeptsuche (TheMealDB)', 'externalRecipes', s.externalRecipes, 'Bitte prüfe vor der Nutzung die aktuellen Nutzungsbedingungen von TheMealDB. Die Rezepte sind englischsprachig.', (v) => save({ externalRecipes: v }, v ? 'Online-Rezeptsuche aktiviert.' : 'Online-Rezeptsuche deaktiviert.')),

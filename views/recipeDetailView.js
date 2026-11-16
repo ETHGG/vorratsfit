@@ -3,7 +3,7 @@ import { h, clear, stepper, icon, dialog, toast, withBusy, emptyState, fmtMinute
 import { pageHeader, section, statusBadge, tagList, estimateNote, allergyDisclaimer, favoriteButton, recipeArt } from './components.js';
 import { state, analysisContext, refreshFavorites, shoppingContext, refreshRecipes } from './state.js';
 import { routeHref, navigate } from './router.js';
-import { analyzeRecipe, toggleFavorite, deleteCustomRecipe, deleteCachedRecipe } from '../recipes.js';
+import { analyzeRecipe, toggleFavorite, deleteCustomRecipe, deleteCachedRecipe, saveCustomRecipe } from '../recipes.js';
 import { previewAddRecipe, addRecipeToShopping } from '../shopping.js';
 import { addPlanEntry, listAllPlan, cookUnplanned } from '../planner.js';
 import { cookWithPreview } from './todayView.js';
@@ -155,9 +155,7 @@ export async function render(container, { id, params }) {
   const favHolder = h('span', {});
   const drawFav = () => { clear(favHolder); favHolder.append(favoriteButton(r, async () => { await toggleFavorite(r); await refreshFavorites(); drawFav(); })); };
   drawFav();
-  const visual = r.imageUrl && state.settings?.externalImages && state.online
-    ? h('img', { class: 'detail-img', src: r.imageUrl, alt: `Foto: ${r.title}`, referrerpolicy: 'no-referrer', loading: 'lazy' })
-    : recipeArt(r, 'detail-emoji');
+  const visual = recipeArt(r, 'detail-emoji');
   const sourceInfo = h('p', { class: 'small' }, `Datenquelle: ${r.source}. Lizenz: ${r.license}.`, r.sourceUrl ? h('span', {}, ' ', h('a', { href: r.sourceUrl, target: '_blank', rel: 'noopener noreferrer' }, 'Originalrezept öffnen')) : null);
 
   container.append(
@@ -178,10 +176,28 @@ export async function render(container, { id, params }) {
       al.tags.length ? h('p', {}, `Laut Zutatenstammdaten enthalten: ${al.tags.map(allergenLabel).join(', ')}.`) : h('p', {}, al.complete ? 'In den hinterlegten Zutatenstammdaten sind keine der 14 Hauptallergene vermerkt.' : 'Keine Allergenangaben vorhanden.'),
       !al.complete ? h('p', { class: 'notice notice-warn' }, icon('alert', { size: 16 }), 'Die Allergendaten sind unvollständig. Fehlende Angaben bedeuten nicht, dass das Rezept allergenfrei ist.') : null,
       allergyDisclaimer()),
-    section('Zubereitung', r.instructions.length ? h('ol', { class: 'steps' }, ...r.instructions.map((s) => h('li', {}, s))) : h('p', {}, 'Keine Zubereitungsschritte hinterlegt.')),
+    section('Zubereitung',
+      r.instructions.length ? h('a', { class: 'btn btn-primary cook-start', href: routeHref(`kochen/${encodeURIComponent(r.id)}?portionen=${servings}`) }, icon('pot', { size: 18 }), ' Kochmodus starten') : null,
+      r.instructions.length ? h('ol', { class: 'steps' }, ...r.instructions.map((s) => h('li', {}, s))) : h('p', {}, 'Keine Zubereitungsschritte hinterlegt.')),
     section('Nährwerte pro Portion', nutritionTable(r)),
     section('Quelle', sourceInfo),
   );
+  if (r.origin === 'custom') {
+    // 0.6: eigenes Foto hinzufügen oder ändern
+    const pin = h('input', { type: 'file', accept: 'image/*', capture: 'environment', class: 'photo-input', id: 'photo-change', 'aria-label': 'Foto für dieses Rezept wählen' });
+    pin.addEventListener('change', async () => {
+      try {
+        const { shrinkPhoto } = await import('./customRecipeView.js');
+        const photo = pin.files?.[0] ? await shrinkPhoto(pin.files[0]) : null;
+        if (!photo) return;
+        await saveCustomRecipe({ ...r, photo });
+        await refreshRecipes();
+        toast('Foto gespeichert.', 'success');
+        window.dispatchEvent(new HashChangeEvent('hashchange'));
+      } catch (err) { toast(err.message, 'error'); }
+    });
+    container.append(section('Foto', h('label', { for: 'photo-change', class: 'photo-label' }, r.photo ? '📷 Foto ändern' : '📷 Foto hinzufügen'), pin));
+  }
   if (r.origin === 'custom' || r.origin === 'external') {
     const del = h('button', { type: 'button', class: 'btn btn-danger' }, icon('trash', { size: 16 }), r.origin === 'custom' ? ' Eigenes Rezept löschen' : ' Gespeichertes Rezept entfernen');
     del.addEventListener('click', async () => {

@@ -17,7 +17,7 @@ export const NAV_ITEMS = Object.freeze([
 ]);
 
 /** Welcher Eintrag der unteren Leiste gehört zu einer Seite? */
-export const PRIMARY_FOR = Object.freeze({ entdecken: 'vorrat-rezepte', favoriten: 'vorrat-rezepte', rezept: 'vorrat-rezepte', 'eigenes-rezept': 'vorrat-rezepte', tagesziel: 'heute' });
+export const PRIMARY_FOR = Object.freeze({ entdecken: 'vorrat-rezepte', favoriten: 'vorrat-rezepte', rezept: 'vorrat-rezepte', 'eigenes-rezept': 'vorrat-rezepte', kochen: 'vorrat-rezepte', tagesziel: 'heute' });
 
 export function parseHash(hash = location.hash) {
   const raw = hash.replace(/^#\/?/, '');

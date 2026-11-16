@@ -5,8 +5,10 @@ import { state, analysisContext, refreshFavorites } from './state.js';
 import { routeHref } from './router.js';
 import { analyzeAll, applyFilters, sortAnalyses, RECIPE_FILTERS, PANTRY_PAGE_FILTERS, toggleFavorite } from '../recipes.js';
 
-export async function render(container) {
+export async function render(container, { params } = {}) {
   const active = new Set();
+  // 0.6: Resteverwertung – direkt aus „Bald aufbrauchen“ auf der Startseite
+  if (params?.get('resteverwertung') === '1') active.add('resteverwertung');
   let servings = state.pantryServings ?? state.settings?.defaultServings ?? 2;
   let sortKey = 'recommended';
   const results = h('div', { class: 'card-list', 'aria-live': 'polite' });
@@ -27,7 +29,14 @@ export async function render(container) {
     const allowed = all.filter((a) => a.check.status === 'ok');
     const blocked = all.filter((a) => a.check.status !== 'ok');
     const relevant = allowed.filter((a) => a.evaluation.counts.available + a.evaluation.counts.insufficient > 0);
-    const shown = sortAnalyses(applyFilters(relevant, Array.from(active)), sortKey);
+    let shown = sortAnalyses(applyFilters(relevant, Array.from(active)), sortKey);
+    if (active.has('resteverwertung')) {
+      // Rezepte, die die am frühesten ablaufenden Zutaten verbrauchen, zuerst
+      const urgency = (a) => Math.min(...a.evaluation.items.filter((i) => !i.isSpice && typeof i.expiringInDays === 'number').map((i) => i.expiringInDays), 99);
+      shown = [...shown].sort((x, y) => urgency(x) - urgency(y));
+      const names = [...new Set(relevant.flatMap((a) => a.evaluation.items.filter((i) => !i.isSpice && typeof i.expiringInDays === 'number').map((i) => i.name)))];
+      results.append(h('p', { class: 'notice notice-warn' }, h('span', {}, h('strong', {}, 'Resteverwertung: '), names.length ? `Diese Rezepte verbrauchen ${names.slice(0, 5).join(', ')}${names.length > 5 ? ' …' : ''} – bevor es schlecht wird.` : 'Gerade läuft nichts bald ab. 🎉')));
+    }
     results.append(h('p', { class: 'small muted' }, `${shown.length} passende ${shown.length === 1 ? 'Rezept' : 'Rezepte'} für ${servings} ${servings === 1 ? 'Person' : 'Personen'}`));
     if (!shown.length) results.append(emptyState('Keine passenden Rezepte', active.size ? 'Entferne einzelne Filter oder ergänze deinen Vorrat.' : 'Mit deinem aktuellen Vorrat passt noch kein Rezept. Ergänze weitere Lebensmittel.'));
     shown.forEach((a) => results.append(recipeCard(a, {

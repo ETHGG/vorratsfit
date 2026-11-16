@@ -1,17 +1,23 @@
 // views/shoppingView.js – „Einkaufsliste“: Was muss ich dafür kaufen?
-import { CATEGORY_EMOJI } from '../core/models.js';
 import { h, clear, field, select, stepper, toast, withBusy, icon, dialog, emptyState, showFieldErrors, confirmDialog, announce } from './dom.js';
 import { pageHeader, section } from './components.js';
-import { state, shoppingContext } from './state.js';
+import { state, shoppingContext, refreshSettings } from './state.js';
 import { routeHref } from './router.js';
 import {
   getShoppingState, recomputeShoppingList, getShoppingRange, clearShoppingRange, updateSelectedServings, removeSelectedRecipe, addManualItem,
   setPurchasedAmount, checkShoppingItem, previewCheckAll, checkAllOpen, getUndoInfo, undoCheck, startNewPurchase, deleteShoppingItem, clearCompleted,
 } from '../shopping.js';
 import { sortShoppingItems } from '../core/shopping-logic.js';
-import { SHOPPING_GROUPS, CATEGORIES } from '../core/models.js';
+import { SHOPPING_GROUPS, CATEGORIES, CATEGORY_EMOJI } from '../core/models.js';
+import { saveSettings } from '../settings.js';
 import { formatAmount, SELECTABLE_UNITS, CHECK_QUANTITY_TEXT } from '../units.js';
 import { buildShareText } from '../core/share-text.js';
+
+/** Gänge in der vom Nutzer gewählten Reihenfolge, fehlende hinten angehängt. */
+function groupOrder() {
+  const own = state.settings?.shoppingGroupOrder ?? [];
+  return [...own.filter((g) => SHOPPING_GROUPS.includes(g)), ...SHOPPING_GROUPS.filter((g) => !own.includes(g))];
+}
 
 export async function render(container) {
   const selectedBox = h('div', {});
@@ -166,13 +172,14 @@ export async function render(container) {
     shareBtn.title = shareBtn.disabled ? 'Keine offenen Artikel' : '';
     clear(listBox);
     clear(doneBox);
-    const open = sortShoppingItems(data.items.filter((i) => !i.checked), SHOPPING_GROUPS);
-    const done = sortShoppingItems(data.items.filter((i) => i.checked), SHOPPING_GROUPS);
+    const groups = groupOrder();
+    const open = sortShoppingItems(data.items.filter((i) => !i.checked), groups);
+    const done = sortShoppingItems(data.items.filter((i) => i.checked), groups);
     if (!open.length) {
       listBox.append(emptyState(data.items.length ? 'Alles erledigt!' : 'Die Einkaufsliste ist leer', data.selected.length ? 'Für die ausgewählten Rezepte ist alles im Vorrat.' : 'Füge Rezepte hinzu oder trage Artikel manuell ein.', null, 'einkauf'));
     } else {
       listBox.append(h('p', { class: 'small muted' }, `${open.length} offene ${open.length === 1 ? 'Position' : 'Positionen'}`));
-      for (const group of SHOPPING_GROUPS) {
+      for (const group of groups) {
         const items = open.filter((i) => i.shoppingGroup === group);
         if (!items.length) continue;
         listBox.append(h('h3', { class: 'group-title' }, h('span', { 'aria-hidden': 'true' }, `${CATEGORY_EMOJI[group] ?? '🛒'} `), group), h('ul', { class: 'plain-list shop-list' }, ...items.map(openItem)));
@@ -263,14 +270,43 @@ export async function render(container) {
     }
   }));
 
+  // 0.6: Reihenfolge der Gänge wie im eigenen Supermarkt
+  const orderBtn = h('button', { type: 'button', class: 'btn btn-link' }, icon('menu', { size: 16 }), ' Gänge wie in meinem Supermarkt sortieren');
+  orderBtn.addEventListener('click', async () => {
+    const order = [...groupOrder()];
+    const list = h('ol', { class: 'order-list' });
+    const drawList = () => {
+      clear(list);
+      order.forEach((g, i) => {
+        const up = h('button', { type: 'button', class: 'btn btn-icon', 'aria-label': `${g} nach oben`, disabled: i === 0 }, '↑');
+        const down = h('button', { type: 'button', class: 'btn btn-icon', 'aria-label': `${g} nach unten`, disabled: i === order.length - 1 }, '↓');
+        up.addEventListener('click', () => { [order[i - 1], order[i]] = [order[i], order[i - 1]]; drawList(); list.querySelectorAll('button')[Math.max(0, (i - 1) * 2)]?.focus(); });
+        down.addEventListener('click', () => { [order[i + 1], order[i]] = [order[i], order[i + 1]]; drawList(); list.querySelectorAll('button')[(i + 1) * 2 + 1]?.focus(); });
+        list.append(h('li', { class: 'order-item' }, h('span', {}, `${CATEGORY_EMOJI[g] ?? '🛒'} ${g}`), h('span', { class: 'order-btns' }, up, down)));
+      });
+    };
+    drawList();
+    const c = await dialog({
+      title: 'Reihenfolge der Gänge',
+      body: [h('p', { class: 'small' }, 'Sortiere die Bereiche so, wie du durch deinen Supermarkt läufst. Die Einkaufsliste folgt dann dieser Reihenfolge.'), list],
+      buttons: [{ label: 'Standard', value: 'reset' }, { label: 'Abbrechen', value: 'cancel' }, { label: 'Speichern', value: 'ok', variant: 'primary' }],
+      dismissValue: 'cancel',
+    });
+    if (c === 'cancel') return;
+    await saveSettings({ shoppingGroupOrder: c === 'reset' ? [] : order });
+    await refreshSettings();
+    toast(c === 'reset' ? 'Standard-Reihenfolge wiederhergestellt.' : 'Reihenfolge gespeichert.', 'success');
+    await reload();
+  });
+
   const recomputeBtn = h('button', { type: 'button', class: 'btn' }, 'Mit aktuellem Vorrat abgleichen');
   recomputeBtn.addEventListener('click', () => withBusy(recomputeBtn, async () => { await reload({ recompute: true }); toast('Einkaufsliste mit dem Vorrat abgeglichen.'); }));
 
   container.append(
     pageHeader('Einkaufsliste', 'Nur, was dir wirklich noch fehlt.'),
-    section('Ausgewählte Rezepte', rangeBox, selectedBox, h('div', { class: 'form-actions' }, recomputeBtn)),
-    section('Zu kaufen', h('p', { class: 'small muted' }, 'Trage bei Bedarf die tatsächlich gekaufte Menge ein und hake den Artikel ab – er wird automatisch in deinen Vorrat übernommen.'), h('div', { class: 'form-actions' }, allBtn, shareBtn), shareOut, listBox),
+    section('Zu kaufen', h('p', { class: 'small muted' }, 'Abhaken übernimmt den Artikel automatisch in deinen Vorrat. Bei Bedarf vorher die gekaufte Menge anpassen.'), h('div', { class: 'form-actions' }, allBtn, shareBtn), shareOut, listBox, orderBtn),
     doneBox,
+    section('Ausgewählte Rezepte', rangeBox, selectedBox, h('div', { class: 'form-actions' }, recomputeBtn)),
     section('Artikel manuell hinzufügen', mForm),
   );
   // Beim Öffnen immer mit Vorrat und Wochenplan abgleichen (gemeinsame Bedarfsquelle).

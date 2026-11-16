@@ -164,7 +164,10 @@ const protein = (r) => r.nutritionPerServing?.protein;
 const minutes = (r) => (typeof r.totalMinutes === 'number' && Number.isFinite(r.totalMinutes) ? r.totalMinutes : null);
 const timeBelow = (r, limit, inclusive = false) => minutes(r) !== null && (inclusive ? minutes(r) <= limit : minutes(r) < limit);
 
+const usesExpiring = (a) => a.evaluation.items.some((i) => !i.isSpice && typeof i.expiringInDays === 'number' && (i.status === 'available' || i.status === 'insufficient' || i.status === 'check'));
+
 export const RECIPE_FILTERS = Object.freeze({
+  resteverwertung: { label: '⏳ verbraucht bald Ablaufendes', test: usesExpiring },
   fullyCookable: { label: 'vollständig kochbar', test: (a) => a.evaluation.fullyCookable },
   max1Missing: { label: 'höchstens 1 fehlende Zutat', test: (a) => a.evaluation.missingCount <= 1 },
   max3Missing: { label: 'höchstens 3 fehlende Zutaten', test: (a) => a.evaluation.missingCount <= 3 },
@@ -190,7 +193,7 @@ export const RECIPE_FILTERS = Object.freeze({
   mikrowelle: { label: 'Mikrowelle', test: (a) => (a.recipe.devices ?? []).includes('mikrowelle') },
 });
 
-export const PANTRY_PAGE_FILTERS = ['fullyCookable', 'max1Missing', 'max3Missing', 'proteinreich', 'kalorienarm', 'schnell', 'guenstig', 'vegetarisch', 'vegan', 'laktosefrei', 'glutenfrei', 'mealprep', 'airfryer', 'mikrowelle'];
+export const PANTRY_PAGE_FILTERS = ['resteverwertung', 'fullyCookable', 'max1Missing', 'max3Missing', 'proteinreich', 'kalorienarm', 'schnell', 'guenstig', 'vegetarisch', 'vegan', 'laktosefrei', 'glutenfrei', 'mealprep', 'airfryer', 'mikrowelle'];
 export const DISCOVER_FILTERS = ['fruehstueck', 'mittagessen', 'abendessen', 'snack', 'proteinreich', 'kalorienarm', 'under500', 'under700', 'vegetarisch', 'vegan', 'laktosefrei', 'glutenfrei', 'guenstig', 'mealprep', 'airfryer', 'mikrowelle', 'under15', 'under30', 'under45'];
 
 export function applyFilters(analyses, activeFilters = [], query = '') {

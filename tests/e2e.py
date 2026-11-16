@@ -792,6 +792,13 @@ def _run_all(browser, base, alt, alt_base, site, tmp, args, errors):
         EXTRA = register(globals(), locals())
     except ImportError:
         pass
+    try:
+        from e2e_v06 import register as register06  # 0.4–0.6
+        extra06 = register06(globals(), locals())
+        for key, val in extra06.items():
+            EXTRA[key] = EXTRA.get(key, []) + val
+    except ImportError:
+        pass
     for name, fn, req in EXTRA.get('before_update', []):
         run_section(name, fn, req)
     run_section(f'Update {OLD_TAG} → {NEW_VERSION}', s_update_from_old)

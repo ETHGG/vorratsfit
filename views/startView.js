@@ -1,7 +1,12 @@
 // views/startView.js – Startseite (0.5): persönliche Begrüßung, Tagesring, farbige Bereichskacheln,
 // heute geplante Mahlzeiten, bald Ablaufendes und Rezeptideen als Bildkarten.
 import { h, icon, fmtKcal } from './dom.js';
-import { pageHeader, section, recipeArt, illustration } from './components.js';
+import { pageHeader, section, recipeArt, illustration, waterWidget, achievementList } from './components.js';
+import { getWater, addWater, listWaterRange } from '../water.js';
+import { listFoodLogRange } from '../foodlog.js';
+import { listAllPlan } from '../planner.js';
+import { computeAchievements } from '../core/achievements.js';
+import { addDays } from '../core/utils.js';
 import { state, analysisContext } from './state.js';
 import { routeHref } from './router.js';
 import { analyzeAll, sortAnalyses } from '../recipes.js';
@@ -64,6 +69,7 @@ export async function render(container) {
   });
   container.append(areaSection('heute', 'Heute',
     balanceCard(today.balance, { compact: true }),
+    waterWidget({ ml: await getWater(todayString()), goal: state.settings?.waterGoalMl ?? 2000, onChange: async (d) => (await addWater(todayString(), d)).ml, compact: true }),
     planned.length ? h('ul', { class: 'today-list' }, ...planned) : h('p', { class: 'small muted' }, 'Für heute ist noch nichts geplant.'),
     h('div', { class: 'form-actions' },
       h('a', { class: 'btn btn-primary', href: routeHref('heute') }, 'Tagesbilanz öffnen'),
@@ -74,6 +80,15 @@ export async function render(container) {
     tile({ route: 'einkauf', area: 'einkauf', art: 'einkauf', title: 'Einkaufsliste', sub: open ? `${open} ${open === 1 ? 'Artikel' : 'Artikel'} offen` : 'Alles erledigt', badge: open || null }),
     tile({ route: 'woche', area: 'woche', art: 'woche', title: 'Woche', sub: 'Mahlzeiten planen' }),
     tile({ route: 'vorrat', area: 'vorrat', art: 'vorrat', title: 'Vorrat', sub: `${ctx.pantry.length} ${ctx.pantry.length === 1 ? 'Eintrag' : 'Einträge'}` })));
+
+  // Erfolge
+  const day = todayString();
+  const [foodLog, weightsAll, plans, water] = await Promise.all([listFoodLogRange(addDays(day, -30), day), listWeights(), listAllPlan(), listWaterRange(addDays(day, -6), day)]);
+  const achievements = computeAchievements({
+    today: day, foodLog, kcalTarget: targets?.kcalTarget ?? null, weights: weightsAll, cookedCount: new Set(plans.filter((e) => e.cooked).map((e) => e.mealPrepGroupId || e.id)).size,
+    water, waterGoalMl: state.settings?.waterGoalMl ?? 2000, goal: p?.goal ?? null, minor: (p?.age ?? 99) < 18,
+  });
+  container.append(section('Deine Erfolge', achievementList(achievements)));
 
   const soon = expiringSoon(ctx.pantry, warnDays);
   if (soon.length) {

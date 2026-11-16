@@ -4,6 +4,18 @@
 - Die Arbeitsumgebung wurde zweimal zurückgesetzt. 0.2.0 und 0.3.0 wurden vollständig aus dem Projektverlauf neu geschrieben.
 - Git-Historie: Basis-Commit und Tag **v0.2.0**, darauf 0.3.0 mit Tag **v0.3.0**. Ältere Phasen-Commits sind nicht mehr vorhanden.
 
+## 0.6.0 – Etappe 3: Neue Funktionen (16.11.2026)
+- [x] Kochmodus `#/kochen/<id>` mit Timer-Erkennung (`core/cook-steps.js`), Wake Lock, Ton/Vibration
+- [x] Gänge-Reihenfolge in den Einstellungen (`shoppingGroupOrder`), Dialog auf der Einkaufsliste
+- [x] Resteverwertung (Filter `resteverwertung`, Sortierung nach Dringlichkeit, Link von der Startseite)
+- [x] Wasser-Tracker: IndexedDB v4 Store `waterLog`, Backup v4 (Migration 3 → 4), Wasserziel in den Einstellungen
+- [x] Erfolge (`core/achievements.js`), ohne Gewichtsabnahme-Erfolge für Minderjährige
+- [x] 14 neue Rezepte (50 insgesamt), eigene Fotos für eigene Rezepte (nur Bild-Daten-URLs, max. ca. 1,5 MB)
+- [x] Neue Tests: `test-cases-v06.js`, `db-tests-v06.js`, `e2e_v06.py`
+
+## Letzte vollständige Testausführung (16.11.2026, 0.6.0)
+Logik 100/100 · Statik bestanden · Browser/DB 163/163 · E2E 157/157 · Meta T0-01 1/1
+
 ## 0.5.0 – Etappe 2: Neues Aussehen (16.11.2026)
 - [x] Bereichsfarben über `data-area` (Body, Navigation, Kacheln, Abschnitte), Kontraste geprüft (hell ≥ 4,5:1, dunkel ≥ 7:1)
 - [x] Illustrationen `assets/illustrations/*.svg` im Seitenkopf, in Kacheln und leeren Zuständen
@@ -28,7 +40,7 @@
 - [x] Dunkelmodus mit ruhigerem Kontrast
 - [x] Backup Version 3, Migration 2 → 3
 
-## Letzte vollständige Testausführung (16.11.2026 20:04)
+## Testausführung 0.3.0 (16.11.2026 20:04)
 Logik 87/87 · Statik bestanden · Browser/DB 147/147 · E2E 143/143 · Meta T0-01 1/1
 
 ## Entscheidungen

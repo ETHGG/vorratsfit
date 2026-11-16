@@ -545,3 +545,63 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { border-color
 
 .cat-emoji { width: 42px; height: 42px; flex: 0 0 42px; display: grid; place-items: center; font-size: 1.35rem; border-radius: 14px; background: var(--area-soft); }
 .group-title { display: flex; align-items: center; gap: .3rem; border-bottom-width: 0; background: var(--area-soft); color: var(--area-ink); padding: .35rem .7rem; border-radius: 12px; font-size: .95rem; }
+
+/* ---------- 0.6 Wasser & Erfolge ---------- */
+.water-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: .35rem; margin: 0 0 .5rem; }
+.water-value { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: var(--area-ink); }
+.glasses { display: flex; flex-wrap: wrap; gap: .35rem; margin: .2rem 0 .4rem; }
+.glass { width: 24px; height: 32px; border: 2px solid var(--area); border-top-width: 0; border-radius: 3px 3px 8px 8px; position: relative; overflow: hidden; background: var(--surface); }
+.glass::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 0; background: linear-gradient(180deg, color-mix(in srgb, var(--area) 55%, #fff), var(--area)); transition: height .4s ease; }
+.glass.full::after { height: 82%; }
+.achievements { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; }
+@media (min-width: 600px) { .achievements { grid-template-columns: 1fr 1fr; } }
+.achievement { display: flex; gap: .75rem; align-items: center; padding: .7rem .8rem; border-radius: 16px; background: var(--surface-2); }
+.achievement.is-achieved { background: linear-gradient(135deg, #fff4d6, #ffe7b0); color: #3b2a10; }
+.achievement.is-achieved .muted { color: #6b5320; }
+.ach-emoji { font-size: 1.8rem; width: 2.6rem; height: 2.6rem; display: grid; place-items: center; border-radius: 50%; background: var(--surface); flex: 0 0 auto; }
+.achievement:not(.is-achieved) .ach-emoji { filter: grayscale(.6); opacity: .8; }
+.ach-body { display: grid; gap: .1rem; min-width: 0; flex: 1; }
+.ach-meter { height: 6px; margin: .25rem 0 0; display: block; }
+.achievement.is-achieved .ach-meter span { background: #d99a1e; }
+
+/* ---------- 0.6 Kochmodus ---------- */
+body[data-route="kochen"] .app-footer { display: none; }
+.cook-top { display: flex; align-items: center; gap: .6rem; margin-bottom: .8rem; }
+.cook-title h1 { font-size: 1.25rem; margin: 0; }
+.cook-title p { margin: 0; }
+.cook-card { background: var(--surface); border-radius: 24px; box-shadow: var(--shadow); overflow: hidden; padding-bottom: 1rem; }
+.cook-art.rv { height: 96px; font-size: 3rem; }
+.cook-dots { display: flex; gap: .3rem; justify-content: center; margin: .8rem 1rem .2rem; flex-wrap: wrap; }
+.cook-dot { width: 26px; height: 6px; border-radius: 99px; background: var(--surface-2); }
+.cook-dot.done { background: color-mix(in srgb, var(--area) 45%, var(--surface-2)); }
+.cook-dot.current { background: var(--area); }
+.cook-stage { padding: .4rem 1.2rem .4rem; min-height: 9rem; }
+.cook-count { color: var(--area-ink); font-weight: 700; margin: .2rem 0 .3rem; }
+.cook-step { font-size: 1.45rem; line-height: 1.45; font-weight: 600; margin: 0; }
+@media (min-width: 700px) { .cook-step { font-size: 1.7rem; } }
+.cook-timer-box { padding: 0 1.2rem; }
+.cook-timer { font-family: var(--font-display); font-variant-numeric: tabular-nums; font-size: 2.6rem; font-weight: 800; margin: .3rem 0; color: var(--area-ink); }
+.cook-timer.done { color: var(--c-orange-ink); animation: pulse 1s ease-in-out 3; }
+@keyframes pulse { 50% { transform: scale(1.06); } }
+.cook-controls { display: grid; grid-template-columns: 1fr 1.6fr; gap: .6rem; margin: .9rem 0; position: sticky; bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + .5rem); }
+@media (min-width: 900px) { .cook-controls { bottom: 1rem; } }
+.cook-nav { min-height: 60px; font-size: 1.1rem; border-radius: 18px; }
+.cook-more summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }
+.cook-ings { list-style: none; margin: 0; padding: 0; }
+.cook-ings li { display: flex; gap: .7rem; padding: .4rem 0; border-bottom: 1px solid var(--border); }
+.cook-ing-amount { font-weight: 700; min-width: 5.5rem; }
+.cook-start { margin-bottom: .6rem; }
+
+.order-list { list-style: none; margin: .5rem 0 0; padding: 0; }
+.order-item { display: flex; justify-content: space-between; align-items: center; gap: .5rem; padding: .3rem 0; border-bottom: 1px solid var(--border); }
+.order-btns { display: flex; gap: .3rem; }
+
+.photo-input { font: inherit; min-height: 44px; width: 100%; max-width: 100%; min-width: 0; overflow: hidden; }
+.photo-label { font-weight: 600; }
+.photo-preview img { max-height: 200px; border-radius: 16px; margin-top: .4rem; object-fit: cover; }
+
+.water.compact { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .8rem; padding: .6rem .8rem; margin: .6rem 0; border-radius: 16px; background: var(--area-soft); }
+.water.compact .glasses, .water.compact .btn-secondary, .water.compact .btn-link { display: none; }
+.water.compact .water-head { margin: 0; flex: 1 1 auto; }
+.water.compact .water-head::before { content: "💧 "; }
+.water.compact .form-actions { margin: 0; }

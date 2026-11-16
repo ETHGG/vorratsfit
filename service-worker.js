@@ -2,7 +2,7 @@
 // WICHTIG: Dieser Service Worker verwaltet ausschließlich Programmdateien (Cache Storage).
 // Persönliche Daten liegen in IndexedDB und werden hier niemals gelesen, verändert oder gelöscht.
 const CACHE_PREFIX = 'vorratsfit-app-';
-const CACHE_VERSION = '0.5.0';
+const CACHE_VERSION = '0.6.0';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 
 // Relative Pfade: funktionieren unter jedem Unterpfad (z. B. /vorratsfit/ auf GitHub Pages).
@@ -22,6 +22,7 @@ const APP_SHELL = [
   './planner.js',
   './foodlog.js',
   './weight.js',
+  './water.js',
   './nutrition.js',
   './backup.js',
   './api.js',
@@ -42,6 +43,8 @@ const APP_SHELL = [
   './core/share-text.js',
   './core/body.js',
   './core/food.js',
+  './core/achievements.js',
+  './core/cook-steps.js',
   './views/dom.js',
   './views/router.js',
   './views/state.js',
@@ -60,6 +63,7 @@ const APP_SHELL = [
   './views/backupView.js',
   './views/settingsView.js',
   './views/customRecipeView.js',
+  './views/cookView.js',
   './data/recipes.json',
   './data/ingredients.json',
   './assets/icons/favicon.svg',

@@ -2,13 +2,13 @@
 
 **Progressive Web App für Rezepte, Vorräte, Wochenplanung, Einkaufslisten, Ernährungs- und Gewichtstracking – ohne Backend, ohne Konto, alle Daten lokal.**
 
-Version 0.5.0 · Live: <https://ethgg.github.io/vorratsfit/>
+Version 0.6.0 · Live: <https://ethgg.github.io/vorratsfit/>
 
 ## Funktionen
 
 | Bereich | Inhalt |
 |---|---|
-| Aus meinem Vorrat / Rezepte entdecken | 36 eigene Rezepte, Allergien als harter Ausschluss, Vorratsabgleich, Bewertung bis 100 Punkte |
+| Aus meinem Vorrat / Rezepte entdecken | 50 eigene Rezepte, Allergien als harter Ausschluss, Vorratsabgleich, Bewertung bis 100 Punkte |
 | Woche | Wochenplaner, Meal Prep (2–14 Boxen), Einkaufsliste für die Woche oder einen Zeitraum |
 | Einkaufsliste | nur die Differenz zum Vorrat, Abhaken übernimmt in den Vorrat, „Einkauf komplett übernehmen“, Teilen |
 | Vorrat | Gewürze getrennt, Ablaufwarnung, Schnellerfassen, Barcode (optional) |
@@ -16,6 +16,15 @@ Version 0.5.0 · Live: <https://ethgg.github.io/vorratsfit/>
 | **Gewicht** (Menü „Mehr“) | Gewicht eintragen (ein Eintrag je Tag), **Diagramm** mit 7-Tage-Durchschnitt und Wunschgewicht (4 Wochen / 3 Monate / Alles), **Wochenauswertung**, **Erinnerung nach 7 Tagen**; neuester Eintrag = Profilgewicht |
 | Profil | **Geburtsdatum** statt Alter – das Alter läuft automatisch weiter; unter 18 gelten die Schutzregeln automatisch |
 | Darstellung | Hell, Dunkel (seit 0.3 mit ruhigerem Kontrast), System |
+
+## Neu in 0.6 – neue Funktionen
+- **Kochmodus:** ein Schritt pro Bildschirm in großer Schrift, automatisch erkannte Timer mit Ton/Vibration, Bildschirm bleibt an, Bedienung per Wischen-Knöpfen oder Pfeiltasten.
+- **Einkaufsliste nach deinem Supermarkt:** Reihenfolge der Gänge frei sortierbar („Gänge wie in meinem Supermarkt sortieren“). „Zu kaufen“ steht jetzt ganz oben.
+- **Resteverwertung:** Filter „verbraucht bald Ablaufendes“, Rezepte mit den dringendsten Zutaten zuerst; direkt aus „Bald aufbrauchen“ auf der Startseite.
+- **Wasser-Tracker** auf „Heute“ und der Startseite (Ziel in den Einstellungen, Standard 2 l).
+- **Erfolge:** Serie, Tage im Ziel, selbst gekocht, genug getrunken, Fortschritt zum Wunschgewicht (nicht für unter 18-Jährige).
+- **14 neue Rezepte** (jetzt 50) und **eigene Fotos** für eigene Rezepte (verkleinert, nur lokal, im Backup).
+- Datenbank Version 4 (neu: `waterLog`), Backup Version 4. Backups ab 0.1 werden weiterhin eingelesen.
 
 ## Neu in 0.5 – neues Aussehen
 - **Eine Farbe je Bereich:** Start/Rezepte grün, Vorrat petrol, Einkauf orange, Woche violett, Heute blau, Gewicht rosé – in Seitenkopf, Kacheln, Knöpfen und Navigation.
@@ -46,11 +55,11 @@ Version 0.5.0 · Live: <https://ethgg.github.io/vorratsfit/>
 
 ## Veröffentlichen (GitHub Pages)
 Settings → Pages → Deploy from a branch → `main` / `(root)`. `.nojekyll` muss im Repository liegen.
-**Bei jeder neuen Version `CACHE_VERSION` in `service-worker.js` erhöhen** (0.5.0 ist gesetzt).
+**Bei jeder neuen Version `CACHE_VERSION` in `service-worker.js` erhöhen** (0.6.0 ist gesetzt).
 
 ## Daten, Update, Datenschutz
-- Persönliche Daten: IndexedDB `vorratsfit-db`, Version 3 (neu: `weightLog`). Das Update erweitert die Datenbank, es wird nichts gelöscht.
-- Backup Version 3 (inkl. Gewichtsverlauf). Backups aus 0.1 und 0.2 werden eingelesen.
+- Persönliche Daten: IndexedDB `vorratsfit-db`, Version 4 (neu: `waterLog`). Das Update erweitert die Datenbank, es wird nichts gelöscht.
+- Backup Version 4 (inkl. Gewichts- und Wasserverlauf). Backups aus 0.1–0.5 werden eingelesen.
 - Externe Abfragen (standardmäßig aus) enthalten nie Alter, Geburtsdatum, Gewicht, Ziele, Plan oder Tagebuch – automatisch per Netzwerkmitschnitt geprüft.
 
 ## Bekannte Einschränkungen

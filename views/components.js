@@ -181,3 +181,44 @@ export function recipeTabs(current) {
   return h('nav', { class: 'segmented', 'aria-label': 'Rezept-Ansicht' }, ...tabs.map(([route, label]) =>
     h('a', { href: routeHref(route), class: 'segment', 'aria-current': route === current ? 'page' : null }, label)));
 }
+
+/**
+ * 0.6: Wasser-Widget – Gläser als Fortschritt, Schnellknöpfe. onChange(deltaMl) speichert und liefert den neuen Wert.
+ */
+export function waterWidget({ ml, goal, onChange, compact = false }) {
+  const box = h('div', { class: `water ${compact ? 'compact' : ''}`, 'data-area': 'heute' });
+  const draw = (value) => {
+    while (box.firstChild) box.firstChild.remove();
+    const glasses = Math.max(1, Math.round(goal / 250));
+    const full = Math.min(glasses, Math.floor(value / 250));
+    const liters = (v) => `${(v / 1000).toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 2 })} l`;
+    box.append(
+      h('p', { class: 'water-head' }, h('span', { class: 'water-value' }, liters(value)), h('span', { class: 'muted' }, ` von ${liters(goal)}`), value >= goal ? h('span', { class: 'badge badge-ok' }, '✓ Ziel erreicht') : null),
+      h('div', { class: 'glasses', role: 'img', 'aria-label': `${full} von ${glasses} Gläsern getrunken` }, ...Array.from({ length: glasses }, (_, i) => h('span', { class: `glass ${i < full ? 'full' : ''}` }))),
+      h('div', { class: 'form-actions' },
+        waterBtn('+ 1 Glas (250 ml)', 250, 'btn-primary'),
+        waterBtn('+ 500 ml', 500, 'btn-secondary'),
+        value > 0 ? waterBtn('− 250 ml', -250, 'btn-link') : null));
+  };
+  function waterBtn(label, delta, cls) {
+    const b = h('button', { type: 'button', class: `btn ${cls}` }, label);
+    b.addEventListener('click', async () => { b.disabled = true; const v = await onChange(delta); draw(v); });
+    return b;
+  }
+  draw(ml);
+  return box;
+}
+
+/** 0.6: Erfolge als kleine Karten mit Fortschrittsbalken. */
+export function achievementList(items) {
+  return h('ul', { class: 'achievements', 'aria-label': 'Deine Erfolge' }, ...items.map((a) => {
+    const bar = h('span', {});
+    bar.style.width = `${Math.round(Math.max(0, Math.min(1, a.progress)) * 100)}%`;
+    return h('li', { class: `achievement ${a.achieved ? 'is-achieved' : ''}` },
+      h('span', { class: 'ach-emoji', 'aria-hidden': 'true' }, a.emoji),
+      h('span', { class: 'ach-body' },
+        h('strong', {}, a.title), a.achieved ? h('span', { class: 'sr-only' }, ' (erreicht)') : null,
+        h('span', { class: 'small muted ach-text' }, a.text),
+        h('span', { class: 'meter ach-meter', 'aria-hidden': 'true' }, bar)));
+  }));
+}
