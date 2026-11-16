@@ -21,7 +21,7 @@ export function aggregateNeeds(selections, catalog = EMPTY_CATALOG) {
       const baseKey = ingredientKey(ing, catalog);
       const unit = normalizeUnit(ing.unit);
       const base = unit && typeof ing.amount === 'number' ? toBase(ing.amount, unit) : null;
-      const source = { recipeId: sel.recipeId, title: sel.title ?? sel.recipe.title, servings: scaled.servings, amount: ing.amount, unit: unit ?? ing.unit ?? null };
+      const source = { recipeId: sel.recipeId, title: sel.title ?? sel.recipe.title, servings: scaled.servings, amount: ing.amount, unit: unit ?? ing.unit ?? null, sourceType: sel.sourceType ?? 'single', sourceId: sel.sourceId ?? sel.recipeId, label: sel.label ?? null };
       let key = baseKey;
       let group = needs.get(key);
       let add = null;
@@ -71,7 +71,6 @@ export function computePlan(needs, pantry, catalog = EMPTY_CATALOG) {
   const index = indexPantry(pantry, catalog);
   const used = new Set();
   const plan = [];
-  // Primäre Schlüssel zuerst, damit Vorrat zuerst dem Hauptbedarf zugeordnet wird
   const sorted = [...needs].sort((a, b) => (a.key.includes('|') ? 1 : 0) - (b.key.includes('|') ? 1 : 0));
   for (const need of sorted) {
     const entry = need.ingredientId ? catalog.get(need.ingredientId) : catalogEntryFor({ name: need.name }, catalog);
@@ -89,7 +88,6 @@ export function computePlan(needs, pantry, catalog = EMPTY_CATALOG) {
       let quantityCheck = need.quantityCheck;
       let toBuy = calc.toBuy;
       if (otherDims.length && toBuy > 0) {
-        // Vorrat vorhanden, aber nicht sicher vergleichbar
         if (need.isSpice) toBuy = 0; else quantityCheck = true;
       }
       result = { amountNeeded: need.amount, amountAvailable: calc.available, amountToBuy: toBuy, quantityCheck };
@@ -121,9 +119,6 @@ export function isFrozen(item) {
 
 /**
  * Führt einen neu berechneten Plan mit der bestehenden Liste zusammen.
- * - manuelle, abgehakte und bereits übernommene Einträge bleiben unverändert,
- * - offene automatische Einträge werden aktualisiert,
- * - nicht mehr benötigte, noch nicht gekaufte Einträge werden entfernt.
  */
 export function mergePlanIntoList(existing, plan, now = nowIso()) {
   const frozen = existing.filter(isFrozen);

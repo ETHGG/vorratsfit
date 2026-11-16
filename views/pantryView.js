@@ -2,7 +2,8 @@
 import { h, field, select, showFieldErrors, toast, withBusy, icon, confirmDialog, dialog, emptyState, clear, errorBox } from './dom.js';
 import { pageHeader, section } from './components.js';
 import { state } from './state.js';
-import { listPantry, savePantryItem, deletePantryItem, changePantryAmount, filterPantry, expiryStatus, isSpiceItem } from '../pantry.js';
+import { listPantry, savePantryItem, deletePantryItem, changePantryAmount, filterPantry, expiryStatus, isSpiceItem, frequentItems, addFrequentItem, addBulkToPantry } from '../pantry.js';
+import { parseBulkLines, MAX_BULK_LINES } from '../core/quick-entry.js';
 import { CATEGORIES } from '../core/models.js';
 import { SELECTABLE_UNITS, formatAmount, isCountUnit, getDimension } from '../units.js';
 import { lookupBarcode, COMMUNITY_DATA_NOTICE, barcodeScanSupported } from '../api.js';
@@ -28,7 +29,6 @@ function pantryForm(item, { onSaved, submitLabel = 'Hinzufügen', spiceDefault =
   const productInfo = h('div', { class: 'product-info', 'aria-live': 'polite' });
   let fetched = null;
 
-  // Automatische Vorbelegung aus den Stammdaten
   name.addEventListener('change', () => {
     const entry = state.catalog.resolve(name.value);
     if (!entry) return;
@@ -199,6 +199,47 @@ export async function render(container) {
     }));
   };
 
+  // ---------- Schnellerfassen ----------
+  const freqBox = h('div', { class: 'quick-grid' });
+  async function drawFrequent() {
+    clear(freqBox);
+    const list = await frequentItems();
+    if (!list.length) { freqBox.append(h('p', { class: 'small muted' }, 'Hier erscheinen deine häufig erfassten Lebensmittel als Ein-Tipp-Knöpfe.')); return; }
+    for (const f of list) {
+      const b = h('button', { type: 'button', class: 'btn quick-btn', 'aria-label': `${f.name}: ${formatAmount(f.amount, f.unit)} zum Vorrat hinzufügen` }, h('span', { class: 'quick-name' }, f.name), h('span', { class: 'small muted' }, `+ ${formatAmount(f.amount, f.unit)}`));
+      b.addEventListener('click', () => withBusy(b, async () => {
+        const r = await addFrequentItem(f, state.catalog);
+        toast(r.status === 'increased' ? `${f.name}: Menge erhöht.` : `${f.name} hinzugefügt.`, 'success');
+        await reload(); await drawFrequent();
+      }));
+      freqBox.append(b);
+    }
+  }
+  const bulkArea = h('textarea', { name: 'bulk', rows: '5', maxlength: '4000', placeholder: '500 g Hähnchen\n1 kg Reis\n6 Eier' });
+  const bulkPreview = h('div', { 'aria-live': 'polite' });
+  const bulkCheck = h('button', { type: 'button', class: 'btn' }, 'Vorschau');
+  const bulkSave = h('button', { type: 'button', class: 'btn btn-primary', disabled: true }, 'Gültige Zeilen speichern');
+  let bulkItems = [];
+  bulkCheck.addEventListener('click', () => {
+    const r = parseBulkLines(bulkArea.value, state.catalog);
+    bulkItems = r.items;
+    clear(bulkPreview);
+    if (!r.items.length) { bulkPreview.append(h('p', { class: 'small' }, 'Keine Zeilen erkannt.')); bulkSave.disabled = true; return; }
+    bulkPreview.append(h('ul', { class: 'plain-list bulk-list' }, ...r.items.map((i) => h('li', { class: 'ing-item' },
+      i.status === 'ok' ? h('span', { class: 'badge badge-ok' }, icon('check', { size: 12 }), 'OK') : h('span', { class: 'badge badge-warn' }, icon('info', { size: 12 }), 'Menge bitte prüfen'),
+      h('span', {}, i.status === 'ok' ? `${formatAmount(i.amount, i.unit, { humanize: false })} ${i.name}` : `„${i.line}“ – ${i.reason}`)))));
+    if (r.duplicates.length) bulkPreview.append(h('p', { class: 'small' }, `Doppelte Zeilen (werden addiert): ${r.duplicates.join(', ')}`));
+    if (r.truncated) bulkPreview.append(h('p', { class: 'notice notice-warn small' }, `Nur die ersten ${MAX_BULK_LINES} Zeilen werden berücksichtigt (${r.truncated} weitere ignoriert).`));
+    bulkSave.disabled = !r.items.some((i) => i.status === 'ok');
+  });
+  bulkSave.addEventListener('click', () => withBusy(bulkSave, async () => {
+    const res = await addBulkToPantry(bulkItems, state.catalog);
+    toast(`${res.saved} gespeichert${res.skipped ? `, ${res.skipped} zum Prüfen übersprungen` : ''}.`, res.skipped ? 'warn' : 'success');
+    bulkArea.value = ''; bulkItems = []; clear(bulkPreview);
+    await reload(); await drawFrequent();
+  }));
+  bulkSave.addEventListener('click', () => { bulkSave.disabled = true; });
+
   const search = h('input', { type: 'search', name: 'q', placeholder: 'Vorrat durchsuchen', autocomplete: 'off' });
   search.addEventListener('input', () => { filters.query = search.value; draw(); });
   const cat = select('cat', [{ id: '', label: 'Alle Kategorien' }, ...CATEGORIES.map((c) => ({ id: c, label: c }))], '');
@@ -228,6 +269,9 @@ export async function render(container) {
     pageHeader('Vorrat', 'Erfasse Lebensmittel und Gewürze mit Menge und optionalem Ablaufdatum.'),
     tablist,
     h('div', { id: 'pantry-panel', role: 'tabpanel', 'aria-labelledby': 'tab-food' },
+      section('Schnell hinzufügen', freqBox, h('details', { class: 'more' }, h('summary', {}, 'Mehrere auf einmal eintragen'),
+        field({ label: `Ein Lebensmittel pro Zeile (max. ${MAX_BULK_LINES})`, input: bulkArea, hint: 'Format: Menge Einheit Name, z. B. „500 g Hähnchen“. Unklare Zeilen werden nicht geraten, sondern markiert.' }),
+        h('div', { class: 'form-actions' }, bulkCheck, bulkSave), bulkPreview)),
       section('Hinzufügen', addHolder),
       section('Bestand',
         h('div', { class: 'toolbar' },
@@ -238,4 +282,5 @@ export async function render(container) {
   );
   renderAddForm();
   await reload();
+  await drawFrequent();
 }

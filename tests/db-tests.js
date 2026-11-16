@@ -6,9 +6,9 @@ import { checkShoppingItem, undoCheck, startNewPurchase, addRecipeToShopping, re
 import { createBackupObject, parseBackupInput, encodeBackupCode } from '../backup.js';
 import { assert, eq } from './test-cases.js';
 
-const TEST_DB = 'vorratsfit-test-db';
+export const TEST_DB = 'vorratsfit-test-db';
 
-async function resetTestDb() {
+export async function resetTestDb() {
   await closeDatabase();
   await new Promise((resolve) => {
     // Nur die TEST-Datenbank wird gelöscht – niemals die App-Datenbank.
@@ -50,7 +50,7 @@ export function buildDbTests(ingredientsData, recipesData) {
     await putItem('shoppingList', chickenItem());
     await checkShoppingItem('shop-chicken', catalog);
     eq((await checkShoppingItem('shop-chicken', catalog)).status, 'already');
-    await closeDatabase(); // "Neu laden"
+    await closeDatabase();
     configureDatabase(TEST_DB);
     eq((await checkShoppingItem('shop-chicken', catalog)).status, 'already');
     eq((await getItem('pantry', 'p1')).amount, 800);

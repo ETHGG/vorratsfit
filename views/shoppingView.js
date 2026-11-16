@@ -4,12 +4,13 @@ import { pageHeader, section } from './components.js';
 import { state, shoppingContext } from './state.js';
 import { routeHref } from './router.js';
 import {
-  getShoppingState, recomputeShoppingList, updateSelectedServings, removeSelectedRecipe, addManualItem,
-  setPurchasedAmount, checkShoppingItem, getUndoInfo, undoCheck, startNewPurchase, deleteShoppingItem, clearCompleted,
+  getShoppingState, recomputeShoppingList, getShoppingRange, clearShoppingRange, updateSelectedServings, removeSelectedRecipe, addManualItem,
+  setPurchasedAmount, checkShoppingItem, previewCheckAll, checkAllOpen, getUndoInfo, undoCheck, startNewPurchase, deleteShoppingItem, clearCompleted,
 } from '../shopping.js';
 import { sortShoppingItems } from '../core/shopping-logic.js';
 import { SHOPPING_GROUPS, CATEGORIES } from '../core/models.js';
 import { formatAmount, SELECTABLE_UNITS, CHECK_QUANTITY_TEXT } from '../units.js';
+import { buildShareText } from '../core/share-text.js';
 
 export async function render(container) {
   const selectedBox = h('div', {});
@@ -21,17 +22,32 @@ export async function render(container) {
     if (recompute) {
       try {
         const res = await recomputeShoppingList(shoppingContext());
-        if (res.skipped.length) toast(`${res.skipped.length} Rezept(e) übersprungen: ${res.skipped.map((s) => `${s.title} (${s.reason})`).join(', ')}`, 'warn');
+        if (res.skipped.length) toast(`${res.skipped.length} Rezept(e) übersprungen: ${res.skipped.map((s) => `${s.title ?? s.label ?? 'Rezept'} (${s.reason})`).join(', ')}`, 'warn');
       } catch (err) { toast(`Neuberechnung fehlgeschlagen: ${err.message}`, 'error'); }
     }
     data = await getShoppingState();
+    await drawRange();
     draw();
+  }
+
+  const rangeBox = h('div', {});
+  async function drawRange() {
+    clear(rangeBox);
+    const range = await getShoppingRange();
+    if (!range) {
+      rangeBox.append(h('p', { class: 'small muted' }, 'Wochenplan: Alle kommenden, noch nicht gekochten Mahlzeiten werden berücksichtigt. ', h('a', { href: routeHref('woche') }, 'Zeitraum im Wochenplan wählen')));
+      return;
+    }
+    const all = h('button', { type: 'button', class: 'btn btn-link' }, 'Alle geplanten Mahlzeiten berücksichtigen');
+    all.addEventListener('click', () => withBusy(all, async () => { await clearShoppingRange(shoppingContext()); toast('Alle kommenden geplanten Mahlzeiten werden berücksichtigt.'); await reload(); }));
+    const fmt = (d) => d.split('-').reverse().join('.');
+    rangeBox.append(h('p', { class: 'notice notice-info small' }, icon('info', { size: 14 }), h('span', {}, `Wochenplan berücksichtigt: ${fmt(range.from)} bis ${fmt(range.to)}. `, all)));
   }
 
   function drawSelected() {
     clear(selectedBox);
     if (!data.selected.length) {
-      selectedBox.append(h('p', { class: 'small muted' }, 'Noch keine Rezepte ausgewählt. Öffne ein Rezept und tippe auf „Fehlende Zutaten prüfen“.'));
+      selectedBox.append(h('p', { class: 'small muted' }, 'Keine einzelnen Rezepte ausgewählt. Öffne ein Rezept und tippe auf „Fehlende Zutaten prüfen“. Geplante Mahlzeiten aus der Woche werden automatisch berücksichtigt.'));
       return;
     }
     selectedBox.append(h('ul', { class: 'plain-list' }, ...data.selected.map((s) => {
@@ -59,7 +75,7 @@ export async function render(container) {
     const label = it.recipeSources.length > 1 ? `Benötigt für ${it.recipeSources.length} Rezepte` : `Für ${it.recipeSources[0].title}`;
     return h('details', { class: 'sources' }, h('summary', {}, label),
       h('dl', { class: 'kv-list small' },
-        ...it.recipeSources.map((s) => h('div', { class: 'kv' }, h('dt', {}, `Bedarf ${s.title} (${s.servings} P.)`), h('dd', {}, formatAmount(s.amount, s.unit)))),
+        ...it.recipeSources.map((s) => h('div', { class: 'kv' }, h('dt', {}, `${s.title} – ${s.sourceType === 'single' ? 'Einzelrezept' : (s.label ?? 'Plan')} (${s.servings} P.)`), h('dd', {}, formatAmount(s.amount, s.unit)))),
         h('div', { class: 'kv' }, h('dt', {}, 'Gesamtbedarf'), h('dd', {}, formatAmount(it.amountNeeded, it.unit))),
         h('div', { class: 'kv' }, h('dt', {}, 'Vorrat'), h('dd', {}, formatAmount(it.amountAvailable ?? 0, it.unit))),
         h('div', { class: 'kv' }, h('dt', {}, 'Einkaufsmenge'), h('dd', {}, typeof it.amountToBuy === 'number' ? formatAmount(it.amountToBuy, it.unit) : CHECK_QUANTITY_TEXT))));
@@ -77,7 +93,6 @@ export async function render(container) {
       if (res.ok) announce(`Gekaufte Menge für ${it.name} gespeichert.`);
     });
     checkBtn.addEventListener('click', () => withBusy(checkBtn, async () => {
-      // Sicherstellen, dass eine gerade getippte Menge gespeichert ist
       if (!it.addedToPantry && purchased.value.trim() !== String(it.amountPurchased ?? '')) {
         const res = await setPurchasedAmount(it.id, purchased.value.trim());
         if (!res.ok) { err.textContent = res.error; purchased.focus(); return; }
@@ -146,6 +161,8 @@ export async function render(container) {
 
   function draw() {
     drawSelected();
+    shareBtn.disabled = !data.items.some((i) => !i.checked);
+    shareBtn.title = shareBtn.disabled ? 'Keine offenen Artikel' : '';
     clear(listBox);
     clear(doneBox);
     const open = sortShoppingItems(data.items.filter((i) => !i.checked), SHOPPING_GROUPS);
@@ -172,7 +189,6 @@ export async function render(container) {
     }
   }
 
-  // Manuelle Artikel
   const mName = h('input', { type: 'text', name: 'name', maxlength: '80', autocomplete: 'off', required: true });
   const mAmount = h('input', { type: 'number', name: 'amount', min: '0', step: 'any', inputmode: 'decimal', value: '1', required: true });
   const mUnit = select('unit', SELECTABLE_UNITS.map((u) => ({ id: u, label: u })), 'Stück');
@@ -201,18 +217,61 @@ export async function render(container) {
     });
   });
 
+  const allBtn = h('button', { type: 'button', class: 'btn btn-primary' }, icon('check', { size: 16 }), ' Einkauf komplett übernehmen');
+  allBtn.addEventListener('click', () => withBusy(allBtn, async () => {
+    const pv = await previewCheckAll();
+    if (!pv.items.length) { toast(pv.skipped.length ? 'Kein offener Artikel hat eine gültige Menge. Bitte Mengen prüfen.' : 'Keine offenen Artikel.'); return; }
+    const c = await dialog({
+      title: 'Einkauf komplett übernehmen?',
+      body: [
+        h('p', {}, `${pv.items.length} ${pv.items.length === 1 ? 'Artikel wird' : 'Artikel werden'} abgehakt und in den Vorrat übernommen:`),
+        h('ul', {}, ...pv.items.map((i) => h('li', {}, `${formatAmount(i.amountPurchased ?? i.amountToBuy, i.unit)} ${i.name}`))),
+        pv.skipped.length ? h('p', { class: 'notice notice-warn small' }, icon('alert', { size: 14 }), h('span', {}, `Übersprungen (Menge bitte prüfen): ${pv.skipped.map((i) => i.name).join(', ')}`)) : null,
+      ],
+      buttons: [{ label: 'Abbrechen', value: 'cancel' }, { label: 'Übernehmen', value: 'ok', variant: 'primary' }],
+      dismissValue: 'cancel',
+    });
+    if (c !== 'ok') return;
+    try {
+      const r = await checkAllOpen(state.catalog);
+      toast(r.added ? `${r.added} Artikel in den Vorrat übernommen.` : 'Es wurde nichts übernommen (bereits erledigt).', r.added ? 'success' : 'info');
+    } catch (err) { toast(`Nicht übernommen – nichts verändert: ${err.message}`, 'error'); }
+    await reload();
+  }));
+
+  // ---------- Teilen (Phase 6): Teilen-Menü → Zwischenablage → Textfeld zum manuellen Kopieren ----------
+  const shareBtn = h('button', { type: 'button', class: 'btn' }, 'Liste teilen');
+  const shareOut = h('div', { 'aria-live': 'polite' });
+  shareBtn.addEventListener('click', () => withBusy(shareBtn, async () => {
+    clear(shareOut);
+    const text = buildShareText(data.items);
+    if (!text) { toast('Die Liste enthält keine offenen Artikel zum Teilen.'); return; }
+    if (typeof navigator.share === 'function') {
+      try { await navigator.share({ title: 'Einkaufsliste', text }); return; } catch (err) {
+        if (err?.name === 'AbortError') return; // Nutzer hat abgebrochen – keine Fehlermeldung
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      toast('Einkaufsliste in die Zwischenablage kopiert.', 'success');
+    } catch {
+      const area = h('textarea', { class: 'code share-text', readonly: true, rows: '8', 'aria-label': 'Einkaufsliste zum Kopieren' });
+      area.value = text;
+      shareOut.append(h('p', { class: 'small' }, 'Kopieren war nicht möglich. Bitte markiere den Text und kopiere ihn manuell:'), area);
+      area.focus(); area.select();
+    }
+  }));
+
   const recomputeBtn = h('button', { type: 'button', class: 'btn' }, 'Mit aktuellem Vorrat abgleichen');
   recomputeBtn.addEventListener('click', () => withBusy(recomputeBtn, async () => { await reload({ recompute: true }); toast('Einkaufsliste mit dem Vorrat abgeglichen.'); }));
 
   container.append(
     pageHeader('Einkaufsliste', 'Was muss ich dafür kaufen?'),
-    section('Ausgewählte Rezepte', selectedBox, h('div', { class: 'form-actions' }, recomputeBtn)),
-    section('Zu kaufen', h('p', { class: 'small muted' }, 'Trage bei Bedarf die tatsächlich gekaufte Menge ein und hake den Artikel ab – er wird automatisch in deinen Vorrat übernommen.'), listBox),
+    section('Ausgewählte Rezepte', rangeBox, selectedBox, h('div', { class: 'form-actions' }, recomputeBtn)),
+    section('Zu kaufen', h('p', { class: 'small muted' }, 'Trage bei Bedarf die tatsächlich gekaufte Menge ein und hake den Artikel ab – er wird automatisch in deinen Vorrat übernommen.'), h('div', { class: 'form-actions' }, allBtn, shareBtn), shareOut, listBox),
     doneBox,
     section('Artikel manuell hinzufügen', mForm),
   );
-  // Beim Öffnen einmal mit dem aktuellen Vorrat abgleichen (falls Rezepte ausgewählt sind)
-  data = await getShoppingState();
-  if (data.selected.length) await reload({ recompute: true });
-  else draw();
+  // Beim Öffnen immer mit Vorrat und Wochenplan abgleichen (gemeinsame Bedarfsquelle).
+  await reload({ recompute: true });
 }

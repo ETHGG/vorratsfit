@@ -66,7 +66,6 @@ export function checkRecipe(recipe, profile, catalog = EMPTY_CATALOG) {
   const hasRestrictions = allergies.size || customAllergies.length || intolerances.size || customIntolerances.length
     || ['vegan', 'vegetarisch', 'pescetarisch', 'halal'].some((d) => diets.has(d));
 
-  // Rezeptweite Allergenangaben
   for (const a of recipe?.allergens ?? []) {
     if (allergies.has(a)) reasons.push(`Enthält ${allergenLabel(a)} (Allergie)`);
   }
@@ -74,7 +73,6 @@ export function checkRecipe(recipe, profile, catalog = EMPTY_CATALOG) {
   const mapList = (list, isSpice) => (list ?? []).map((ing) => {
     const info = ingredientAllergenInfo(ing, catalog);
     const entry = info.entry;
-    // 1. Allergien – harter Ausschluss, auch bei optionalen Zutaten
     for (const tag of info.tags) {
       if (allergies.has(tag)) reasons.push(`Enthält ${allergenLabel(tag)} (${ing.name}) – Allergie`);
     }
@@ -83,7 +81,6 @@ export function checkRecipe(recipe, profile, catalog = EMPTY_CATALOG) {
     }
     if (!info.known && (allergies.size || customAllergies.length)) unknown = true;
 
-    // 2. Ernährungsweisen
     for (const [diet, violates] of Object.entries(ANIMAL_RULES)) {
       if (!diets.has(diet)) continue;
       if (!entry) { unknown = true; continue; }
@@ -96,7 +93,6 @@ export function checkRecipe(recipe, profile, catalog = EMPTY_CATALOG) {
       notes.push(`Halal: Bitte halal-zertifiziertes Fleisch verwenden (${ing.name}).`);
     }
 
-    // 3. Unverträglichkeiten – nur ausdrücklich hinterlegte Alternativen
     let current = ing;
     let currentEntry = entry;
     let currentTags = info.tags;

@@ -124,7 +124,6 @@ export function evaluateAgainstPantry(scaledRecipe, pantry, catalog = EMPTY_CATA
 
 /**
  * Bewertet ein Rezept (0–100). Allergien/harte Regeln müssen VORHER geprüft sein.
- * @param {object} ctx { profile, mealTargets, evaluation, catalog }
  */
 export function scoreRecipe(recipe, { profile = null, mealTargets = null, evaluation, catalog = EMPTY_CATALOG } = {}) {
   const parts = {};
@@ -134,7 +133,7 @@ export function scoreRecipe(recipe, { profile = null, mealTargets = null, evalua
   if (mealTargets && n && typeof n.kcal === 'number') {
     const diff = Math.abs(n.kcal - mealTargets.kcal) / Math.max(1, mealTargets.kcal);
     parts.calories = SCORE_WEIGHTS.calories * Math.max(0, 1 - diff / 0.5);
-  } else parts.calories = SCORE_WEIGHTS.calories / 2; // unbekannt -> neutral, nicht als 0 kcal gewertet
+  } else parts.calories = SCORE_WEIGHTS.calories / 2;
 
   if (mealTargets && n && typeof n.protein === 'number') {
     parts.protein = SCORE_WEIGHTS.protein * Math.min(1, n.protein / Math.max(1, mealTargets.protein));

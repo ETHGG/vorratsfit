@@ -26,7 +26,6 @@ export async function render(container) {
     const all = analyzeAll(state.recipes, { ...ctx, servings });
     const allowed = all.filter((a) => a.check.status === 'ok');
     const blocked = all.filter((a) => a.check.status !== 'ok');
-    // Nur Rezepte mit mindestens einer vorhandenen Hauptzutat sind „aus dem Vorrat“ relevant
     const relevant = allowed.filter((a) => a.evaluation.counts.available + a.evaluation.counts.insufficient > 0);
     const shown = sortAnalyses(applyFilters(relevant, Array.from(active)), sortKey);
     results.append(h('p', { class: 'small muted' }, `${shown.length} passende ${shown.length === 1 ? 'Rezept' : 'Rezepte'} für ${servings} ${servings === 1 ? 'Person' : 'Personen'}`));

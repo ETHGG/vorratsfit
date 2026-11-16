@@ -21,7 +21,6 @@ async function fetchJsonSafe(url) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   try {
-    // credentials: 'omit' und referrerPolicy: 'no-referrer' – keine Cookies, keine Herkunftsdaten
     const res = await fetch(url, { signal: ctrl.signal, credentials: 'omit', referrerPolicy: 'no-referrer', cache: 'no-store' });
     if (!res.ok) throw new Error(`Der Dienst antwortet nicht wie erwartet (HTTP ${res.status}).`);
     const text = await res.text();

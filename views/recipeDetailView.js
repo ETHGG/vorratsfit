@@ -5,12 +5,16 @@ import { state, analysisContext, refreshFavorites, shoppingContext, refreshRecip
 import { routeHref, navigate } from './router.js';
 import { analyzeRecipe, toggleFavorite, deleteCustomRecipe, deleteCachedRecipe } from '../recipes.js';
 import { previewAddRecipe, addRecipeToShopping } from '../shopping.js';
-import { consumeFromPantry } from '../pantry.js';
-import { formatAmount, convertWithIngredient, roundQuantity } from '../units.js';
+import { addPlanEntry, listAllPlan, cookUnplanned } from '../planner.js';
+import { cookWithPreview } from './todayView.js';
+import { planConsumption } from '../core/cooking.js';
+import { planLabel } from '../core/demand.js';
+import { checkRecipe } from '../core/restrictions.js';
+import { planDialog, planMealPrep } from './plannerView.js';
+import { formatAmount } from '../units.js';
 import { nutritionStatusLabel, confidenceLabel } from '../nutrition.js';
 import { allergenLabel, deviceLabel, mealTypeLabel } from '../core/models.js';
 import { recipeAllergens } from '../core/restrictions.js';
-import { ingredientKey, catalogEntryFor } from '../core/catalog.js';
 
 function nutritionTable(r) {
   const n = r.nutritionPerServing;
@@ -76,8 +80,18 @@ export async function render(container, { id, params }) {
     const shopBtn = h('button', { type: 'button', class: 'btn btn-primary' }, icon('cart', { size: 18 }), ' Fehlende Zutaten prüfen');
     shopBtn.addEventListener('click', () => withBusy(shopBtn, () => openShoppingPreview()));
     const cookBtn = h('button', { type: 'button', class: 'btn' }, icon('pot', { size: 18 }), ' Gekocht – aus Vorrat abziehen');
-    cookBtn.addEventListener('click', () => withBusy(cookBtn, () => cooked(a)));
-    actionsBox.append(shopBtn, cookBtn);
+    cookBtn.addEventListener('click', () => withBusy(cookBtn, () => cooked()));
+    const planBtn = h('button', { type: 'button', class: 'btn' }, icon('calendar', { size: 18 }), ' Zum Plan hinzufügen');
+    planBtn.addEventListener('click', () => withBusy(planBtn, async () => {
+      const input = await planDialog({ title: 'Zum Wochenplan hinzufügen', fixedRecipe: recipe, servings });
+      if (!input) return;
+      const res = await addPlanEntry(input, shoppingContext());
+      if (!res.ok) { toast(Object.values(res.errors).join(' '), 'error'); return; }
+      toast(res.warning ? `Eingeplant. Hinweis: ${res.warning}` : 'Zum Wochenplan hinzugefügt.', res.warning ? 'warn' : 'success');
+    }));
+    const prepBtn = h('button', { type: 'button', class: 'btn' }, '📦 Meal Prep planen');
+    prepBtn.addEventListener('click', () => withBusy(prepBtn, () => planMealPrep(recipe)));
+    actionsBox.append(shopBtn, planBtn, prepBtn, cookBtn);
   }
 
   async function openShoppingPreview() {
@@ -103,34 +117,36 @@ export async function render(container, { id, params }) {
     }
   }
 
-  async function cooked(a) {
-    const index = new Map();
-    for (const p of ctx.pantry) {
-      const k = ingredientKey(p, state.catalog);
-      if (!index.has(k)) index.set(k, []);
-      index.get(k).push(p);
+  async function cooked() {
+    // Gibt es passende, noch nicht gekochte Plan-Einträge? Dann fragen, welcher gekocht wurde (CLAUDE.md 4.2).
+    const planned = (await listAllPlan()).filter((e) => e.recipeId === recipe.id && !e.cooked && e.date).sort((x, y) => x.date.localeCompare(y.date));
+    const seen = new Set();
+    const options = planned.filter((e) => { const k = e.mealPrepGroupId ?? e.id; if (seen.has(k)) return false; seen.add(k); return true; });
+    let target = null;
+    if (options.length) {
+      const sel = h('select', { name: 'planEntry' },
+        ...options.map((e) => h('option', { value: e.id }, `${planLabel(e.date, e.mealType)} – ${e.mealPrepGroupId ? `Meal Prep, ${e.mealPrepCount} Boxen` : `${e.servings} ${e.servings === 1 ? 'Portion' : 'Portionen'}`}`)),
+        h('option', { value: '' }, `Ohne Plan-Eintrag (${servings} ${servings === 1 ? 'Portion' : 'Portionen'})`));
+      const c = await dialog({ title: 'Welche Mahlzeit hast du gekocht?', body: [h('p', {}, 'Dieses Rezept steht in deinem Wochenplan. Der gewählte Eintrag wird als gekocht markiert und nicht erneut eingekauft.'), sel], buttons: [{ label: 'Abbrechen', value: 'cancel' }, { label: 'Weiter', value: 'ok', variant: 'primary' }], dismissValue: 'cancel' });
+      if (c !== 'ok') return;
+      target = options.find((e) => e.id === sel.value) ?? null;
     }
-    const plan = [];
-    for (const it of a.evaluation.items) {
-      if (it.isSpice || typeof it.amount !== 'number') continue;
-      let rest = it.amount;
-      const entry = catalogEntryFor(it, state.catalog);
-      for (const p of (index.get(it.key) ?? []).filter((x) => x.amount > 0)) {
-        if (rest <= 0) break;
-        const availInRecipeUnit = convertWithIngredient(p.amount, p.unit, it.unit, entry);
-        if (availInRecipeUnit === null) continue;
-        const take = Math.min(rest, availInRecipeUnit);
-        const takeInPantryUnit = convertWithIngredient(take, it.unit, p.unit, entry);
-        if (takeInPantryUnit === null) continue;
-        plan.push({ pantryId: p.id, amount: roundQuantity(takeInPantryUnit), name: p.name, unit: p.unit });
-        rest -= take;
-      }
+    if (target) {
+      const total = target.mealPrepGroupId ? planned.filter((e) => e.mealPrepGroupId === target.mealPrepGroupId).reduce((sum, e) => sum + e.servings, 0) : target.servings;
+      if (await cookWithPreview(target, total)) { ctx = await analysisContext(servings); draw(); }
+      return;
     }
-    if (!plan.length) { toast('Keine passenden Vorratsmengen zum Abziehen gefunden.'); return; }
-    const ok = await confirmDialog('Aus Vorrat abziehen?', `Folgende Mengen werden abgezogen: ${plan.map((p) => `${formatAmount(p.amount, p.unit)} ${p.name}`).join(', ')}. Gewürze bleiben unverändert.`, { confirmLabel: 'Abziehen' });
-    if (!ok) return;
-    await consumeFromPantry(plan);
-    toast('Vorrat aktualisiert. Guten Appetit!', 'success');
+    const prev = planConsumption(checkRecipe(recipe, state.profile, state.catalog).effectiveRecipe, servings, ctx.pantry, state.catalog);
+    if (!prev.consumptions.length) { toast('Keine passenden Vorratsmengen zum Abziehen gefunden.'); return; }
+    const msg = [`Folgende Mengen werden abgezogen: ${prev.consumptions.map((p) => `${formatAmount(p.amount, p.unit)} ${p.name}`).join(', ')}.`];
+    if (prev.missing.length) msg.push(`Nicht im Vorrat: ${prev.missing.map((m) => m.name).join(', ')}.`);
+    if (prev.unchecked.length) msg.push(`Menge bitte prüfen (nicht abgezogen): ${prev.unchecked.map((u) => u.name).join(', ')}.`);
+    msg.push('Gewürze bleiben unverändert.');
+    if (!(await confirmDialog('Aus Vorrat abziehen?', msg.join(' '), { confirmLabel: 'Abziehen' }))) return;
+    try {
+      await cookUnplanned(recipe, servings, shoppingContext());
+      toast('Vorrat aktualisiert. Guten Appetit!', 'success');
+    } catch (err) { toast(`Nicht gespeichert: ${err.message}`, 'error'); }
     ctx = await analysisContext(servings);
     draw();
   }

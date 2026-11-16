@@ -1,9 +1,9 @@
 // pantry.js – Vorratsverwaltung (CRUD, Suche, Filter, Ablaufdaten).
-import { getAllItems, putItem, deleteItem, getItem, runTransaction } from './db.js';
+import { getAllItems, putItem, deleteItem, getItem, runTransaction, getMeta } from './db.js';
 import { normalizePantryItem, CATEGORIES } from './core/models.js';
 import { normalizeText, parseNumber, isValidDateString, daysUntil, todayString, nowIso, uuid } from './core/utils.js';
-import { normalizeUnit, roundQuantity } from './units.js';
-import { catalogEntryFor } from './core/catalog.js';
+import { normalizeUnit, roundQuantity, convertWithIngredient } from './units.js';
+import { catalogEntryFor, ingredientKey } from './core/catalog.js';
 
 export const MAX_PANTRY_AMOUNT = 1_000_000;
 
@@ -46,7 +46,10 @@ export async function savePantryItem(input, catalog) {
   if (!res.ok) return res;
   const existing = input.id ? await getItem('pantry', input.id) : null;
   const item = { ...res.item, createdAt: existing?.createdAt ?? res.item.createdAt };
-  await putItem('pantry', item);
+  await runTransaction(['pantry', 'metadata'], 'readwrite', async (t) => {
+    await t.put('pantry', item);
+    if (!existing && item.amount > 0) await bumpFrequency(t, item);
+  });
   return { ok: true, item };
 }
 
@@ -121,4 +124,65 @@ export async function consumeFromPantry(consumptions) {
 
 export function newPantryId() {
   return uuid();
+}
+
+// ---------- Schnellerfassen (0.2, Phase 5) ----------
+// Häufigkeitsdaten liegen im Store „metadata“ und sind bewusst NICHT im Backup (CLAUDE.md 4.4).
+const FREQ_KEY = 'pantryFrequency';
+const MAX_FREQUENT = 12;
+
+async function bumpFrequency(t, item) {
+  const rec = await t.get('metadata', FREQ_KEY);
+  const list = Array.isArray(rec?.value) ? rec.value.filter((x) => x && typeof x.name === 'string') : [];
+  const key = item.ingredientId ? `id:${item.ingredientId}` : `n:${normalizeText(item.name)}`;
+  const found = list.find((x) => x.key === key);
+  if (found) { found.count += 1; found.amount = item.amount; found.unit = item.unit; found.lastUsed = nowIso(); }
+  else list.push({ key, name: item.name, ingredientId: item.ingredientId ?? null, category: item.category, amount: item.amount, unit: item.unit, count: 1, lastUsed: nowIso() });
+  list.sort((a, b) => b.count - a.count || b.lastUsed.localeCompare(a.lastUsed));
+  await t.put('metadata', { id: FREQ_KEY, value: list.slice(0, 40), updatedAt: nowIso() });
+}
+
+/** Die häufigsten erfassten Lebensmittel (für Ein-Tipp-Knöpfe). */
+export async function frequentItems() {
+  const v = await getMeta(FREQ_KEY);
+  return Array.isArray(v) ? v.slice(0, MAX_FREQUENT) : [];
+}
+
+/** Ein Vorratseintrag in einer laufenden Transaktion: passende Einheit erhöhen, sonst neu anlegen. */
+async function addOrIncrease(t, input, catalog) {
+  const entry = catalogEntryFor(input, catalog);
+  const unit = normalizeUnit(input.unit);
+  const key = ingredientKey({ ingredientId: input.ingredientId ?? entry?.id, name: input.name }, catalog);
+  const pantry = (await t.getAll('pantry')).map((p) => normalizePantryItem(p));
+  const target = pantry.find((p) => ingredientKey(p, catalog) === key && convertWithIngredient(1, unit, p.unit, entry) !== null && !p.expiryDate)
+    ?? pantry.find((p) => ingredientKey(p, catalog) === key && convertWithIngredient(1, unit, p.unit, entry) !== null);
+  if (target) {
+    const add = convertWithIngredient(input.amount, unit, target.unit, entry);
+    await t.put('pantry', { ...target, amount: roundQuantity(Math.min(MAX_PANTRY_AMOUNT, target.amount + add)), updatedAt: nowIso() });
+    return 'increased';
+  }
+  await t.put('pantry', normalizePantryItem({
+    name: entry?.name ?? input.name, ingredientId: input.ingredientId ?? entry?.id ?? null, category: input.category || entry?.category || 'Sonstiges',
+    amount: input.amount, unit, nutritionPer100g: entry?.nutrition && entry.nutritionBasis === '100g' ? entry.nutrition : null, nutritionSource: entry?.nutrition ? 'catalog' : 'none',
+  }));
+  return 'created';
+}
+
+/** Häufig-genutzt-Knopf: Standardmenge hinzufügen bzw. vorhandene Menge erhöhen. */
+export async function addFrequentItem(item, catalog) {
+  if (!(item.amount > 0) || !normalizeUnit(item.unit)) return { status: 'invalid' };
+  return runTransaction(['pantry', 'metadata'], 'readwrite', async (t) => {
+    const status = await addOrIncrease(t, item, catalog);
+    await bumpFrequency(t, item);
+    return { status };
+  });
+}
+
+/** Mehrere Zeilen speichern (nur Zeilen mit Status „ok“), in einer Transaktion. */
+export async function addBulkToPantry(items, catalog) {
+  const ok = items.filter((i) => i.status === 'ok');
+  return runTransaction(['pantry', 'metadata'], 'readwrite', async (t) => {
+    for (const i of ok) { await addOrIncrease(t, i, catalog); await bumpFrequency(t, i); }
+    return { saved: ok.length, skipped: items.length - ok.length };
+  });
 }

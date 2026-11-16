@@ -5,7 +5,7 @@ import { state, loadBase } from './views/state.js';
 import { allergyDisclaimer } from './views/components.js';
 import { applyTheme, isPrivacyAcknowledged, acknowledgePrivacy } from './settings.js';
 import { initServiceWorker, activateUpdate, UPDATE_TEXT } from './app-update.js';
-import { onVersionChange } from './db.js';
+import { onVersionChange, onBlocked, NEWER_VERSION_TEXT } from './db.js';
 
 export const PRIVACY_TEXT = 'Deine persönlichen Daten werden ausschließlich auf diesem Gerät gespeichert. Rezept- und Produktabfragen an externe Anbieter enthalten keine Angaben zu Alter, Gewicht, Kalorienziel oder persönlichen Gesundheitsdaten.';
 export const OFFLINE_TEXT = 'Du bist offline. Lokale und bereits gespeicherte Rezepte stehen weiterhin zur Verfügung.';
@@ -16,6 +16,8 @@ const VIEWS = {
   entdecken: () => import('./views/discoverView.js'),
   favoriten: () => import('./views/discoverView.js'),
   einkauf: () => import('./views/shoppingView.js'),
+  woche: () => import('./views/plannerView.js'),
+  heute: () => import('./views/todayView.js'),
   vorrat: () => import('./views/pantryView.js'),
   tagesziel: () => import('./views/goalsView.js'),
   profil: () => import('./views/profileView.js'),
@@ -55,7 +57,7 @@ function markActive(name) {
     if (a.dataset.route === routeName) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
   });
   const moreActive = !NAV_ITEMS.find((n) => n.route === routeName)?.primary;
-  document.querySelector('.more-btn')?.classList.toggle('active', moreActive && routeName !== 'start');
+  document.querySelector('.more-btn')?.classList.toggle('active', moreActive);
 }
 
 async function renderRoute() {
@@ -138,13 +140,22 @@ async function init() {
     b.append(h('p', {}, 'VorratsFit wurde in einem anderen Tab aktualisiert. Bitte lade diese Seite neu. Deine Daten bleiben erhalten.'), h('button', { type: 'button', class: 'btn btn-primary', onclick: () => location.reload() }, 'Neu laden'));
     b.hidden = false;
   });
+  let blockedShown = false;
+  onBlocked(() => {
+    blockedShown = true;
+    const b = document.getElementById('update-banner');
+    clear(b);
+    b.append(h('p', {}, 'VorratsFit wird aktualisiert, aber ein anderer geöffneter VorratsFit-Tab hält noch die alte Version offen. Bitte schließe die anderen Tabs. Deine Daten bleiben erhalten.'));
+    b.hidden = false;
+  });
   try {
     await loadBase();
   } catch (err) {
     clear(main);
-    main.append(errorBox(`VorratsFit kann den lokalen Speicher nicht öffnen: ${err.message}. Im privaten Modus mancher Browser ist IndexedDB deaktiviert.`));
+    main.append(errorBox(err.message === NEWER_VERSION_TEXT ? err.message : `VorratsFit kann den lokalen Speicher nicht öffnen: ${err.message}. Im privaten Modus mancher Browser ist IndexedDB deaktiviert.`));
     return;
   }
+  if (blockedShown) document.getElementById('update-banner').hidden = true;
   await showPrivacyNoticeIfNeeded();
   window.addEventListener('hashchange', renderRoute);
   await renderRoute();

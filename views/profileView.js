@@ -115,7 +115,6 @@ export async function render(container, { wizard = false } = {}) {
 
   back.addEventListener('click', () => show(Math.max(0, step - 1)));
   next.addEventListener('click', () => {
-    // Pflichtfelder des aktuellen Schritts vorab prüfen
     const res = validateProfileInput(collect());
     const stepFields = Array.from(stepEls[step].querySelectorAll('[name]')).map((e) => e.name);
     const relevant = Object.fromEntries(Object.entries(res.errors).filter(([k]) => stepFields.includes(k)));

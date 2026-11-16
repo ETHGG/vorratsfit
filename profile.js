@@ -19,7 +19,6 @@ export const PROFILE_LIMITS = Object.freeze({
 
 /**
  * Validiert Formulareingaben. Gibt verständliche Fehlermeldungen je Feld zurück.
- * @returns {{ok:boolean, errors:Object<string,string>, profile:object|null}}
  */
 export function validateProfileInput(input) {
   const errors = {};

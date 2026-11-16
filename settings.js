@@ -43,8 +43,10 @@ export function applyTheme(theme = getTheme()) {
 
 /** Löscht alle persönlichen Daten – NUR nach ausdrücklicher Bestätigung durch den Nutzer (eine Transaktion). */
 export async function wipeAllPersonalData() {
-  await runTransaction(BACKUP_STORES, 'readwrite', async (t) => {
+  await runTransaction([...BACKUP_STORES, 'metadata'], 'readwrite', async (t) => {
     for (const name of BACKUP_STORES) await t.clear(name);
+    // Geräteeinstellungen mit persönlichem Bezug (0.2): Häufigkeiten und Einkaufszeitraum.
+    for (const key of ['pantryFrequency', 'shoppingRange', 'lastBackupAt']) await t.delete('metadata', key);
   });
 }
 

@@ -3,25 +3,25 @@
 import { runTransaction, getAllItems } from './db.js';
 import { normalizeShoppingItem, normalizeSelectedRecipe, normalizePantryItem, CATEGORIES, shoppingGroupFor } from './core/models.js';
 import { aggregateNeeds, computePlan, mergePlanIntoList, previewForRecipe, undoAnalysis } from './core/shopping-logic.js';
-import { checkRecipe } from './core/restrictions.js';
+import { buildDemand } from './core/demand.js';
+import { normalizeMealPlanEntry } from './core/models.js';
 import { ingredientKey, catalogEntryFor } from './core/catalog.js';
 import { normalizeUnit, convertWithIngredient, roundQuantity } from './units.js';
-import { parseNumber, nowIso, uuid, normalizeText, sanitizeText } from './core/utils.js';
+import { parseNumber, nowIso, uuid, normalizeText, sanitizeText, todayString } from './core/utils.js';
 
 const inFlight = new Set();
 
-/** Baut die effektiven Rezepte (inkl. hinterlegter Alternativen) für die Bedarfsberechnung. */
+/** Baut die effektiven Rezepte (inkl. hinterlegter Alternativen) aus Einzelrezepten – Kompatibilität zu 0.1. */
 export function buildSelections(selected, recipesById, profile, catalog) {
-  const selections = [];
-  const skipped = [];
-  for (const s of selected) {
-    const recipe = recipesById.get(s.recipeId);
-    if (!recipe) { skipped.push({ ...s, reason: 'Rezept nicht mehr verfügbar' }); continue; }
-    const check = checkRecipe(recipe, profile, catalog);
-    if (check.status === 'excluded') { skipped.push({ ...s, reason: check.reasons[0] }); continue; }
-    selections.push({ recipeId: s.recipeId, title: recipe.title, servings: s.servings, recipe: check.effectiveRecipe });
-  }
-  return { selections, skipped };
+  return buildDemand({ selected, planEntries: [], recipesById, profile, catalog });
+}
+
+/** Stores, die eine Neuberechnung liest bzw. schreibt (gemeinsame Bedarfsquelle, CLAUDE.md 4.1). */
+export const RECOMPUTE_STORES = Object.freeze(['selectedRecipes', 'mealPlan', 'pantry', 'shoppingList', 'metadata']);
+
+const RANGE_KEY = 'shoppingRange';
+function validRange(v) {
+  return v && typeof v.from === 'string' && typeof v.to === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v.from) && /^\d{4}-\d{2}-\d{2}$/.test(v.to) && v.from <= v.to ? { from: v.from, to: v.to } : null;
 }
 
 export async function getShoppingState() {
@@ -31,22 +31,24 @@ export async function getShoppingState() {
 
 /** Vorschau vor dem Hinzufügen: berücksichtigt bereits ausgewählte Rezepte und den aktuellen Vorrat. */
 export async function previewAddRecipe(recipe, servings, { recipesById, profile, catalog }) {
-  const [pantry, selected] = await Promise.all([getAllItems('pantry'), getAllItems('selectedRecipes')]);
+  const [pantry, selected, planRaw] = await Promise.all([getAllItems('pantry'), getAllItems('selectedRecipes'), getAllItems('mealPlan')]);
   const others = selected.map((s) => normalizeSelectedRecipe(s)).filter((s) => s.recipeId !== recipe.id);
   const all = [...others, normalizeSelectedRecipe({ recipeId: recipe.id, title: recipe.title, servings })];
   const map = new Map(recipesById);
   map.set(recipe.id, recipe);
-  const { selections } = buildSelections(all, map, profile, catalog);
+  const { selections } = buildDemand({ selected: all, planEntries: planRaw.map((e) => normalizeMealPlanEntry(e)), recipesById: map, profile, catalog, today: todayString() });
   const plan = computePlan(aggregateNeeds(selections, catalog), pantry, catalog);
   return { servings, ...previewForRecipe(recipe.id, plan), alreadySelected: selected.some((s) => s.recipeId === recipe.id) };
 }
 
 /** Neuberechnung innerhalb EINER Transaktion über Auswahl, Vorrat und Einkaufsliste. */
-async function recomputeInTx(t, { recipesById, profile, catalog }) {
-  const [selectedRaw, pantry, itemsRaw] = [await t.getAll('selectedRecipes'), await t.getAll('pantry'), await t.getAll('shoppingList')];
+export async function recomputeInTx(t, { recipesById, profile, catalog, today = todayString() }) {
+  const [selectedRaw, planRaw, pantry, itemsRaw] = [await t.getAll('selectedRecipes'), await t.getAll('mealPlan'), await t.getAll('pantry'), await t.getAll('shoppingList')];
   const selected = selectedRaw.map((s) => normalizeSelectedRecipe(s));
+  const planEntries = planRaw.map((e) => normalizeMealPlanEntry(e));
   const items = itemsRaw.map((i) => normalizeShoppingItem(i));
-  const { selections, skipped } = buildSelections(selected, recipesById, profile, catalog);
+  const range = validRange((await t.get('metadata', RANGE_KEY))?.value);
+  const { selections, skipped } = buildDemand({ selected, planEntries, recipesById, profile, catalog, today, range });
   const plan = computePlan(aggregateNeeds(selections, catalog), pantry, catalog);
   const merged = mergePlanIntoList(items, plan);
   for (const r of merged.removed) await t.delete('shoppingList', r.id);
@@ -54,13 +56,61 @@ async function recomputeInTx(t, { recipesById, profile, catalog }) {
   return { added: merged.added.length, updated: merged.updated.length, removed: merged.removed.length, skipped };
 }
 
+/** Gewählter Einkaufszeitraum für den Wochenplan (null = alle kommenden geplanten Mahlzeiten). */
+export async function getShoppingRange() {
+  const rec = await runTransaction(['metadata'], 'readonly', (t) => t.get('metadata', RANGE_KEY));
+  return validRange(rec?.value);
+}
+
+/** Vorschau für einen Zeitraum – schreibt nichts. */
+export async function previewShoppingRange(from, to, { recipesById, profile, catalog }) {
+  const [pantry, selected, planRaw] = await Promise.all([getAllItems('pantry'), getAllItems('selectedRecipes'), getAllItems('mealPlan')]);
+  const planEntries = planRaw.map((e) => normalizeMealPlanEntry(e));
+  const range = validRange({ from, to });
+  if (!range) return { status: 'invalid', needed: [], sufficient: [], check: [], planCount: 0 };
+  const onlyPlan = buildDemand({ selected: [], planEntries, recipesById, profile, catalog, today: todayString(), range });
+  const { selections, skipped } = buildDemand({ selected: selected.map((s) => normalizeSelectedRecipe(s)), planEntries, recipesById, profile, catalog, today: todayString(), range });
+  const plan = computePlan(aggregateNeeds(selections, catalog), pantry, catalog);
+  const fromPlan = plan.filter((p) => p.recipeSources.some((src) => src.sourceType !== 'single'));
+  return {
+    status: onlyPlan.selections.length ? 'ok' : 'empty',
+    planCount: onlyPlan.selections.length,
+    skipped,
+    needed: fromPlan.filter((p) => typeof p.amountToBuy === 'number' && p.amountToBuy > 0 && !p.quantityCheck),
+    sufficient: fromPlan.filter((p) => p.amountToBuy === 0 && !p.quantityCheck),
+    check: fromPlan.filter((p) => p.quantityCheck && p.amountToBuy !== 0),
+  };
+}
+
+/** „Einkaufsliste für diese Woche“: Zeitraum setzen und neu berechnen. Leerer Zeitraum ändert nichts. */
+export async function applyShoppingRange(from, to, ctx) {
+  const range = validRange({ from, to });
+  if (!range) return { status: 'invalid' };
+  return runTransaction(RECOMPUTE_STORES, 'readwrite', async (t) => {
+    const planEntries = (await t.getAll('mealPlan')).map((e) => normalizeMealPlanEntry(e));
+    const probe = buildDemand({ selected: [], planEntries, recipesById: ctx.recipesById, profile: ctx.profile, catalog: ctx.catalog, today: todayString(), range });
+    if (!probe.selections.length && !probe.skipped.length) return { status: 'empty' };
+    await t.put('metadata', { id: RANGE_KEY, value: range, updatedAt: nowIso() });
+    const res = await recomputeInTx(t, ctx);
+    return { status: 'applied', ...res };
+  });
+}
+
+/** Zeitraum aufheben: alle kommenden geplanten Mahlzeiten berücksichtigen. */
+export async function clearShoppingRange(ctx) {
+  return runTransaction(RECOMPUTE_STORES, 'readwrite', async (t) => {
+    await t.delete('metadata', RANGE_KEY);
+    return recomputeInTx(t, ctx);
+  });
+}
+
 export async function recomputeShoppingList(ctx) {
-  return runTransaction(['selectedRecipes', 'pantry', 'shoppingList'], 'readwrite', (t) => recomputeInTx(t, ctx));
+  return runTransaction(RECOMPUTE_STORES, 'readwrite', (t) => recomputeInTx(t, ctx));
 }
 
 export async function addRecipeToShopping(recipe, servings, ctx) {
   const s = Math.round(Math.min(50, Math.max(1, parseNumber(servings) ?? recipe.defaultServings)));
-  return runTransaction(['selectedRecipes', 'pantry', 'shoppingList'], 'readwrite', async (t) => {
+  return runTransaction(RECOMPUTE_STORES, 'readwrite', async (t) => {
     const existing = await t.get('selectedRecipes', recipe.id);
     await t.put('selectedRecipes', normalizeSelectedRecipe({ ...(existing ?? {}), recipeId: recipe.id, title: recipe.title, servings: s, updatedAt: nowIso() }));
     const map = new Map(ctx.recipesById);
@@ -71,7 +121,7 @@ export async function addRecipeToShopping(recipe, servings, ctx) {
 
 export async function updateSelectedServings(recipeId, servings, ctx) {
   const s = Math.round(Math.min(50, Math.max(1, parseNumber(servings) ?? 1)));
-  return runTransaction(['selectedRecipes', 'pantry', 'shoppingList'], 'readwrite', async (t) => {
+  return runTransaction(RECOMPUTE_STORES, 'readwrite', async (t) => {
     const existing = await t.get('selectedRecipes', recipeId);
     if (!existing) throw new Error('Rezept ist nicht ausgewählt.');
     await t.put('selectedRecipes', { ...existing, servings: s, updatedAt: nowIso() });
@@ -81,7 +131,7 @@ export async function updateSelectedServings(recipeId, servings, ctx) {
 
 /** Entfernt nur den Bedarf dieses Rezepts; gekaufte Artikel bleiben im Vorrat. */
 export async function removeSelectedRecipe(recipeId, ctx) {
-  return runTransaction(['selectedRecipes', 'pantry', 'shoppingList'], 'readwrite', async (t) => {
+  return runTransaction(RECOMPUTE_STORES, 'readwrite', async (t) => {
     await t.delete('selectedRecipes', recipeId);
     return recomputeInTx(t, ctx);
   });
@@ -137,61 +187,96 @@ function findPantryTarget(pantry, item, catalog, entry) {
 
 /**
  * Abhaken mit automatischer Vorratsübernahme – transaktionssicher und idempotent.
- * Mehrfaches Aufrufen (Doppelklick, erneutes Rendern) bucht die Menge nur einmal.
+ */
+/** Kern des Abhakens innerhalb einer Transaktion (wird von Einzel- und Gesamtübernahme genutzt). */
+async function checkInTx(t, id, catalog) {
+  const raw = await t.get('shoppingList', id);
+  if (!raw) throw new Error('Eintrag nicht gefunden.');
+  const item = normalizeShoppingItem(raw);
+  if (item.checked && item.addedToPantry) return { status: 'already' };
+  if (item.addedToPantry) {
+    await t.put('shoppingList', { ...item, checked: true, updatedAt: nowIso() });
+    return { status: 'checkedWithoutAdding' };
+  }
+  const amount = item.amountPurchased ?? item.amountToBuy;
+  if (typeof amount !== 'number' || !Number.isFinite(amount) || amount <= 0) {
+    throw new Error('Bitte trage zuerst die tatsächlich gekaufte Menge ein.');
+  }
+  if (!normalizeUnit(item.unit)) throw new Error('Die Einheit ist unbekannt. Bitte Menge prüfen.');
+  const entry = catalogEntryFor(item, catalog);
+  const pantry = await t.getAll('pantry');
+  const target = findPantryTarget(pantry, item, catalog, entry);
+  const txId = uuid();
+  const now = nowIso();
+  let pantryItem;
+  let added;
+  if (target) {
+    added = convertWithIngredient(amount, item.unit, target.unit, entry);
+    pantryItem = { ...target, amount: roundQuantity((target.amount ?? 0) + added), updatedAt: now };
+  } else {
+    added = amount;
+    pantryItem = normalizePantryItem({
+      name: entry?.name ?? item.name, ingredientId: item.ingredientId ?? entry?.id ?? null, category: item.category,
+      amount, unit: item.unit, createdByTransaction: txId, nutritionSource: entry?.nutrition ? 'catalog' : 'none', createdAt: now, updatedAt: now,
+    });
+  }
+  await t.put('pantry', pantryItem);
+  await t.put('shoppingList', {
+    ...item, amountPurchased: amount, checked: true, addedToPantry: true, pantryTransactionId: txId, pantryItemId: pantryItem.id,
+    pantryAmountAdded: added, pantryUnit: pantryItem.unit, pantryAmountAfter: pantryItem.amount, updatedAt: now,
+  });
+  return { status: 'added', amount: added, unit: pantryItem.unit, pantryItemId: pantryItem.id, pantryAmountAfter: pantryItem.amount };
+}
+
+/**
+ * Abhaken mit automatischer Vorratsübernahme – transaktionssicher und idempotent.
  */
 export async function checkShoppingItem(id, catalog) {
   if (inFlight.has(id)) return { status: 'busy' };
   inFlight.add(id);
   try {
-    return await runTransaction(['shoppingList', 'pantry'], 'readwrite', async (t) => {
-      const raw = await t.get('shoppingList', id);
-      if (!raw) throw new Error('Eintrag nicht gefunden.');
-      const item = normalizeShoppingItem(raw);
-      if (item.checked && item.addedToPantry) return { status: 'already' };
-      if (item.addedToPantry) {
-        // Zuvor nur auf die Liste zurückgesetzt: Menge ist bereits im Vorrat -> nicht erneut addieren.
-        await t.put('shoppingList', { ...item, checked: true, updatedAt: nowIso() });
-        return { status: 'checkedWithoutAdding' };
-      }
-      const amount = item.amountPurchased ?? item.amountToBuy;
-      if (typeof amount !== 'number' || !Number.isFinite(amount) || amount <= 0) {
-        throw new Error('Bitte trage zuerst die tatsächlich gekaufte Menge ein.');
-      }
-      if (!normalizeUnit(item.unit)) throw new Error('Die Einheit ist unbekannt. Bitte Menge prüfen.');
-      const entry = catalogEntryFor(item, catalog);
-      const pantry = await t.getAll('pantry');
-      const target = findPantryTarget(pantry, item, catalog, entry);
-      const txId = uuid();
-      const now = nowIso();
-      let pantryItem;
-      let added;
-      if (target) {
-        added = convertWithIngredient(amount, item.unit, target.unit, entry);
-        pantryItem = { ...target, amount: roundQuantity((target.amount ?? 0) + added), updatedAt: now };
-      } else {
-        added = amount;
-        pantryItem = normalizePantryItem({
-          name: entry?.name ?? item.name, ingredientId: item.ingredientId ?? entry?.id ?? null, category: item.category,
-          amount, unit: item.unit, createdByTransaction: txId, nutritionSource: entry?.nutrition ? 'catalog' : 'none', createdAt: now, updatedAt: now,
-        });
-      }
-      await t.put('pantry', pantryItem);
-      await t.put('shoppingList', {
-        ...item,
-        amountPurchased: amount,
-        checked: true,
-        addedToPantry: true,
-        pantryTransactionId: txId,
-        pantryItemId: pantryItem.id,
-        pantryAmountAdded: added,
-        pantryUnit: pantryItem.unit,
-        pantryAmountAfter: pantryItem.amount,
-        updatedAt: now,
-      });
-      return { status: 'added', amount: added, unit: pantryItem.unit, pantryItemId: pantryItem.id, pantryAmountAfter: pantryItem.amount };
-    });
+    return await runTransaction(['shoppingList', 'pantry'], 'readwrite', (t) => checkInTx(t, id, catalog));
   } finally {
     inFlight.delete(id);
+  }
+}
+
+function bookable(i) {
+  const amount = i.amountPurchased ?? i.amountToBuy;
+  return typeof amount === 'number' && Number.isFinite(amount) && amount > 0 && !!normalizeUnit(i.unit);
+}
+
+/** Vorschau für „Einkauf komplett übernehmen“. */
+export async function previewCheckAll() {
+  const items = (await getAllItems('shoppingList')).map((i) => normalizeShoppingItem(i)).filter((i) => !i.checked);
+  return { items: items.filter(bookable), skipped: items.filter((i) => !bookable(i)) };
+}
+
+/**
+ * Alle offenen Artikel mit gültiger Menge in EINER Transaktion abhaken und in den Vorrat übernehmen.
+ * Artikel ohne Menge werden übersprungen. Idempotent: Der Status wird innerhalb der Transaktion geprüft,
+ * daher bucht ein zweiter Aufruf (auch aus einem anderen Tab) nichts doppelt.
+ * failAfter: nur für Tests – erzwingt einen Fehler nach n Buchungen (Rollback-Prüfung).
+ */
+export async function checkAllOpen(catalog, { failAfter = null } = {}) {
+  const key = 'check-all';
+  if (inFlight.has(key)) return { status: 'busy', added: 0, skipped: [] };
+  inFlight.add(key);
+  try {
+    return await runTransaction(['shoppingList', 'pantry'], 'readwrite', async (t) => {
+      const open = (await t.getAll('shoppingList')).map((i) => normalizeShoppingItem(i)).filter((i) => !i.checked);
+      const skipped = open.filter((i) => !bookable(i) && !i.addedToPantry);
+      let added = 0;
+      for (const i of open) {
+        if (skipped.includes(i)) continue;
+        const r = await checkInTx(t, i.id, catalog);
+        if (r.status === 'added') added += 1;
+        if (failAfter !== null && added >= failAfter) throw new Error('Absichtlicher Testfehler');
+      }
+      return { status: added || open.length > skipped.length ? 'done' : 'nothing', added, skipped };
+    });
+  } finally {
+    inFlight.delete(key);
   }
 }
 

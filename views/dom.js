@@ -50,6 +50,7 @@ export function clear(el) {
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const ICONS = {
+  calendar: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',
   home: 'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
   pantry: 'M4 4h16v6H4zM4 14h16v6H4zM9 7h6M9 17h6',
   search: 'M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zM20 20l-4-4',
@@ -91,12 +92,10 @@ export function icon(name, { size = 20, label = null } = {}) {
   return svg;
 }
 
-// ---------- Rückmeldungen ----------
 export function toast(message, type = 'info') {
   const region = document.getElementById('toast-region');
   if (!region) return;
   const el = h('div', { class: `toast toast-${type}`, role: type === 'error' ? 'alert' : 'status' }, message);
-  // Höchstens zwei Meldungen gleichzeitig – ältere werden entfernt
   while (region.children.length >= 2) region.firstElementChild.remove();
   region.append(el);
   const ms = type === 'error' ? 6000 : 3500;
@@ -109,9 +108,7 @@ export function announce(message) {
   if (live) { live.textContent = ''; setTimeout(() => { live.textContent = message; }, 30); }
 }
 
-/**
- * Modaler Dialog mit Schaltflächen. Gibt die gewählte value zurück (oder dismissValue bei Abbruch).
- */
+/** Modaler Dialog mit Schaltflächen. Gibt die gewählte value zurück (oder dismissValue bei Abbruch). */
 export function dialog({ title, body = [], buttons = [{ label: 'OK', value: 'ok', variant: 'primary' }], dismissValue = null, onMount = null }) {
   return new Promise((resolve) => {
     const titleId = `dlg-${Math.random().toString(36).slice(2)}`;
@@ -119,7 +116,6 @@ export function dialog({ title, body = [], buttons = [{ label: 'OK', value: 'ok'
     const inner = h('div', { class: 'dialog-inner' });
     inner.append(h('h2', { id: titleId, class: 'dialog-title' }, title));
     append(inner, [h('div', { class: 'dialog-body' }, ...body)]);
-    // Eigenes Formular nur für die Aktionsschaltflächen (keine verschachtelten Formulare)
     const form = h('form', { method: 'dialog', class: 'dialog-actions' });
     for (const b of buttons) {
       form.append(h('button', { type: 'submit', value: b.value, class: `btn ${b.variant ? `btn-${b.variant}` : ''}` }, b.label));
@@ -149,7 +145,6 @@ export async function confirmDialog(title, message, { confirmLabel = 'Bestätige
   return v === 'ok';
 }
 
-// ---------- Formular-Helfer ----------
 let fieldCounter = 0;
 export function field({ label, input, hint = null, error = null, id = null }) {
   const fid = id || input.id || `f${(fieldCounter += 1)}`;

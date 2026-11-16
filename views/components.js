@@ -63,10 +63,7 @@ function ingredientSummary(evaluation) {
     row('Menge bitte prüfen', check, 'warn', 'info'));
 }
 
-/**
- * Rezeptkarte.
- * @param {object} a Analyse aus recipes.analyzeRecipe
- */
+/** Rezeptkarte. */
 export function recipeCard(a, { mode = 'discover', servings = null, onFavorite = null } = {}) {
   const r = a.recipe;
   const n = r.nutritionPerServing;

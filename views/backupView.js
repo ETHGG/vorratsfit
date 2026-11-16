@@ -8,7 +8,6 @@ import {
 } from '../backup.js';
 
 export async function render(container) {
-  // ---------- Export ----------
   const exportOut = h('div', { 'aria-live': 'polite' });
   const createBtn = h('button', { type: 'button', class: 'btn btn-primary' }, 'Backup erstellen');
   createBtn.addEventListener('click', () => withBusy(createBtn, async () => {
@@ -28,8 +27,9 @@ export async function render(container) {
       dlBtn.addEventListener('click', () => {
         const blob = new Blob([json], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
-        const a = h('a', { download: backupFileName() });
+        const a = document.createElement('a');
         a.href = url;
+        a.download = backupFileName();
         document.body.append(a);
         a.click();
         a.remove();
@@ -48,7 +48,6 @@ export async function render(container) {
     }
   }));
 
-  // ---------- Import ----------
   const importArea = h('textarea', { name: 'code', rows: '5', class: 'code', spellcheck: 'false', placeholder: 'Backup-Code oder JSON hier einfügen' });
   const fileInput = h('input', { type: 'file', name: 'file', accept: 'application/json,.json' });
   const checkBtn = h('button', { type: 'button', class: 'btn btn-primary' }, 'Backup prüfen');
@@ -100,7 +99,7 @@ export async function render(container) {
   container.append(
     pageHeader('Backup', 'Sichere deine Daten oder übertrage sie auf ein anderes Gerät.'),
     h('p', { class: 'notice notice-warn' }, icon('alert', { size: 16 }), h('span', {}, 'Deine Daten liegen nur im Browser dieses Geräts. Wenn du Website-Daten löschst oder den Browser zurücksetzt, gehen sie verloren. Erstelle regelmäßig ein Backup.')),
-    section('Backup erstellen', h('p', { class: 'small' }, 'Enthalten: Profil, Vorrat inkl. Gewürze, Favoriten, eigene Rezepte, gespeicherte Online-Rezepte, Einkaufsliste, ausgewählte Rezepte mit Portionen und Einstellungen.'), createBtn, exportOut),
+    section('Backup erstellen', h('p', { class: 'small' }, 'Enthalten: Profil, Vorrat inkl. Gewürze, Favoriten, eigene Rezepte, gespeicherte Online-Rezepte, Einkaufsliste, ausgewählte Rezepte mit Portionen, Wochenplan, Ernährungstagebuch, eigene Schnell-Lebensmittel und Einstellungen. Nicht enthalten: Häufigkeit der Schnellerfassung und gewählter Einkaufszeitraum (Geräteeinstellungen).'), createBtn, exportOut),
     section('Backup wiederherstellen',
       field({ label: 'Backup-Code oder JSON', input: importArea }),
       field({ label: 'Oder JSON-Datei auswählen', input: fileInput }),

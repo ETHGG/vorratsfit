@@ -3,7 +3,7 @@
 // Persönliche Daten liegen in IndexedDB und werden hier niemals gelesen, verändert oder gelöscht.
 
 const CACHE_PREFIX = 'vorratsfit-app-';
-const CACHE_VERSION = '0.1.0';
+const CACHE_VERSION = '0.2.0';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 
 // Relative Pfade: funktionieren unter jedem Unterpfad (z. B. /vorratsfit/ auf GitHub Pages).
@@ -20,6 +20,8 @@ const APP_SHELL = [
   './pantry.js',
   './recipes.js',
   './shopping.js',
+  './planner.js',
+  './foodlog.js',
   './nutrition.js',
   './backup.js',
   './api.js',
@@ -32,6 +34,12 @@ const APP_SHELL = [
   './core/scoring.js',
   './core/shopping-logic.js',
   './core/recipe-tags.js',
+  './core/demand.js',
+  './core/plan-logic.js',
+  './core/cooking.js',
+  './core/day-balance.js',
+  './core/quick-entry.js',
+  './core/share-text.js',
   './views/dom.js',
   './views/router.js',
   './views/state.js',
@@ -41,6 +49,8 @@ const APP_SHELL = [
   './views/discoverView.js',
   './views/recipeDetailView.js',
   './views/shoppingView.js',
+  './views/plannerView.js',
+  './views/todayView.js',
   './views/pantryView.js',
   './views/goalsView.js',
   './views/profileView.js',
@@ -80,7 +90,6 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  // Externe APIs (TheMealDB, Open Food Facts) nicht abfangen – die App speichert Ergebnisse selbst in IndexedDB.
   if (url.origin !== self.location.origin) return;
 
   if (req.mode === 'navigate') {
@@ -89,7 +98,6 @@ self.addEventListener('fetch', (event) => {
     event.respondWith((async () => {
       const cache = await caches.open(CACHE_NAME);
       if (isAppShell) {
-        // App-Shell aus dem versionierten Cache: startet auch offline zuverlässig.
         const cached = await cache.match(new URL('./index.html', self.registration.scope));
         if (cached) return cached;
       }

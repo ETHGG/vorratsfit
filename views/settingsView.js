@@ -57,7 +57,7 @@ export async function render(container) {
     const input = h('input', { type: 'text', autocomplete: 'off', 'aria-label': 'Zur Bestätigung LÖSCHEN eingeben' });
     const choice = await dialog({
       title: 'Alle Daten löschen?',
-      body: [h('p', {}, 'Profil, Vorrat, Einkaufsliste, Favoriten, eigene Rezepte und Einstellungen werden unwiderruflich von diesem Gerät gelöscht. Erstelle vorher ein Backup, wenn du die Daten behalten möchtest.'), h('p', {}, 'Gib zur Bestätigung LÖSCHEN ein:'), input],
+      body: [h('p', {}, 'Profil, Vorrat, Einkaufsliste, Wochenplan, Ernährungstagebuch, Favoriten, eigene Rezepte und Einstellungen werden unwiderruflich von diesem Gerät gelöscht. Erstelle vorher ein Backup, wenn du die Daten behalten möchtest.'), h('p', {}, 'Gib zur Bestätigung LÖSCHEN ein:'), input],
       buttons: [{ label: 'Abbrechen', value: 'cancel' }, { label: 'Endgültig löschen', value: 'wipe', variant: 'danger' }],
       dismissValue: 'cancel',
     });

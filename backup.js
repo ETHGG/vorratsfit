@@ -4,7 +4,7 @@ import { APP_VERSION } from './core/models.js';
 import { exportAllData, importAllData, BACKUP_STORES, STORE_NORMALIZERS, getMeta, setMeta } from './db.js';
 
 export const BACKUP_FORMAT = 'vorratsfit-backup';
-export const BACKUP_VERSION = 1;
+export const BACKUP_VERSION = 2;
 export const MAX_INPUT_CHARS = 8_000_000; // ca. 8 MB Text
 export const MAX_FILE_BYTES = 10 * 1024 * 1024;
 export const LONG_CODE_THRESHOLD = 60_000; // darüber besser als JSON-Datei übertragen
@@ -72,6 +72,8 @@ const BACKUP_MIGRATIONS = {
     delete out.selected;
     return out;
   },
+  // 1 → 2 (0.2): neue Bereiche ergänzen. Bestehende Daten bleiben unverändert.
+  1: (data) => ({ ...data, mealPlan: data.mealPlan ?? [], foodLog: data.foodLog ?? [], quickFoods: data.quickFoods ?? [] }),
 };
 
 /** Entfernt gefährliche Schlüssel (Prototyp-Verschmutzung) rekursiv. */
@@ -136,7 +138,6 @@ export async function parseBackupInput(input) {
     normalized[name] = out;
   }
   if (errors.length) return { ok: false, errors };
-  // Profil und Einstellungen sind Einzeldatensätze
   normalized.profile = normalized.profile.slice(-1);
   normalized.settings = normalized.settings.slice(-1);
   return {
@@ -162,9 +163,9 @@ export function buildImportPreview(incoming, current) {
 export const STORE_LABELS = Object.freeze({
   profile: 'Profil', pantry: 'Vorrat (inkl. Gewürze)', favorites: 'Favoriten', customRecipes: 'Eigene Rezepte',
   cachedRecipes: 'Gespeicherte Online-Rezepte', shoppingList: 'Einkaufsliste', selectedRecipes: 'Ausgewählte Rezepte und Portionen', settings: 'Einstellungen',
+  mealPlan: 'Wochenplan', foodLog: 'Ernährungstagebuch', quickFoods: 'Schnell-Lebensmittel',
 });
 
-// ---------- Service-Funktionen (IndexedDB) ----------
 export async function createBackupFromDatabase() {
   const data = await exportAllData();
   return createBackupObject(data);

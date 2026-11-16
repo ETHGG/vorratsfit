@@ -1,9 +1,11 @@
 // views/router.js – Hash-Routing (funktioniert unter jedem GitHub-Pages-Unterpfad).
 export const NAV_ITEMS = Object.freeze([
-  { route: 'start', label: 'Start', icon: 'home', primary: true },
   { route: 'vorrat-rezepte', label: 'Aus meinem Vorrat', short: 'Vorrat-Rezepte', icon: 'pot', primary: true },
   { route: 'entdecken', label: 'Rezepte entdecken', short: 'Entdecken', icon: 'search', primary: true },
+  { route: 'woche', label: 'Woche', icon: 'calendar', primary: true },
   { route: 'einkauf', label: 'Einkaufsliste', short: 'Einkauf', icon: 'cart', primary: true },
+  { route: 'start', label: 'Start', icon: 'home' },
+  { route: 'heute', label: 'Heute gegessen', icon: 'check' },
   { route: 'vorrat', label: 'Vorrat', icon: 'pantry' },
   { route: 'favoriten', label: 'Favoriten', icon: 'heart' },
   { route: 'tagesziel', label: 'Tagesziel', icon: 'target' },

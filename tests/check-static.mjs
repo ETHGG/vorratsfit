@@ -19,7 +19,6 @@ function walk(dir, out = []) {
 const files = walk('');
 const appJs = files.filter((f) => f.endsWith('.js'));
 
-// 1. Verbotene Muster im App-Code
 const forbidden = [
   [/\beval\s*\(/, 'eval()'],
   [/new\s+Function\s*\(/, 'Function()'],
@@ -33,18 +32,16 @@ for (const f of appJs) {
   const src = read(f).replace(/\/\/.*$/gm, '');
   for (const [re, label] of forbidden) if (re.test(src)) problems.push(`${f}: verbotenes Muster ${label}`);
 }
-ok.push(`${appJs.length} JS-Dateien auf verbotene Muster geprüft`);
+ok.push(`N7-02 ${appJs.length} JS-Dateien auf verbotene Muster geprüft (kein innerHTML, eval usw.)`);
 
-// 2. Service Worker cached alle Programmdateien
 const sw = read('service-worker.js');
 const shell = Array.from(sw.matchAll(/'\.\/([^']*)'/g)).map((m) => m[1]);
 const mustCache = files.filter((f) => /\.(js|css|html|json|webmanifest|png|svg)$/.test(f) && f !== 'service-worker.js' && f !== 'package.json' && !f.startsWith('README'));
 for (const f of mustCache) if (!shell.includes(f)) problems.push(`service-worker.js: ${f} fehlt im App-Shell-Cache`);
 for (const f of shell) if (f && !files.includes(f)) problems.push(`service-worker.js: ${f} existiert nicht`);
 if (/indexedDB|localStorage/.test(sw.replace(/\/\/.*$/gm, ''))) problems.push('service-worker.js greift auf IndexedDB/localStorage zu');
-ok.push(`Service Worker: ${shell.length} Einträge geprüft`);
+ok.push(`P3-11 Service Worker: ${shell.length} Einträge geprüft, alle Programmdateien im App-Shell-Cache`);
 
-// 3. Nur relative Pfade (GitHub-Pages-Unterpfad)
 const html = read('index.html');
 for (const m of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
   const v = m[1];
@@ -61,7 +58,6 @@ if (manifest.display !== 'standalone') problems.push('manifest: display != stand
 for (const f of ['.nojekyll', 'LICENSE', 'README.md']) { try { read(f); } catch { problems.push(`${f} fehlt`); } }
 ok.push('Relative Pfade, Manifest und Pflichtdateien geprüft');
 
-// 4. Rezeptdaten
 const { recipes } = JSON.parse(read('data/recipes.json'));
 const ingredients = JSON.parse(read('data/ingredients.json'));
 const ingIds = new Set(ingredients.map((i) => i.id));

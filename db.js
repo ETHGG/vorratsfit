@@ -2,20 +2,26 @@
 // Grundsatz: Schemaänderungen nur über versionierte Migrationen; niemals Stores oder die Datenbank löschen.
 import {
   normalizePantryItem, normalizeShoppingItem, normalizeSelectedRecipe, normalizeFavorite,
-  normalizeSettings, normalizeProfile, normalizeRecipe,
+  normalizeSettings, normalizeProfile, normalizeRecipe, normalizeMealPlanEntry, normalizeFoodLogEntry, normalizeQuickFood,
 } from './core/models.js';
 
 export const DEFAULT_DB_NAME = 'vorratsfit-db';
-export const DB_VERSION = 1;
+export const DB_VERSION = 2;
 
-export const STORE_NAMES = Object.freeze([
+/** Stores aus Version 1 (0.1). Diese Liste wird nie verändert – sie beschreibt Migration 1. */
+const V1_STORE_NAMES = Object.freeze([
   'profile', 'pantry', 'favorites', 'customRecipes', 'cachedRecipes',
   'shoppingList', 'selectedRecipes', 'settings', 'metadata',
 ]);
+/** Stores, die mit Version 2 (0.2) hinzukommen. */
+const V2_STORE_NAMES = Object.freeze(['mealPlan', 'foodLog', 'quickFoods']);
+
+export const STORE_NAMES = Object.freeze([...V1_STORE_NAMES, ...V2_STORE_NAMES]);
 
 /** Stores, die in Backups enthalten sind (metadata ist intern). */
 export const BACKUP_STORES = Object.freeze([
   'profile', 'pantry', 'favorites', 'customRecipes', 'cachedRecipes', 'shoppingList', 'selectedRecipes', 'settings',
+  'mealPlan', 'foodLog', 'quickFoods',
 ]);
 
 export const STORE_NORMALIZERS = Object.freeze({
@@ -27,28 +33,35 @@ export const STORE_NORMALIZERS = Object.freeze({
   shoppingList: normalizeShoppingItem,
   selectedRecipes: normalizeSelectedRecipe,
   settings: normalizeSettings,
+  mealPlan: normalizeMealPlanEntry,
+  foodLog: normalizeFoodLogEntry,
+  quickFoods: normalizeQuickFood,
 });
 
 const STORE_INDEXES = Object.freeze({
   pantry: [['normalizedName', 'normalizedName'], ['category', 'category']],
   shoppingList: [['normalizedName', 'normalizedName']],
+  mealPlan: [['date', 'date'], ['mealPrepGroupId', 'mealPrepGroupId']],
+  foodLog: [['date', 'date']],
 });
+
+function createStores(db, names) {
+  for (const name of names) {
+    if (db.objectStoreNames.contains(name)) continue;
+    const store = db.createObjectStore(name, { keyPath: 'id' });
+    for (const [indexName, keyPath] of STORE_INDEXES[name] ?? []) store.createIndex(indexName, keyPath, { unique: false });
+  }
+}
 
 /**
  * Versionierte Migrationen. Jede Migration darf nur ergänzen und Standardwerte setzen.
- * Beispiel für eine spätere Version 2:
- *   2: (db, tx) => migrateRecords(tx, 'shoppingList', normalizeShoppingItem)
  */
 const MIGRATIONS = Object.freeze({
-  1: (db) => {
-    for (const name of STORE_NAMES) {
-      if (!db.objectStoreNames.contains(name)) {
-        const store = db.createObjectStore(name, { keyPath: 'id' });
-        for (const [indexName, keyPath] of STORE_INDEXES[name] ?? []) {
-          store.createIndex(indexName, keyPath, { unique: false });
-        }
-      }
-    }
+  1: (db) => createStores(db, V1_STORE_NAMES),
+  // 0.2: neue Bereiche anlegen; Einkaufsliste um Herkunftstyp ergänzen. Es wird nichts gelöscht.
+  2: (db, tx) => {
+    createStores(db, V2_STORE_NAMES);
+    migrateRecords(tx, 'shoppingList', (r) => normalizeShoppingItem(r));
   },
 });
 
@@ -67,6 +80,15 @@ export function migrateRecords(tx, storeName, normalizer) {
 let dbName = DEFAULT_DB_NAME;
 let dbPromise = null;
 const versionChangeListeners = new Set();
+const blockedListeners = new Set();
+
+/** Hinweis, wenn ein anderer (alter) Tab das Upgrade blockiert. Es wird nichts gelöscht; das Öffnen wartet. */
+export function onBlocked(listener) {
+  blockedListeners.add(listener);
+  return () => blockedListeners.delete(listener);
+}
+
+export const NEWER_VERSION_TEXT = 'Diese Seite stammt aus einer älteren VorratsFit-Version, deine Daten wurden bereits von einer neueren Version aktualisiert. Bitte lade die Seite neu oder schließe diesen Tab. Deine Daten bleiben erhalten.';
 
 /** Nur für Tests: eigene Datenbank verwenden. */
 export function configureDatabase(name) {
@@ -126,11 +148,15 @@ export function openDatabase() {
     };
     request.onerror = () => {
       if (dbPromise === thisPromise) dbPromise = null;
+      if (request.error?.name === 'VersionError') {
+        reject(new Error(NEWER_VERSION_TEXT));
+        return;
+      }
       reject(new Error(`Datenbank konnte nicht geöffnet werden: ${request.error?.message ?? 'unbekannter Fehler'}`));
     };
     request.onblocked = () => {
-      // Kein Löschen, nur Hinweis: anderer Tab blockiert das Upgrade.
-      console.warn('VorratsFit: Datenbank-Upgrade wartet, bis andere Tabs geschlossen sind.');
+      // Kein Löschen, nur Hinweis: anderer Tab blockiert das Upgrade. Das Öffnen läuft weiter, sobald er geschlossen ist.
+      blockedListeners.forEach((fn) => { try { fn(); } catch { /* ignorieren */ } });
     };
   });
   dbPromise = thisPromise;
@@ -150,7 +176,6 @@ function assertStore(name) {
 
 /**
  * Führt eine Funktion innerhalb einer IndexedDB-Transaktion aus.
- * In fn dürfen nur IndexedDB-Anfragen über das Hilfsobjekt abgewartet werden.
  * Wirft fn einen Fehler, wird die Transaktion vollständig zurückgerollt.
  */
 export async function runTransaction(storeNames, mode, fn) {
@@ -170,6 +195,7 @@ export async function runTransaction(storeNames, mode, fn) {
     const helper = {
       get: (store, key) => promisify(tx.objectStore(store).get(key)),
       getAll: (store) => promisify(tx.objectStore(store).getAll()),
+      getAllInRange: (store, index, lower, upper) => promisify(tx.objectStore(store).index(index).getAll(IDBKeyRange.bound(lower, upper))),
       put: (store, value) => promisify(tx.objectStore(store).put(value)),
       delete: (store, key) => promisify(tx.objectStore(store).delete(key)),
       clear: (store) => promisify(tx.objectStore(store).clear()),

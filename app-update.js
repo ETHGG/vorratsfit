@@ -10,7 +10,6 @@ let updateRequested = false;
 export function initServiceWorker(showBanner) {
   onUpdateAvailable = showBanner;
   if (!('serviceWorker' in navigator)) return Promise.resolve(null);
-  // Relativer Pfad -> funktioniert unter https://BENUTZER.github.io/vorratsfit/
   return navigator.serviceWorker.register('./service-worker.js', { scope: './' }).then((reg) => {
     registration = reg;
     if (reg.waiting && navigator.serviceWorker.controller) onUpdateAvailable(reg.waiting);

@@ -9,6 +9,8 @@ import { getShoppingState } from '../shopping.js';
 import { getTargets } from '../profile.js';
 import { formatAmount } from '../units.js';
 import { getLastBackupDate } from '../backup.js';
+import { loadDayBalance, balanceCard } from './todayView.js';
+import { todayString } from '../core/utils.js';
 
 export async function render(container) {
   const p = state.profile;
@@ -26,6 +28,9 @@ export async function render(container) {
     h('a', { class: 'tile', href: routeHref('vorrat') }, icon('pantry', { size: 28 }), h('span', { class: 'tile-title' }, 'Vorrat'), h('span', { class: 'tile-sub' }, `${ctx.pantry.length} Einträge`)));
 
   container.append(pageHeader(p?.nickname ? `Hallo ${p.nickname}!` : 'VorratsFit', 'Rezepte, Vorräte, Einkaufslisten und Ernährungsziele – alles lokal auf deinem Gerät.'), tiles);
+
+  const today = await loadDayBalance(todayString());
+  container.append(section('Heute', balanceCard(today.balance, { compact: true }), h('a', { class: 'btn', href: routeHref('heute') }, 'Tagesbilanz öffnen')));
 
   if (targets) {
     container.append(section('Dein Tagesziel', h('p', {}, h('strong', {}, fmtKcal(targets.kcalTarget)), targets.manual ? ' (Manuell festgelegt)' : ' (Schätzung)', ` · Protein ${targets.proteinMin}–${targets.proteinMax} g`), h('a', { href: routeHref('tagesziel') }, 'Details ansehen')));

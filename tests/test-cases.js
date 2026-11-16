@@ -8,7 +8,7 @@ import { checkRecipe, recipeAllergens } from '../core/restrictions.js';
 import { calcBmr, calcTargets, computeRecipeNutrition } from '../nutrition.js';
 import { normalizeShoppingItem, normalizePantryItem } from '../core/models.js';
 import { canonicalStringify, parseNumber, uuid } from '../core/utils.js';
-import { createBackupObject, encodeBackupCode, decodeBackupCode, parseBackupInput, sha256Hex } from '../backup.js';
+import { createBackupObject, encodeBackupCode, decodeBackupCode, parseBackupInput, sha256Hex, BACKUP_VERSION } from '../backup.js';
 import { mapMealDbMeal, parseMeasure } from '../api.js';
 import { buildCustomRecipe } from '../recipes.js';
 
@@ -36,7 +36,6 @@ export function buildTests(ingredientsData) {
   const T = [];
   const t = (name, fn) => T.push({ name, fn });
 
-  // ---------- Mengen ----------
   t('01 Mengen: 800 g benötigt, 300 g vorhanden → 500 g kaufen', () => {
     const r = computeToBuy(800, 'g', [{ amount: 300, unit: 'g' }]);
     eq(r.toBuy, 500); eq(r.status, 'ok');
@@ -49,7 +48,6 @@ export function buildTests(ingredientsData) {
     eq(r.toBuy, 250); eq(r.unit, 'ml');
   });
 
-  // ---------- Portionen ----------
   t('06 Portionen: 2 Personen 400 g → 4 Personen 800 g', () => {
     eq(scaleAmount(400, 2, 4), 800);
     const s = scaleRecipe(chicken4, 4);
@@ -62,15 +60,13 @@ export function buildTests(ingredientsData) {
   });
   t('07b Spezifikationsbeispiel: Einkaufsliste für 4 Personen', () => {
     const pantry = [P('Hähnchenbrust', 300, 'g'), P('Reis', 500, 'g'), P('Paprika', 1, 'Stück'), P('Olivenöl', 100, 'ml')];
-    const recipe = { ...chicken4, ingredients: chicken4.ingredients.map((i) => (i.ingredientId === 'zwiebel' ? { ...i, amount: 1 } : i)) };
-    const plan = computePlan(aggregateNeeds([{ recipeId: 'C', title: 'X', servings: 4, recipe }], catalog), pantry, catalog);
+    const plan = computePlan(aggregateNeeds([{ recipeId: 'C', title: 'X', servings: 4, recipe: chicken4 }], catalog), pantry, catalog);
     const buy = Object.fromEntries(plan.filter((p) => p.amountToBuy > 0).map((p) => [p.ingredientId, p.amountToBuy]));
     eq(buy, { haehnchenbrust: 500, paprika: 3, zwiebel: 2 });
     const pv = previewForRecipe('C', plan);
     eq(pv.sufficient.map((p) => p.ingredientId).sort(), ['olivenoel', 'reis']);
   });
 
-  // ---------- Mehrere Rezepte ----------
   t('08 Mehrere Rezepte: 3 + 4 Zwiebeln, Vorrat 2 → 5 kaufen', () => {
     const needs = aggregateNeeds([{ recipeId: 'A', servings: 2, recipe: recipeA }, { recipeId: 'B', servings: 2, recipe: recipeB }], catalog);
     const plan = computePlan(needs, [P('Zwiebel', 2, 'Stück')], catalog);
@@ -214,7 +210,7 @@ export function buildTests(ingredientsData) {
   t('B1 Backup: Code-Roundtrip mit Umlauten und Prüfsumme', async () => {
     const data = { profile: [{ id: 'main', nickname: 'Jörg 🍗' }], pantry: [P('Hähnchen', 300, 'g')] };
     const backup = await createBackupObject(data);
-    eq(backup.format, 'vorratsfit-backup'); eq(backup.backupVersion, 1);
+    eq(backup.format, 'vorratsfit-backup'); eq(backup.backupVersion, BACKUP_VERSION); // 0.2: Version 2 laut CLAUDE.md Abschnitt 5
     eq(backup.checksum, await sha256Hex(canonicalStringify(backup.data)));
     const code = encodeBackupCode(backup);
     assert(/^[A-Za-z0-9_-]+$/.test(code), 'Base64URL');

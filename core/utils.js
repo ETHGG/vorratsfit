@@ -162,3 +162,18 @@ export function unique(array) {
 export function isPlainObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
+
+/** Addiert Tage zu einem Datum JJJJ-MM-TT (kalendarisch, unabhängig von Sommer-/Winterzeit). */
+export function addDays(dateString, days) {
+  if (!isValidDateString(dateString)) return null;
+  const [y, m, d] = dateString.split('-').map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d + days));
+  return dt.toISOString().slice(0, 10);
+}
+
+/** Wochentag 0 = Montag … 6 = Sonntag (kalendarisch, ohne Zeitzoneneinfluss). */
+export function weekdayIndex(dateString) {
+  if (!isValidDateString(dateString)) return null;
+  const [y, m, d] = dateString.split('-').map(Number);
+  return (new Date(Date.UTC(y, m - 1, d)).getUTCDay() + 6) % 7;
+}

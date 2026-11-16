@@ -3,7 +3,7 @@
 import { uuid, nowIso, sanitizeText, sanitizeMultiline, normalizeText, parseNumber, isValidDateString, isPlainObject, isSafeHttpUrl } from './utils.js';
 import { normalizeUnit, roundQuantity } from '../units.js';
 
-export const APP_VERSION = '0.1.0';
+export const APP_VERSION = '0.2.0';
 
 export const CATEGORIES = Object.freeze([
   'Fleisch und Fisch', 'vegetarische Proteinquellen', 'Milchprodukte', 'Ersatzprodukte', 'Gemüse', 'Obst',
@@ -187,6 +187,8 @@ export function normalizePantryItem(raw = {}, now = nowIso()) {
   };
 }
 
+export const SOURCE_TYPES = Object.freeze(['single', 'plan', 'mealprep']);
+
 export function normalizeRecipeSource(raw = {}) {
   return {
     recipeId: str(raw.recipeId, 100),
@@ -194,6 +196,10 @@ export function normalizeRecipeSource(raw = {}) {
     servings: Math.round(Math.min(50, Math.max(1, parseNumber(raw.servings) ?? 1))),
     amount: amountOrNull(raw.amount),
     unit: unitOrRaw(raw.unit),
+    // 0.2: Herkunft der Anforderung (Einzelrezept, Plan-Eintrag, Meal-Prep-Gruppe). Alte Daten = Einzelrezept.
+    sourceType: SOURCE_TYPES.includes(raw.sourceType) ? raw.sourceType : 'single',
+    sourceId: str(raw.sourceId, 100) || null,
+    label: str(raw.label, 60) || null,
   };
 }
 
@@ -368,6 +374,92 @@ export function normalizeRecipe(raw = {}, now = nowIso()) {
     emoji: str(raw.emoji, 8) || '🍽️',
     license: str(raw.license, 200) || 'Eigenes Rezept (privat)',
     origin: ['local', 'custom', 'external'].includes(raw.origin) ? raw.origin : 'custom',
+    createdAt: iso(raw.createdAt, now),
+    updatedAt: iso(raw.updatedAt, now),
+  };
+}
+
+// ---------- Version 0.2: Wochenplan, Ernährungstagebuch, Schnell-Lebensmittel ----------
+function intIn(v, min, max, fallback) {
+  const n = parseNumber(v);
+  if (n === null) return fallback;
+  const r = Math.round(n);
+  return r >= min && r <= max ? r : fallback;
+}
+function nutrientOrNull(v) {
+  const n = parseNumber(v);
+  return n !== null && n >= 0 && n < 100000 ? n : null;
+}
+function timeOrNull(v) {
+  if (typeof v !== 'string') return null;
+  const m = v.match(/^(\d{2}):(\d{2})$/);
+  if (!m) return null;
+  return Number(m[1]) < 24 && Number(m[2]) < 60 ? v : null;
+}
+
+export const MAX_PLAN_SERVINGS = 50;
+
+/** Eintrag im Wochenplan. Ungültige Werte werden auf sichere Standardwerte gesetzt. */
+export function normalizeMealPlanEntry(raw = {}, now = nowIso()) {
+  const consumptions = Array.isArray(raw.cookConsumptions) ? raw.cookConsumptions.slice(0, 200)
+    .filter((c) => isPlainObject(c))
+    .map((c) => ({ pantryId: str(c.pantryId, 100), amount: amountOrNull(c.amount) ?? 0, unit: unitOrRaw(c.unit), name: str(c.name, 80), createdPantryItem: bool(c.createdPantryItem, false) }))
+    .filter((c) => c.pantryId) : [];
+  return {
+    id: idOrNew(raw.id),
+    date: isValidDateString(raw.date) ? raw.date : null,
+    mealType: MEAL_TYPES.some((m) => m.id === raw.mealType) ? raw.mealType : 'mittagessen',
+    recipeId: str(raw.recipeId, 100),
+    recipeTitle: str(raw.recipeTitle, 120),
+    servings: intIn(raw.servings, 1, MAX_PLAN_SERVINGS, 1),
+    mealPrepGroupId: str(raw.mealPrepGroupId, 100) || null,
+    mealPrepIndex: intIn(raw.mealPrepIndex, 1, 50, null),
+    mealPrepCount: intIn(raw.mealPrepCount, 1, 50, null),
+    cooked: bool(raw.cooked, false),
+    cookTransactionId: str(raw.cookTransactionId, 100) || null,
+    cookedAt: iso(raw.cookedAt, null),
+    cookConsumptions: consumptions,
+    eaten: bool(raw.eaten, false),
+    createdAt: iso(raw.createdAt, now),
+    updatedAt: iso(raw.updatedAt, now),
+  };
+}
+
+export const FOOD_LOG_SOURCES = Object.freeze(['plan', 'recipe', 'quick']);
+
+/** Eintrag im Ernährungstagebuch. Nährwerte werden als Kopie gespeichert; unbekannt = null (nie 0). */
+export function normalizeFoodLogEntry(raw = {}, now = nowIso()) {
+  const kcal = nutrientOrNull(raw.kcal);
+  const protein = nutrientOrNull(raw.protein);
+  return {
+    id: idOrNew(raw.id),
+    date: isValidDateString(raw.date) ? raw.date : null,
+    time: timeOrNull(raw.time),
+    source: FOOD_LOG_SOURCES.includes(raw.source) ? raw.source : 'quick',
+    refId: str(raw.refId, 100) || null,
+    name: str(raw.name, 80) || 'Eintrag',
+    kcal,
+    protein,
+    carbs: nutrientOrNull(raw.carbs),
+    fat: nutrientOrNull(raw.fat),
+    fiber: nutrientOrNull(raw.fiber),
+    portions: Math.min(50, Math.max(0.1, parseNumber(raw.portions) ?? 1)),
+    nutritionComplete: typeof raw.nutritionComplete === 'boolean' ? raw.nutritionComplete : (kcal !== null && protein !== null),
+    createdAt: iso(raw.createdAt, now),
+    updatedAt: iso(raw.updatedAt, now),
+  };
+}
+
+/** Eigenes Schnell-Lebensmittel (z. B. „Mein Proteinriegel“). */
+export function normalizeQuickFood(raw = {}, now = nowIso()) {
+  return {
+    id: idOrNew(raw.id),
+    name: str(raw.name, 80) || 'Lebensmittel',
+    kcal: nutrientOrNull(raw.kcal),
+    protein: nutrientOrNull(raw.protein),
+    carbs: nutrientOrNull(raw.carbs),
+    fat: nutrientOrNull(raw.fat),
+    portionLabel: str(raw.portionLabel, 40) || '1 Portion',
     createdAt: iso(raw.createdAt, now),
     updatedAt: iso(raw.updatedAt, now),
   };
