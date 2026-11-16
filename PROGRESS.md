@@ -4,6 +4,9 @@
 - Die Arbeitsumgebung wurde zweimal zurückgesetzt. 0.2.0 und 0.3.0 wurden vollständig aus dem Projektverlauf neu geschrieben.
 - Git-Historie: Basis-Commit und Tag **v0.2.0**, darauf 0.3.0 mit Tag **v0.3.0**. Ältere Phasen-Commits sind nicht mehr vorhanden.
 
+## 0.7.3
+- [x] Foto-Knopf auf dem Rezeptbild, Abschnitte neu geordnet
+
 ## 0.7.2
 - [x] Einrichtung ohne Navigation, Willkommens-Tipps im Vorrat
 - [x] Wochenauswertung ohne leere Wochen, gerundeter Platzhalter in der Einkaufsliste, Tagesbilanz ≤ 360 px

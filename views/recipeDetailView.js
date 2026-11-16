@@ -157,7 +157,23 @@ export async function render(container, { id, params }) {
   const favHolder = h('span', {});
   const drawFav = () => { clear(favHolder); favHolder.append(favoriteButton(r, async () => { await toggleFavorite(r); await refreshFavorites(); drawFav(); })); };
   drawFav();
-  const visual = recipeArt(r, 'detail-emoji');
+  // 0.7.3: Kamera-Knopf direkt auf dem Bild (statt eigener Abschnitt ganz unten)
+  const hasPhoto = !!state.photos.get(r.id);
+  const pin = h('input', { type: 'file', accept: 'image/*', capture: 'environment', class: 'photo-input', id: 'photo-change', 'aria-label': 'Foto für dieses Rezept wählen' });
+  pin.addEventListener('change', async () => {
+    try {
+      const photo = pin.files?.[0] ? await shrinkPhoto(pin.files[0]) : null;
+      if (!photo) return;
+      await setPhoto(r.id, photo);
+      await refreshPhotos();
+      toast('Foto gespeichert. 📸', 'success');
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
+    } catch (err) { toast(err.message, 'error'); }
+  });
+  const rmPhoto = hasPhoto ? h('button', { type: 'button', class: 'photo-chip' }, 'Foto entfernen') : null;
+  rmPhoto?.addEventListener('click', async () => { await removePhoto(r.id); await refreshPhotos(); toast('Foto entfernt.'); window.dispatchEvent(new HashChangeEvent('hashchange')); });
+  const visual = h('div', { class: 'hero-wrap' }, recipeArt(r, 'detail-emoji'),
+    h('div', { class: 'photo-actions' }, h('label', { for: 'photo-change', class: 'photo-chip photo-btn' }, hasPhoto ? '📷 Foto ändern' : '📷 Eigenes Foto'), rmPhoto), pin);
   const sourceInfo = h('p', { class: 'small' }, `Datenquelle: ${r.source}. Lizenz: ${r.license}.`, r.sourceUrl ? h('span', {}, ' ', h('a', { href: r.sourceUrl, target: '_blank', rel: 'noopener noreferrer' }, 'Originalrezept öffnen')) : null);
 
   container.append(
@@ -174,36 +190,16 @@ export async function render(container, { id, params }) {
     tagList(r.dietaryTags, 20),
     section('Portionen', stepper({ value: servings, onChange: (v) => { servings = v; history.replaceState(null, '', routeHref(`rezept/${encodeURIComponent(r.id)}?portionen=${v}`)); draw(); } }), h('p', { class: 'small muted' }, `Originalrezept für ${r.defaultServings} ${r.defaultServings === 1 ? 'Person' : 'Personen'}. Mengen werden vor dem Vorratsvergleich skaliert.`)),
     section('Zutaten und Vorrat', ingBox, actionsBox),
-    section('Allergene',
-      al.tags.length ? h('p', {}, `Laut Zutatenstammdaten enthalten: ${al.tags.map(allergenLabel).join(', ')}.`) : h('p', {}, al.complete ? 'In den hinterlegten Zutatenstammdaten sind keine der 14 Hauptallergene vermerkt.' : 'Keine Allergenangaben vorhanden.'),
-      !al.complete ? h('p', { class: 'notice notice-warn' }, icon('alert', { size: 16 }), 'Die Allergendaten sind unvollständig. Fehlende Angaben bedeuten nicht, dass das Rezept allergenfrei ist.') : null,
-      allergyDisclaimer()),
     section('Zubereitung',
       r.instructions.length ? h('a', { class: 'btn btn-primary cook-start', href: routeHref(`kochen/${encodeURIComponent(r.id)}?portionen=${servings}`) }, icon('pot', { size: 18 }), ' Kochmodus starten') : null,
       r.instructions.length ? h('ol', { class: 'steps' }, ...r.instructions.map((s) => h('li', {}, s))) : h('p', {}, 'Keine Zubereitungsschritte hinterlegt.')),
     section('Nährwerte pro Portion', nutritionTable(r)),
+    section('Allergene',
+      al.tags.length ? h('p', {}, `Laut Zutatenstammdaten enthalten: ${al.tags.map(allergenLabel).join(', ')}.`) : h('p', {}, al.complete ? 'In den hinterlegten Zutatenstammdaten sind keine der 14 Hauptallergene vermerkt.' : 'Keine Allergenangaben vorhanden.'),
+      !al.complete ? h('p', { class: 'notice notice-warn' }, icon('alert', { size: 16 }), 'Die Allergendaten sind unvollständig. Fehlende Angaben bedeuten nicht, dass das Rezept allergenfrei ist.') : null,
+      allergyDisclaimer()),
     section('Quelle', sourceInfo),
   );
-  {
-    // 0.7: eigenes Foto zu jedem Rezept – z. B. nach dem Nachkochen
-    const has = !!(state.photos.get(r.id) || r.photo);
-    const pin = h('input', { type: 'file', accept: 'image/*', capture: 'environment', class: 'photo-input', id: 'photo-change', 'aria-label': 'Foto für dieses Rezept wählen' });
-    pin.addEventListener('change', async () => {
-      try {
-        const photo = pin.files?.[0] ? await shrinkPhoto(pin.files[0]) : null;
-        if (!photo) return;
-        await setPhoto(r.id, photo);
-        await refreshPhotos();
-        toast('Foto gespeichert. 📸', 'success');
-        window.dispatchEvent(new HashChangeEvent('hashchange'));
-      } catch (err) { toast(err.message, 'error'); }
-    });
-    const rm = has && state.photos.get(r.id) ? h('button', { type: 'button', class: 'btn btn-link' }, 'Foto entfernen') : null;
-    rm?.addEventListener('click', async () => { await removePhoto(r.id); await refreshPhotos(); toast('Foto entfernt.'); window.dispatchEvent(new HashChangeEvent('hashchange')); });
-    container.append(section('Dein Foto',
-      h('p', { class: 'small muted' }, has ? 'So sieht dein Gericht aus – das Foto bleibt nur auf diesem Gerät.' : 'Schon nachgekocht? Mach ein Foto – es ersetzt die Bildfläche und bleibt nur auf diesem Gerät.'),
-      h('div', { class: 'form-actions' }, h('label', { for: 'photo-change', class: 'btn btn-secondary photo-btn' }, has ? '📷 Foto ändern' : '📷 Foto hinzufügen'), rm), pin));
-  }
   if (r.origin === 'custom' || r.origin === 'external') {
     const del = h('button', { type: 'button', class: 'btn btn-danger' }, icon('trash', { size: 16 }), r.origin === 'custom' ? ' Eigenes Rezept löschen' : ' Gespeichertes Rezept entfernen');
     del.addEventListener('click', async () => {

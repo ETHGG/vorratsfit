@@ -641,3 +641,8 @@ body[data-route="einrichtung"] { padding-bottom: 0; }
   h1 { font-size: 1.45rem; }
 }
 .macro-name { white-space: nowrap; }
+
+.hero-wrap { position: relative; }
+.photo-actions { position: absolute; right: .7rem; bottom: .7rem; display: flex; gap: .4rem; flex-wrap: wrap; justify-content: flex-end; }
+.photo-chip { display: inline-flex; align-items: center; min-height: 44px; padding: .4rem .9rem; border-radius: 999px; border: 0; font: inherit; font-weight: 650; font-size: .9rem; background: rgba(255, 255, 255, .92); color: #2b2420; box-shadow: 0 2px 10px rgba(0, 0, 0, .15); cursor: pointer; }
+.hero-wrap:has(.photo-input:focus-visible) .photo-btn { outline: 3px solid var(--focus); outline-offset: 2px; }
