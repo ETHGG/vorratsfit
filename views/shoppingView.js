@@ -10,7 +10,7 @@ import {
 import { sortShoppingItems } from '../core/shopping-logic.js';
 import { SHOPPING_GROUPS, CATEGORIES, CATEGORY_EMOJI } from '../core/models.js';
 import { saveSettings } from '../settings.js';
-import { formatAmount, SELECTABLE_UNITS, CHECK_QUANTITY_TEXT } from '../units.js';
+import { formatAmount, formatNumber, SELECTABLE_UNITS, CHECK_QUANTITY_TEXT } from '../units.js';
 import { buildShareText } from '../core/share-text.js';
 
 /** Gänge in der vom Nutzer gewählten Reihenfolge, fehlende hinten angehängt. */
@@ -90,7 +90,7 @@ export async function render(container) {
 
   function openItem(it) {
     const checkBtn = h('button', { type: 'button', class: 'check-btn', 'aria-label': `${it.name} abhaken und in den Vorrat übernehmen` }, icon('check', { size: 22 }));
-    const purchased = h('input', { type: 'number', name: `p-${it.id}`, min: '0', max: '1000000', step: 'any', inputmode: 'decimal', value: it.amountPurchased ?? '', placeholder: typeof it.amountToBuy === 'number' ? String(it.amountToBuy).replace('.', ',') : '', disabled: it.addedToPantry });
+    const purchased = h('input', { type: 'number', name: `p-${it.id}`, min: '0', max: '1000000', step: 'any', inputmode: 'decimal', value: it.amountPurchased ?? '', placeholder: typeof it.amountToBuy === 'number' ? formatNumber(it.amountToBuy, it.amountToBuy >= 100 ? 0 : 1) : '', disabled: it.addedToPantry });
     purchased.id = `pur-${it.id}`;
     // 0.7: Feld nur bei Bedarf aufklappen – die Liste bleibt im Laden kurz und übersichtlich.
     const purchasedField = h('details', { class: 'purchased-toggle', open: it.amountPurchased !== null && it.amountPurchased !== undefined && it.amountPurchased !== '' ? true : null },

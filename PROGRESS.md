@@ -4,6 +4,11 @@
 - Die Arbeitsumgebung wurde zweimal zurückgesetzt. 0.2.0 und 0.3.0 wurden vollständig aus dem Projektverlauf neu geschrieben.
 - Git-Historie: Basis-Commit und Tag **v0.2.0**, darauf 0.3.0 mit Tag **v0.3.0**. Ältere Phasen-Commits sind nicht mehr vorhanden.
 
+## 0.7.2
+- [x] Einrichtung ohne Navigation, Willkommens-Tipps im Vorrat
+- [x] Wochenauswertung ohne leere Wochen, gerundeter Platzhalter in der Einkaufsliste, Tagesbilanz ≤ 360 px
+- [x] Wasser-Test zeitzonensicher (Mitternacht)
+
 ## 0.7.1 – Nutzungstest (mehrere simulierte Tage, 320/390/1280 px, hell/dunkel)
 - [x] Dezimalfelder als Textfeld mit Zahlentastatur (Komma-Eingabe), Werte mit Komma angezeigt
 - [x] Einkaufsliste: Mengenfeld eingeklappt, Herkunft dezenter

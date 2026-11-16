@@ -623,3 +623,21 @@ body[data-route="kochen"] .app-footer { display: none; }
 .shop-item { padding: .7rem 0; }
 .shop-item .check-btn { align-self: center; }
 .shop-item details.sources summary { min-height: 32px; font-size: .88rem; font-weight: 500; color: var(--muted); }
+
+body[data-route="einrichtung"] .bottom-nav, body[data-route="einrichtung"] .side-nav { display: none; }
+body[data-route="einrichtung"] { padding-bottom: 0; }
+.welcome { background: linear-gradient(135deg, #fff4d6, #ffe7b0); color: #3b2a10; border-radius: var(--radius); padding: .9rem 1rem; margin: 0 0 1rem; }
+.welcome ol { margin: .4rem 0 0; padding-left: 1.2rem; }
+.welcome li { margin: .2rem 0; }
+@media (max-width: 360px) {
+  .balance-top { grid-template-columns: 84px 1fr; gap: .6rem; }
+  .ring { width: 84px; height: 84px; }
+  .ring-value { font-size: 1.05rem; }
+  .ring-unit { font-size: .58rem; }
+  .balance-main { font-size: 1rem; }
+  .balance-facts div { font-size: .85rem; }
+  .macro { font-size: .9rem; }
+  .page-header { padding: .9rem .9rem .9rem 1rem; }
+  h1 { font-size: 1.45rem; }
+}
+.macro-name { white-space: nowrap; }

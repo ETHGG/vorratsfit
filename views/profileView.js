@@ -142,7 +142,7 @@ export async function render(container, { wizard = false } = {}) {
       if (isNew && res.profile.weightKg && !(await listWeights()).length) await saveWeight({ date: todayString(), weightKg: res.profile.weightKg });
       await refreshProfile();
       toast('Profil gespeichert. Die Daten bleiben auf diesem Gerät.', 'success');
-      navigate(wizard ? 'vorrat' : 'tagesziel');
+      navigate(wizard ? 'vorrat?willkommen=1' : 'tagesziel');
     });
   });
 

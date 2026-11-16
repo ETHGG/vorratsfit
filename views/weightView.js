@@ -80,7 +80,7 @@ export async function render(container) {
     weeksBox.append(h('div', { class: 'table-wrap' }, h('table', { class: 'nutri weeks' },
       h('caption', { class: 'sr-only' }, 'Wochenauswertung'),
       h('thead', {}, h('tr', {}, ...['Woche', 'Ø Gewicht', 'Veränderung', 'Ø kcal', 'Ø Protein', 'Tage im Ziel'].map((c) => h('th', { scope: 'col' }, c)))),
-      h('tbody', {}, ...stats.map((w) => h('tr', {},
+      h('tbody', {}, ...stats.filter((w, i) => i === 0 || typeof w.avgWeight === 'number' || (w.daysLogged ?? 0) > 0).map((w) => h('tr', {},
         h('th', { scope: 'row' }, `${dmy(w.start)}–${dmy(w.end)}`),
         h('td', {}, fmt(w.avgWeight, ' kg', 1)),
         h('td', {}, formatChange(w.change)),

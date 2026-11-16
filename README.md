@@ -2,7 +2,7 @@
 
 **Progressive Web App für Rezepte, Vorräte, Wochenplanung, Einkaufslisten, Ernährungs- und Gewichtstracking – ohne Backend, ohne Konto, alle Daten lokal.**
 
-Version 0.7.1 · Live: <https://ethgg.github.io/vorratsfit/>
+Version 0.7.2 · Live: <https://ethgg.github.io/vorratsfit/>
 
 ## Funktionen
 
@@ -17,7 +17,10 @@ Version 0.7.1 · Live: <https://ethgg.github.io/vorratsfit/>
 | Profil | **Geburtsdatum** statt Alter – das Alter läuft automatisch weiter; unter 18 gelten die Schutzregeln automatisch |
 | Darstellung | Hell, Dunkel (seit 0.3 mit ruhigerem Kontrast), System |
 
-## Neu in 0.7.1 (Nutzungstest über Nacht)
+## Neu in 0.7.1/0.7.2 (Nutzungstest über Nacht)
+- **Erster Start:** Während der Einrichtung keine Navigation (weniger Ablenkung); danach drei kurze Tipps zum Loslegen.
+- **Wochenauswertung** zeigt nur Wochen mit Einträgen; Einkaufsmengen im Mengenfeld gerundet.
+- **Kleine Bildschirme (320 px):** Tagesbilanz kompakter.
 - **Komma in Zahlenfeldern:** Gewicht, Mengen und Nährwerte lassen sich mit Komma eingeben (z. B. „94,6“) – wichtig für deutsche iPhone-Tastaturen.
 - **Einkaufsliste kürzer:** „Andere Menge gekauft?“ klappt das Mengenfeld nur bei Bedarf auf.
 
@@ -67,7 +70,7 @@ Version 0.7.1 · Live: <https://ethgg.github.io/vorratsfit/>
 
 ## Veröffentlichen (GitHub Pages)
 Settings → Pages → Deploy from a branch → `main` / `(root)`. `.nojekyll` muss im Repository liegen.
-**Bei jeder neuen Version `CACHE_VERSION` in `service-worker.js` erhöhen** (0.7.1 ist gesetzt).
+**Bei jeder neuen Version `CACHE_VERSION` in `service-worker.js` erhöhen** (0.7.2 ist gesetzt).
 
 ## Daten, Update, Datenschutz
 - Persönliche Daten: IndexedDB `vorratsfit-db`, Version 5 (neu: `recipePhotos`). Das Update erweitert die Datenbank, es wird nichts gelöscht.

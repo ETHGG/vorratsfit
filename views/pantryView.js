@@ -133,7 +133,7 @@ async function scanBarcode() {
   return found;
 }
 
-export async function render(container) {
+export async function render(container, { params } = {}) {
   const filters = { query: '', category: '', tab: 'food', expiringOnly: false };
   const warnDays = state.settings?.expiryWarningDays ?? 3;
   const listEl = h('div', { class: 'pantry-list', 'aria-live': 'polite' });
@@ -270,6 +270,12 @@ export async function render(container) {
 
   container.append(
     pageHeader('Vorrat', 'Was du zu Hause hast – mit Menge und Ablaufdatum.'),
+    params?.get('willkommen') === '1' ? h('div', { class: 'welcome' },
+      h('p', {}, h('strong', {}, 'Schön, dass du da bist! 🎉'), ' Dein Profil ist gespeichert.'),
+      h('ol', {},
+        h('li', {}, 'Trag hier ein, was du zu Hause hast – am schnellsten über „Mehrere auf einmal eintragen“.'),
+        h('li', {}, 'Unter „Rezepte“ siehst du dann, was du daraus kochen kannst.'),
+        h('li', {}, 'Was fehlt, landet mit einem Tipp auf der Einkaufsliste.'))) : null,
     tablist,
     h('div', { id: 'pantry-panel', role: 'tabpanel', 'aria-labelledby': 'tab-food' },
       section('Schnell hinzufügen', freqBox, h('details', { class: 'more' }, h('summary', {}, 'Mehrere auf einmal eintragen'),

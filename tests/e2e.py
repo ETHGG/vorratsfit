@@ -292,7 +292,7 @@ def _run_all(browser, base, alt, alt_base, site, tmp, args, errors):
         page.check('input[name=intolerances][value=laktose]')
         page.click('button:has-text("Profil speichern")')
         page.wait_for_selector('h1:text-is("Vorrat")')
-        check('Profil gespeichert, Weiterleitung zum Vorrat', page.url.endswith('#/vorrat'))
+        check('Profil gespeichert, Weiterleitung zum Vorrat mit Willkommens-Tipps (0.7.2)', '#/vorrat' in page.url and 'Schön, dass du da bist' in page.inner_text('main'))
     run_section('Datenschutz & Einrichtung', s_1)
 
     def s_2():
