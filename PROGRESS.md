@@ -4,6 +4,9 @@
 - Die Arbeitsumgebung wurde zweimal zurückgesetzt. 0.2.0 und 0.3.0 wurden vollständig aus dem Projektverlauf neu geschrieben.
 - Git-Historie: Basis-Commit und Tag **v0.2.0**, darauf 0.3.0 mit Tag **v0.3.0**. Ältere Phasen-Commits sind nicht mehr vorhanden.
 
+## 0.7.4
+- [x] `itemEmoji()` je Lebensmittel, kompakte Vorratszeilen, Löschen im Dialog, keine Ablaufwarnung bei 0
+
 ## 0.7.3
 - [x] Foto-Knopf auf dem Rezeptbild, Abschnitte neu geordnet
 

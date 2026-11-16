@@ -109,6 +109,13 @@ export function buildTestsV07() {
     let threw = false; try { models.normalizeRecipePhoto({ photo: ok }); } catch { threw = true; }
     eq(threw, true);
   });
+  t('V-01 Vorrat-Symbole: Name vor Kategorie, keine Verwechslung (laktosefrei ≠ Ei)', () => {
+    eq(models.itemEmoji('Eier', 'vegetarische Proteinquellen'), '🥚');
+    eq(models.itemEmoji('Laktosefreier Magerquark', 'Milchprodukte'), '🥣');
+    eq(models.itemEmoji('Kokosmilch (light)', 'Konserven'), '🥥');
+    eq(models.itemEmoji('Paprikapulver', 'Gewürze'), '🧂');
+    eq(models.itemEmoji('Irgendwas', 'Obst'), '🍎');
+  });
   t('P-02 Backup-Format 5 enthält Rezeptfotos; Version 4 wird ergänzt', async () => {
     eq(BACKUP_VERSION, 5);
     const photo = models.normalizeRecipePhoto({ id: 'chili-sin-carne', photo: 'data:image/jpeg;base64,/9j/4AAQ' });

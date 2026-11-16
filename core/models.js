@@ -3,7 +3,7 @@
 import { uuid, nowIso, sanitizeText, sanitizeMultiline, normalizeText, parseNumber, isValidDateString, isPlainObject, isSafeHttpUrl, ageFromBirthDate, roundTo } from './utils.js';
 import { normalizeUnit, roundQuantity } from '../units.js';
 
-export const APP_VERSION = '0.7.3';
+export const APP_VERSION = '0.7.4';
 
 export const CATEGORIES = Object.freeze([
   'Fleisch und Fisch', 'vegetarische Proteinquellen', 'Milchprodukte', 'Ersatzprodukte', 'Gemüse', 'Obst',
@@ -520,4 +520,20 @@ export function normalizeRecipePhoto(raw = {}, now = nowIso()) {
   const id = str(raw.id, 100);
   if (!id) throw new Error('Rezeptfoto ohne Rezept-ID');
   return { id, photo: isValidPhoto(raw.photo) ? raw.photo : null, createdAt: iso(raw.createdAt, now), updatedAt: iso(raw.updatedAt, now) };
+}
+
+/** 0.7.4: passendes Symbol für ein Lebensmittel (Name zuerst, sonst Kategorie). Nur Dekoration. */
+const ITEM_EMOJI = [
+  [/(^|\s)ei(er)?($|\s|,)|landeier|bioeier/, '🥚'], [/kokos/, '🥥'], [/milch|drink/, '🥛'], [/banane/, '🍌'], [/apfel/, '🍎'], [/beere|heidel|himbeer|erdbeer/, '🫐'], [/zitrone/, '🍋'],
+  [/avocado/, '🥑'], [/tomate|passiert/, '🍅'], [/knoblauch/, '🧄'], [/frühlingszwiebel|zwiebel/, '🧅'], [/paprika(?!pulver)/, '🫑'], [/brokkoli/, '🥦'],
+  [/karotte|möhre/, '🥕'], [/kartoffel/, '🥔'], [/gurke|zucchini/, '🥒'], [/spinat|salat|kohl/, '🥬'], [/champignon|pilz/, '🍄'], [/mais/, '🌽'],
+  [/hähnchen|huhn|hühn|chicken/, '🍗'], [/pute/, '🦃'], [/hack|rind|steak/, '🥩'], [/schinken|speck/, '🥓'], [/lachs|fisch|thunfisch|seelachs/, '🐟'], [/garnele|shrimp/, '🦐'],
+  [/käse|feta|mozzarella|gouda/, '🧀'], [/joghurt|skyr|quark/, '🥣'], [/sahne|butter/, '🧈'], [/tofu/, '🍢'], [/linse|bohne|kichererbse/, '🫘'],
+  [/haferflocke|hafer|müsli/, '🌾'], [/reis(?!nudel)/, '🍚'], [/nudel|spaghetti|pasta/, '🍝'], [/brot|toast|brötchen/, '🍞'], [/wrap|tortilla/, '🌯'], [/couscous|mehl/, '🌾'],
+  [/honig/, '🍯'], [/erdnuss/, '🥜'], [/mandel|nuss/, '🌰'], [/kokos/, '🥥'], [/öl\b|öl$|olivenöl|rapsöl/, '🫒'], [/salz/, '🧂'], [/kaffee/, '☕'], [/tee\b/, '🍵'], [/wasser/, '💧'], [/schoko/, '🍫'],
+];
+export function itemEmoji(name, category) {
+  const n = String(name ?? '').toLowerCase();
+  for (const [re, e] of ITEM_EMOJI) if (re.test(n)) return e;
+  return CATEGORY_EMOJI[category] ?? '🛒';
 }

@@ -1,5 +1,5 @@
 // views/pantryView.js – Vorrat: hinzufügen, bearbeiten, löschen, suchen, filtern, Gewürze, Ablaufdaten.
-import { CATEGORY_EMOJI } from '../core/models.js';
+import { itemEmoji } from '../core/models.js';
 import { h, field, select, showFieldErrors, toast, withBusy, icon, confirmDialog, dialog, emptyState, clear, errorBox } from './dom.js';
 import { pageHeader, section } from './components.js';
 import { state } from './state.js';
@@ -161,21 +161,26 @@ export async function render(container, { params } = {}) {
         await reload();
       }
     });
-    return h('li', { class: `pantry-item ${exp && exp.level !== 'ok' ? `exp-${exp.level}` : ''}` },
-      h('span', { class: 'cat-emoji', 'aria-hidden': 'true' }, CATEGORY_EMOJI[it.category] ?? '🛒'),
+    return h('li', { class: `pantry-item ${exp && exp.level !== 'ok' && it.amount > 0 ? `exp-${exp.level}` : ''} ${it.amount === 0 ? 'is-empty' : ''}` },
+      h('span', { class: 'cat-emoji', 'aria-hidden': 'true' }, itemEmoji(it.name, it.category)),
       h('div', { class: 'pi-main' },
         h('p', { class: 'pi-name' }, it.name),
-        h('p', { class: 'pi-meta' }, h('strong', {}, formatAmount(it.amount, it.unit, { humanize: false })), ` · ${it.category}`),
-        exp ? h('p', { class: `pi-exp exp-text-${exp.level}` }, icon(exp.level === 'ok' ? 'clock' : 'alert', { size: 14 }), ` ${exp.label}`) : null,
+        h('p', { class: 'pi-meta' }, h('strong', {}, formatAmount(it.amount, it.unit, { humanize: false })), h('span', { class: 'pi-cat' }, ` · ${it.category}`)),
+        exp && it.amount > 0 ? h('p', { class: `pi-exp exp-text-${exp.level}` }, icon(exp.level === 'ok' ? 'clock' : 'alert', { size: 14 }), ` ${exp.label}`) : null,
         it.amount === 0 ? h('p', { class: 'pi-exp exp-text-soon' }, 'Aufgebraucht') : null),
-      h('div', { class: 'pi-actions' }, minusBtn, plusBtn, editBtn, delBtn));
+      h('div', { class: 'pi-actions' }, minusBtn, plusBtn, editBtn, it.amount === 0 ? delBtn : null));
   }
 
   async function editItem(it) {
     const holder = h('div', {});
     let closeFn = null;
     holder.append(pantryForm(it, { submitLabel: 'Änderungen speichern', onSaved: async () => { closeFn?.(); await reload(); } }));
-    await dialog({ title: `${it.name} bearbeiten`, body: [holder], buttons: [{ label: 'Schließen', value: 'close' }], dismissValue: 'close', onMount: (dlg) => { closeFn = () => dlg.close(); } });
+    const choice = await dialog({ title: `${it.name} bearbeiten`, body: [holder], buttons: [{ label: 'Löschen', value: 'delete', variant: 'danger' }, { label: 'Schließen', value: 'close' }], dismissValue: 'close', onMount: (dlg) => { closeFn = () => dlg.close(); } });
+    if (choice === 'delete' && await confirmDialog('Eintrag löschen?', `„${it.name}“ wird aus deinem Vorrat entfernt.`, { confirmLabel: 'Löschen', danger: true })) {
+      await deletePantryItem(it.id);
+      toast(`${it.name} gelöscht.`);
+      await reload();
+    }
   }
 
   function draw() {
