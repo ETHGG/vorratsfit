@@ -2,7 +2,7 @@
 
 **Progressive Web App für Rezepte, Vorräte, Wochenplanung, Einkaufslisten, Ernährungs- und Gewichtstracking – ohne Backend, ohne Konto, alle Daten lokal.**
 
-Version 0.4.0 · Live: <https://ethgg.github.io/vorratsfit/>
+Version 0.5.0 · Live: <https://ethgg.github.io/vorratsfit/>
 
 ## Funktionen
 
@@ -16,6 +16,15 @@ Version 0.4.0 · Live: <https://ethgg.github.io/vorratsfit/>
 | **Gewicht** (Menü „Mehr“) | Gewicht eintragen (ein Eintrag je Tag), **Diagramm** mit 7-Tage-Durchschnitt und Wunschgewicht (4 Wochen / 3 Monate / Alles), **Wochenauswertung**, **Erinnerung nach 7 Tagen**; neuester Eintrag = Profilgewicht |
 | Profil | **Geburtsdatum** statt Alter – das Alter läuft automatisch weiter; unter 18 gelten die Schutzregeln automatisch |
 | Darstellung | Hell, Dunkel (seit 0.3 mit ruhigerem Kontrast), System |
+
+## Neu in 0.5 – neues Aussehen
+- **Eine Farbe je Bereich:** Start/Rezepte grün, Vorrat petrol, Einkauf orange, Woche violett, Heute blau, Gewicht rosé – in Seitenkopf, Kacheln, Knöpfen und Navigation.
+- **Warmer Grundton** (Creme statt Grüngrau), runde Karten, weiche Schatten, abgerundete Überschriften.
+- **Eigene Illustrationen** (SVG, offline, ohne Fremdlizenzen) für jeden Bereich und für leere Zustände.
+- **Rezeptbilder:** farbige Fläche je Mahlzeit mit großem Symbol.
+- **Startseite neu:** Begrüßung nach Tageszeit, Kalorien-Ring, heute Geplantes, Bereichskacheln, Rezeptideen zum Wischen.
+- **Tagesbilanz** mit Kalorien-Ring und farbigen Makro-Balken; Kategorien mit Symbolen in Vorrat und Einkaufsliste.
+- Dunkelmodus angepasst (Kontrast 12,6:1, alle Bereichsfarben ≥ 7:1).
 
 ## Neu in 0.4
 - **Navigation:** Start · Rezepte · Woche · Einkauf · Heute direkt in der unteren Leiste; „Mein Vorrat / Alle Rezepte / Favoriten“ als Umschalter.
@@ -37,7 +46,7 @@ Version 0.4.0 · Live: <https://ethgg.github.io/vorratsfit/>
 
 ## Veröffentlichen (GitHub Pages)
 Settings → Pages → Deploy from a branch → `main` / `(root)`. `.nojekyll` muss im Repository liegen.
-**Bei jeder neuen Version `CACHE_VERSION` in `service-worker.js` erhöhen** (0.4.0 ist gesetzt).
+**Bei jeder neuen Version `CACHE_VERSION` in `service-worker.js` erhöhen** (0.5.0 ist gesetzt).
 
 ## Daten, Update, Datenschutz
 - Persönliche Daten: IndexedDB `vorratsfit-db`, Version 3 (neu: `weightLog`). Das Update erweitert die Datenbank, es wird nichts gelöscht.

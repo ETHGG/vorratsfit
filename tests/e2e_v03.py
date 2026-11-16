@@ -117,6 +117,6 @@ def register(g, l):
         'before_update': [('Geburtsdatum (0.3)', s_birth, ()), ('Gewicht (0.3)', s_weight, ('Datenschutz & Einrichtung',)), ('Lebensmittel & Makros (0.3)', s_food, ('Datenschutz & Einrichtung', 'Vorrat'))],
         'offline': [('Gewicht offline', offline_check)],
         'routes': ['gewicht'],
-        'dark_bg': 'rgb(18, 22, 20)',
+        'dark_bg': 'rgb(23, 21, 19)',
         'dark': [('Kontrast', dark_check)],
     }

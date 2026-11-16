@@ -4,6 +4,13 @@
 - Die Arbeitsumgebung wurde zweimal zurückgesetzt. 0.2.0 und 0.3.0 wurden vollständig aus dem Projektverlauf neu geschrieben.
 - Git-Historie: Basis-Commit und Tag **v0.2.0**, darauf 0.3.0 mit Tag **v0.3.0**. Ältere Phasen-Commits sind nicht mehr vorhanden.
 
+## 0.5.0 – Etappe 2: Neues Aussehen (16.11.2026)
+- [x] Bereichsfarben über `data-area` (Body, Navigation, Kacheln, Abschnitte), Kontraste geprüft (hell ≥ 4,5:1, dunkel ≥ 7:1)
+- [x] Illustrationen `assets/illustrations/*.svg` im Seitenkopf, in Kacheln und leeren Zuständen
+- [x] Rezeptbilder `recipeArt()` (Fläche je Mahlzeit + Emoji; eigene/externe Fotos ersetzen sie)
+- [x] Startseite neu, Kalorien-Ring, farbige Makros, Kategorie-Symbole
+- [x] Kürzere, freundlichere Seitentexte; „Aus meinem Vorrat“ heißt jetzt „Was koche ich?“
+
 ## 0.4.0 – Etappe 1: Technik & Bedienung (16.11.2026)
 - [x] Update-Tests nutzen die veröffentlichte Version 0.3.0 (Commit da170a8) statt eines fehlenden Git-Tags
 - [x] Geburtsdatum-Test simuliert ein Altprofil, braucht keine Vorgängerversion mehr

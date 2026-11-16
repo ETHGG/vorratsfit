@@ -41,7 +41,7 @@ export async function render(container) {
   }
 
   container.append(
-    pageHeader('Aus meinem Vorrat', 'Was kann ich mit meinen vorhandenen Lebensmitteln kochen?'),
+    pageHeader('Was koche ich?', 'Rezepte, die zu deinem Vorrat passen.'),
     recipeTabs('vorrat-rezepte'),
     h('div', { class: 'toolbar' },
       h('div', { class: 'field' }, h('span', { class: 'label' }, 'Für wie viele Personen?'), stepper({ value: servings, onChange: (v) => { servings = v; state.pantryServings = v; draw(); } })),

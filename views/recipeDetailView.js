@@ -1,6 +1,6 @@
 // views/recipeDetailView.js – Rezeptdetail mit Portionsskalierung, Vorratsabgleich, Einkaufsvorschau.
 import { h, clear, stepper, icon, dialog, toast, withBusy, emptyState, fmtMinutes, confirmDialog, errorBox } from './dom.js';
-import { pageHeader, section, statusBadge, tagList, estimateNote, allergyDisclaimer, favoriteButton } from './components.js';
+import { pageHeader, section, statusBadge, tagList, estimateNote, allergyDisclaimer, favoriteButton, recipeArt } from './components.js';
 import { state, analysisContext, refreshFavorites, shoppingContext, refreshRecipes } from './state.js';
 import { routeHref, navigate } from './router.js';
 import { analyzeRecipe, toggleFavorite, deleteCustomRecipe, deleteCachedRecipe } from '../recipes.js';
@@ -157,13 +157,13 @@ export async function render(container, { id, params }) {
   drawFav();
   const visual = r.imageUrl && state.settings?.externalImages && state.online
     ? h('img', { class: 'detail-img', src: r.imageUrl, alt: `Foto: ${r.title}`, referrerpolicy: 'no-referrer', loading: 'lazy' })
-    : h('div', { class: 'detail-emoji', 'aria-hidden': 'true' }, r.emoji || '🍽️');
+    : recipeArt(r, 'detail-emoji');
   const sourceInfo = h('p', { class: 'small' }, `Datenquelle: ${r.source}. Lizenz: ${r.license}.`, r.sourceUrl ? h('span', {}, ' ', h('a', { href: r.sourceUrl, target: '_blank', rel: 'noopener noreferrer' }, 'Originalrezept öffnen')) : null);
 
   container.append(
     backLink(),
-    pageHeader(r.title, r.description || null, favHolder),
     visual,
+    pageHeader(r.title, r.description || null, favHolder),
     h('dl', { class: 'facts' },
       h('div', {}, h('dt', {}, 'Mahlzeit'), h('dd', {}, mealTypeLabel(r.mealType))),
       h('div', {}, h('dt', {}, 'Vorbereitung'), h('dd', {}, fmtMinutes(r.preparationMinutes))),

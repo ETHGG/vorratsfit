@@ -2,7 +2,7 @@
 // WICHTIG: Dieser Service Worker verwaltet ausschließlich Programmdateien (Cache Storage).
 // Persönliche Daten liegen in IndexedDB und werden hier niemals gelesen, verändert oder gelöscht.
 const CACHE_PREFIX = 'vorratsfit-app-';
-const CACHE_VERSION = '0.4.0';
+const CACHE_VERSION = '0.5.0';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 
 // Relative Pfade: funktionieren unter jedem Unterpfad (z. B. /vorratsfit/ auf GitHub Pages).
@@ -67,6 +67,15 @@ const APP_SHELL = [
   './assets/icons/icon-512.png',
   './assets/icons/icon-maskable-512.png',
   './assets/icons/apple-touch-icon.png',
+  './assets/illustrations/einkauf.svg',
+  './assets/illustrations/gewicht.svg',
+  './assets/illustrations/heute.svg',
+  './assets/illustrations/kochen.svg',
+  './assets/illustrations/leer.svg',
+  './assets/illustrations/rezepte.svg',
+  './assets/illustrations/start.svg',
+  './assets/illustrations/vorrat.svg',
+  './assets/illustrations/woche.svg',
 ];
 
 self.addEventListener('install', (event) => {

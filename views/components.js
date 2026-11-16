@@ -34,11 +34,19 @@ export function allergyDisclaimer() {
   return h('p', { class: 'disclaimer' }, icon('alert', { size: 14 }), ALLERGY_DISCLAIMER);
 }
 
-function recipeVisual(recipe) {
-  if (recipe.imageUrl && state.settings?.externalImages && state.online) {
-    return h('img', { class: 'card-img', src: recipe.imageUrl, alt: '', loading: 'lazy', referrerpolicy: 'no-referrer', width: '96', height: '96' });
+/**
+ * 0.5: Rezeptbild – farbige Fläche je Mahlzeit mit großem Emoji (offline, ohne Fremdbilder).
+ * Eigene Fotos (photo) bzw. erlaubte externe Bilder ersetzen die Fläche.
+ */
+export function recipeArt(recipe, extraClass = '') {
+  const cls = `rv rv-${recipe.mealType || 'mittagessen'} ${extraClass}`.trim();
+  const photo = recipe.photo || (recipe.imageUrl && state.settings?.externalImages && state.online ? recipe.imageUrl : null);
+  if (photo) {
+    const box = h('div', { class: `${cls} has-photo`, 'aria-hidden': 'true' });
+    box.append(h('img', { class: 'rv-photo', src: photo, alt: '', loading: 'lazy', referrerpolicy: 'no-referrer' }));
+    return box;
   }
-  return h('div', { class: 'card-emoji', 'aria-hidden': 'true' }, recipe.emoji || '🍽️');
+  return h('div', { class: cls, 'aria-hidden': 'true' }, h('span', { class: 'rv-emoji' }, recipe.emoji || '🍽️'));
 }
 
 export function favoriteButton(recipe, onToggle) {
@@ -71,8 +79,8 @@ export function recipeCard(a, { mode = 'discover', servings = null, onFavorite =
   const detailHref = routeHref(`rezept/${encodeURIComponent(r.id)}${s ? `?portionen=${s}` : ''}`);
   const ev = a.evaluation;
   const card = h('article', { class: 'card recipe-card', 'aria-labelledby': `t-${r.id}` });
+  card.append(recipeArt(r));
   const head = h('div', { class: 'card-head' },
-    recipeVisual(r),
     h('div', { class: 'card-head-text' },
       h('h3', { class: 'card-title', id: `t-${r.id}` }, h('a', { href: detailHref }, r.title)),
       h('p', { class: 'meta' },
@@ -144,8 +152,22 @@ export function filterChips(filterIds, filters, active, onChange, { visible = 5 
   return wrap;
 }
 
+/** Illustration je Seite (0.5). */
+const HERO_ART = Object.freeze({
+  start: 'start', einrichtung: 'start', 'vorrat-rezepte': 'rezepte', entdecken: 'rezepte', favoriten: 'rezepte', 'eigenes-rezept': 'kochen',
+  vorrat: 'vorrat', einkauf: 'einkauf', woche: 'woche', heute: 'heute', tagesziel: 'heute', gewicht: 'gewicht',
+});
+
+export function illustration(name, cls = 'hero-art') {
+  return h('img', { class: cls, src: `./assets/illustrations/${name}.svg`, alt: '', width: '160', height: '120', decoding: 'async' });
+}
+
 export function pageHeader(title, lead = null, ...extra) {
-  return h('header', { class: 'page-header' }, h('h1', { tabindex: '-1', id: 'page-title' }, title), lead ? h('p', { class: 'lead' }, lead) : null, ...extra);
+  const route = typeof document !== 'undefined' ? document.body?.dataset.route : null;
+  const art = HERO_ART[route];
+  return h('header', { class: `page-header ${route === 'rezept' ? 'plain' : ''}` },
+    h('h1', { tabindex: '-1', id: 'page-title' }, title), lead ? h('p', { class: 'lead' }, lead) : null, ...extra,
+    art ? illustration(art) : null);
 }
 
 export function section(title, ...children) {

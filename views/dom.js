@@ -227,8 +227,9 @@ export function loading(text = 'Wird geladen …') {
   return h('div', { class: 'loading', role: 'status' }, h('span', { class: 'spinner', 'aria-hidden': 'true' }), text);
 }
 
-export function emptyState(title, text, action = null) {
-  return h('div', { class: 'empty' }, h('p', { class: 'empty-title' }, title), h('p', {}, text), action);
+export function emptyState(title, text, action = null, art = 'leer') {
+  const img = art ? h('img', { class: 'empty-art', src: `./assets/illustrations/${art}.svg`, alt: '', width: '160', height: '120' }) : null;
+  return h('div', { class: 'empty' }, img, h('p', { class: 'empty-title' }, title), h('p', {}, text), action);
 }
 
 export function errorBox(message) {

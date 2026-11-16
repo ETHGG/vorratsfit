@@ -1,4 +1,5 @@
 // views/pantryView.js – Vorrat: hinzufügen, bearbeiten, löschen, suchen, filtern, Gewürze, Ablaufdaten.
+import { CATEGORY_EMOJI } from '../core/models.js';
 import { h, field, select, showFieldErrors, toast, withBusy, icon, confirmDialog, dialog, emptyState, clear, errorBox } from './dom.js';
 import { pageHeader, section } from './components.js';
 import { state } from './state.js';
@@ -161,6 +162,7 @@ export async function render(container) {
       }
     });
     return h('li', { class: `pantry-item ${exp && exp.level !== 'ok' ? `exp-${exp.level}` : ''}` },
+      h('span', { class: 'cat-emoji', 'aria-hidden': 'true' }, CATEGORY_EMOJI[it.category] ?? '🛒'),
       h('div', { class: 'pi-main' },
         h('p', { class: 'pi-name' }, it.name),
         h('p', { class: 'pi-meta' }, h('strong', {}, formatAmount(it.amount, it.unit, { humanize: false })), ` · ${it.category}`),
@@ -267,7 +269,7 @@ export async function render(container) {
   });
 
   container.append(
-    pageHeader('Vorrat', 'Erfasse Lebensmittel und Gewürze mit Menge und optionalem Ablaufdatum.'),
+    pageHeader('Vorrat', 'Was du zu Hause hast – mit Menge und Ablaufdatum.'),
     tablist,
     h('div', { id: 'pantry-panel', role: 'tabpanel', 'aria-labelledby': 'tab-food' },
       section('Schnell hinzufügen', freqBox, h('details', { class: 'more' }, h('summary', {}, 'Mehrere auf einmal eintragen'),

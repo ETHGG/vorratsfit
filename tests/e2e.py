@@ -331,7 +331,7 @@ def _run_all(browser, base, alt, alt_base, site, tmp, args, errors):
 
     def s_4():
         page.goto(base + '#/vorrat-rezepte')
-        page.wait_for_selector('h1:text-is("Aus meinem Vorrat")')
+        page.wait_for_selector('h1:text-is("Was koche ich?")')
         page.wait_for_selector('.recipe-card')
         body = page.inner_text('main')
         check('„Aus meinem Vorrat“ zeigt Match-Prozent und vorhandene/fehlende Zutaten', '% Übereinstimmung' in body and 'Vorhanden:' in body and 'Fehlt:' in body)

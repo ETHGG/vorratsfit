@@ -25,7 +25,7 @@ export async function render(container, { favoritesOnly = false } = {}) {
     let recipes = state.recipes;
     if (favoritesOnly) recipes = recipes.filter((r) => state.favorites.has(r.id));
     if (favoritesOnly && !recipes.length) {
-      results.append(emptyState('Noch keine Favoriten', 'Markiere Rezepte mit dem Herz-Symbol, um sie hier offline wiederzufinden.', h('a', { class: 'btn btn-primary', href: routeHref('entdecken') }, 'Rezepte entdecken')));
+      results.append(emptyState('Noch keine Favoriten', 'Markiere Rezepte mit dem Herz-Symbol, um sie hier offline wiederzufinden.', h('a', { class: 'btn btn-primary', href: routeHref('entdecken') }, 'Rezepte entdecken'), 'rezepte'));
       return;
     }
     const all = analyzeAll(recipes, ctx);

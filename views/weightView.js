@@ -60,7 +60,7 @@ export async function render(container) {
     for (const r of CHART_RANGES) chipsBox.append(chip(r.label, r.id === rangeId, () => { rangeId = r.id; drawChart(); }));
     clear(chartBox);
     const model = chartModel(weights, { rangeId, today, targetWeightKg: state.profile?.targetWeightKg ?? null });
-    if (!model) { chartBox.append(emptyState('Noch kein Verlauf', 'Sobald du dein Gewicht einträgst, erscheint hier der Verlauf.')); return; }
+    if (!model) { chartBox.append(emptyState('Noch kein Verlauf', 'Sobald du dein Gewicht einträgst, erscheint hier der Verlauf.', null, 'gewicht')); return; }
     chartBox.append(weightChart(model),
       h('p', { class: 'small muted chart-legend' }, h('span', { class: 'legend-point', 'aria-hidden': 'true' }), ' Messwert  ', h('span', { class: 'legend-avg', 'aria-hidden': 'true' }), ' 7-Tage-Durchschnitt', model.targetY !== null ? '  · gestrichelt: Wunschgewicht' : ''));
   }
@@ -126,7 +126,7 @@ export async function render(container) {
   });
 
   container.append(
-    pageHeader('Gewicht', 'Trag dein Gewicht ein und sieh deinen Verlauf. Der neueste Eintrag wird automatisch in dein Profil übernommen – dein Tagesziel passt sich an.'),
+    pageHeader('Gewicht', 'Dein Verlauf – der neueste Eintrag passt dein Tagesziel automatisch an.'),
     reminderBox,
     section('Gewicht eintragen', form),
     section('Verlauf', chipsBox, chartBox),

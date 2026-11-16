@@ -27,8 +27,12 @@ function performanceNow() {
     : 0;
 }
 
+let lastNowMs = 0;
+/** Zeitstempel, streng monoton steigend (0.5): zwei Einträge in derselben Millisekunde behalten ihre Reihenfolge. */
 export function nowIso() {
-  return new Date().toISOString();
+  const ms = Math.max(Date.now(), lastNowMs + 1);
+  lastNowMs = ms;
+  return new Date(ms).toISOString();
 }
 
 /** Parst Zahlen inkl. deutschem Dezimalkomma. Gibt null bei ungültigen Werten zurück. */

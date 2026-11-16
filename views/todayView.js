@@ -1,5 +1,5 @@
 // views/todayView.js – Tagesbilanz und „Heute gegessen“: geplante Mahlzeiten kochen/essen, Schnellerfassen, Tagebuch.
-import { h, clear, icon, toast, withBusy, confirmDialog, field, showFieldErrors, emptyState, stepper, select } from './dom.js';
+import { h, clear, icon, svg, toast, withBusy, confirmDialog, field, showFieldErrors, emptyState, stepper, select } from './dom.js';
 import { pageHeader, section } from './components.js';
 import { state, shoppingContext } from './state.js';
 import { routeHref } from './router.js';
@@ -25,6 +25,19 @@ function meter(label, value, max) {
   const bar = h('span', {});
   bar.style.width = `${pct}%`;
   return h('div', { class: 'meter', role: 'img', 'aria-label': `${label}: ${pct} Prozent des Ziels` }, bar);
+}
+
+/** 0.5: Kalorien-Ring (gegessen im Verhältnis zum Ziel). Text als aria-label, Farbe nie allein. */
+export function kcalRing(eaten, target) {
+  const value = typeof eaten === 'number' && Number.isFinite(eaten) ? eaten : 0;
+  const ratio = target > 0 ? value / target : 0;
+  const pct = Math.round(ratio * 100);
+  const R = 52;
+  const C = 2 * Math.PI * R;
+  const fill = svg('circle', { class: `ring-fill ${ratio > 1.1 ? 'over' : ''}`, cx: 60, cy: 60, r: R, 'stroke-dasharray': C.toFixed(1), 'stroke-dashoffset': (C * (1 - Math.min(1, ratio))).toFixed(1) });
+  return h('div', { class: 'ring', role: 'img', 'aria-label': `Kalorien: ${formatNumber(value, 0)} von ${formatNumber(target, 0)} kcal gegessen (${pct} Prozent)` },
+    svg('svg', { viewBox: '0 0 120 120', 'aria-hidden': 'true' }, svg('circle', { class: 'ring-track', cx: 60, cy: 60, r: R }), fill),
+    h('div', { class: 'ring-label', 'aria-hidden': 'true' }, h('span', { class: 'ring-value' }, formatNumber(value, 0)), h('span', { class: 'ring-unit' }, `von ${formatNumber(target, 0)} kcal`)));
 }
 
 const MACRO_TARGET_TEXT = { range: (m) => `${m.target}–${m.targetMax} g`, approx: (m) => `ca. ${m.target} g`, min: (m) => `mind. ${m.target} g` };
@@ -65,13 +78,15 @@ export function balanceCard(b, { compact = false } = {}) {
     rows.push(macroTable({ ...b, macros: [['protein', 'Protein'], ['carbs', 'Kohlenhydrate'], ['fat', 'Fett'], ['fiber', 'Ballaststoffe']].map(([id, label]) => ({ id, label, eaten: b.eaten[id], target: null })) }, { compact }));
     return h('div', { class: 'balance' }, ...rows);
   }
-  rows.push(h('p', { class: 'balance-main' }, h('strong', {}, b.text)));
-  rows.push(meter('Kalorien', b.eaten.kcal, b.target));
-  rows.push(h('dl', { class: 'kv-list small' },
-    h('div', { class: 'kv' }, h('dt', {}, b.minor ? 'Orientierungswert' : 'Ziel'), h('dd', {}, kcalText(b.target))),
-    h('div', { class: 'kv' }, h('dt', {}, 'Geplant (je 1 Portion)'), h('dd', {}, `${kcalText(b.planned.kcal)}${b.planned.complete ? '' : ' (unvollständig)'}`)),
-    h('div', { class: 'kv' }, h('dt', {}, 'Gegessen'), h('dd', {}, kcalText(b.eaten.kcal)))));
-  rows.push(macroTable(b, { compact }));
+  rows.push(h('div', { class: 'balance-top' },
+    kcalRing(b.eaten.kcal, b.target),
+    h('div', {},
+      h('p', { class: 'balance-main' }, h('strong', {}, b.text)),
+      h('dl', { class: 'balance-facts' },
+        h('div', {}, h('dt', {}, b.minor ? 'Orientierungswert' : 'Ziel'), h('dd', {}, kcalText(b.target))),
+        h('div', {}, h('dt', {}, 'Geplant'), h('dd', {}, `${kcalText(b.planned.kcal)}${b.planned.complete ? '' : ' (unvollst.)'}`)),
+        h('div', {}, h('dt', {}, 'Gegessen'), h('dd', {}, kcalText(b.eaten.kcal)))))));
+  if (!compact) rows.push(macroTable(b, { compact }));
   if (!compact) rows.push(h('p', { class: 'note-estimate' }, icon('info', { size: 14 }), ESTIMATE_NOTICE));
   return h('div', { class: 'balance' }, ...rows);
 }
@@ -122,7 +137,7 @@ export async function render(container, { params }) {
   function drawMeals(entries) {
     clear(mealsBox);
     if (!entries.length) {
-      mealsBox.append(emptyState('Keine Mahlzeiten geplant', 'Plane Mahlzeiten in der Wochenansicht oder erfasse unten direkt, was du gegessen hast.', h('a', { class: 'btn', href: routeHref('woche') }, 'Zur Woche')));
+      mealsBox.append(emptyState('Keine Mahlzeiten geplant', 'Plane Mahlzeiten in der Wochenansicht oder erfasse unten direkt, was du gegessen hast.', h('a', { class: 'btn', href: routeHref('woche') }, 'Zur Woche'), 'woche'));
       return;
     }
     mealsBox.append(h('ul', { class: 'plain-list' }, ...entries.map((e) => {
@@ -331,7 +346,7 @@ export async function render(container, { params }) {
   next.addEventListener('click', () => go(addDays(date, 1)));
 
   container.append(
-    pageHeader('Heute', 'Tagesbilanz, geplante Mahlzeiten und was du gegessen hast. „Gegessen“ verändert deinen Vorrat nicht – nur „Gekocht“ zieht ab.'),
+    pageHeader('Heute', 'Was du heute isst – und wie viel noch geht.'),
     h('div', { class: 'day-nav' }, prev, title, next),
     section('Tagesbilanz', balanceBox),
     section('Geplante Mahlzeiten', mealsBox),

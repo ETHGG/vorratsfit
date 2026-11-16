@@ -3,13 +3,21 @@
 import { uuid, nowIso, sanitizeText, sanitizeMultiline, normalizeText, parseNumber, isValidDateString, isPlainObject, isSafeHttpUrl, ageFromBirthDate, roundTo } from './utils.js';
 import { normalizeUnit, roundQuantity } from '../units.js';
 
-export const APP_VERSION = '0.4.0';
+export const APP_VERSION = '0.5.0';
 
 export const CATEGORIES = Object.freeze([
   'Fleisch und Fisch', 'vegetarische Proteinquellen', 'Milchprodukte', 'Ersatzprodukte', 'Gemüse', 'Obst',
   'Getreide', 'Reis und Nudeln', 'Konserven', 'Tiefkühlprodukte', 'Soßen', 'Öle und Fette', 'Gewürze',
   'Backzutaten', 'Getränke', 'Sonstiges',
 ]);
+
+/** 0.5: Symbol je Kategorie (nur Dekoration, Text bleibt immer sichtbar). */
+export const CATEGORY_EMOJI = Object.freeze({
+  'Fleisch und Fisch': '🍗', 'vegetarische Proteinquellen': '🫘', Milchprodukte: '🥛', Ersatzprodukte: '🌱', Gemüse: '🥕', Obst: '🍎',
+  Getreide: '🌾', 'Reis und Nudeln': '🍝', Konserven: '🥫', Tiefkühlprodukte: '🧊', Soßen: '🫙', 'Öle und Fette': '🫒', Gewürze: '🧂',
+  Backzutaten: '🧁', Getränke: '🧃', Sonstiges: '🛒',
+  'Obst und Gemüse': '🥦', 'Milchprodukte und Ersatzprodukte': '🧀', 'Getreide, Reis und Nudeln': '🍝', 'Brot und Backwaren': '🥖',
+});
 
 export const SHOPPING_GROUPS = Object.freeze([
   'Obst und Gemüse', 'Fleisch und Fisch', 'Milchprodukte und Ersatzprodukte', 'Getreide, Reis und Nudeln',

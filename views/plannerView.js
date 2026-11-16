@@ -251,7 +251,7 @@ export async function render(container, { params }) {
   });
 
   container.append(
-    pageHeader('Woche', 'Plane deine Mahlzeiten. Geplante, noch nicht gekochte Mahlzeiten landen automatisch auf der Einkaufsliste.'),
+    pageHeader('Woche', 'Plane entspannt – Geplantes landet automatisch auf der Einkaufsliste.'),
     h('div', { class: 'day-nav' }, prev, rangeLabel, next),
     h('p', { class: 'week-today' }, today),
     daysBox,

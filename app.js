@@ -42,9 +42,10 @@ function buildNavigation() {
   const more = document.getElementById('more-menu');
   clear(side); clear(bottom); clear(more);
   for (const item of NAV_ITEMS) {
-    side.append(h('li', {}, h('a', { href: routeHref(item.route), 'data-route': item.route }, icon(item.icon), h('span', {}, item.label))));
-    if (item.primary) bottom.append(h('li', {}, h('a', { href: routeHref(item.route), 'data-route': item.route }, icon(item.icon), h('span', {}, item.short ?? item.label))));
-    else more.append(h('li', {}, h('a', { href: routeHref(item.route), 'data-route': item.route }, icon(item.icon), h('span', {}, item.label))));
+    const area = item.area ?? 'start';
+    side.append(h('li', {}, h('a', { href: routeHref(item.route), 'data-route': item.route, 'data-area': area }, icon(item.icon), h('span', {}, item.label))));
+    if (item.primary) bottom.append(h('li', {}, h('a', { href: routeHref(item.route), 'data-route': item.route, 'data-area': area }, icon(item.icon), h('span', {}, item.short ?? item.label))));
+    else more.append(h('li', {}, h('a', { href: routeHref(item.route), 'data-route': item.route, 'data-area': area }, icon(item.icon), h('span', {}, item.label))));
   }
   const moreBtn = h('button', { type: 'button', class: 'more-btn', 'aria-expanded': 'false', 'aria-controls': 'more-panel' }, icon('menu'), h('span', {}, 'Mehr'));
   const panel = document.getElementById('more-panel');
@@ -67,6 +68,7 @@ function markActive(name) {
   document.querySelector('.more-btn')?.classList.toggle('active', !primary);
   const area = NAV_ITEMS.find((n) => n.route === routeName)?.area ?? (routeName === 'rezept' ? 'rezepte' : 'start');
   document.body.dataset.area = area;
+  document.body.dataset.route = name;
 }
 
 async function renderRoute() {

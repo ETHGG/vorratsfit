@@ -1,4 +1,5 @@
 // views/shoppingView.js – „Einkaufsliste“: Was muss ich dafür kaufen?
+import { CATEGORY_EMOJI } from '../core/models.js';
 import { h, clear, field, select, stepper, toast, withBusy, icon, dialog, emptyState, showFieldErrors, confirmDialog, announce } from './dom.js';
 import { pageHeader, section } from './components.js';
 import { state, shoppingContext } from './state.js';
@@ -168,13 +169,13 @@ export async function render(container) {
     const open = sortShoppingItems(data.items.filter((i) => !i.checked), SHOPPING_GROUPS);
     const done = sortShoppingItems(data.items.filter((i) => i.checked), SHOPPING_GROUPS);
     if (!open.length) {
-      listBox.append(emptyState(data.items.length ? 'Alles erledigt!' : 'Die Einkaufsliste ist leer', data.selected.length ? 'Für die ausgewählten Rezepte ist alles im Vorrat.' : 'Füge Rezepte hinzu oder trage Artikel manuell ein.'));
+      listBox.append(emptyState(data.items.length ? 'Alles erledigt!' : 'Die Einkaufsliste ist leer', data.selected.length ? 'Für die ausgewählten Rezepte ist alles im Vorrat.' : 'Füge Rezepte hinzu oder trage Artikel manuell ein.', null, 'einkauf'));
     } else {
       listBox.append(h('p', { class: 'small muted' }, `${open.length} offene ${open.length === 1 ? 'Position' : 'Positionen'}`));
       for (const group of SHOPPING_GROUPS) {
         const items = open.filter((i) => i.shoppingGroup === group);
         if (!items.length) continue;
-        listBox.append(h('h3', { class: 'group-title' }, group), h('ul', { class: 'plain-list shop-list' }, ...items.map(openItem)));
+        listBox.append(h('h3', { class: 'group-title' }, h('span', { 'aria-hidden': 'true' }, `${CATEGORY_EMOJI[group] ?? '🛒'} `), group), h('ul', { class: 'plain-list shop-list' }, ...items.map(openItem)));
       }
     }
     if (done.length) {
@@ -266,7 +267,7 @@ export async function render(container) {
   recomputeBtn.addEventListener('click', () => withBusy(recomputeBtn, async () => { await reload({ recompute: true }); toast('Einkaufsliste mit dem Vorrat abgeglichen.'); }));
 
   container.append(
-    pageHeader('Einkaufsliste', 'Was muss ich dafür kaufen?'),
+    pageHeader('Einkaufsliste', 'Nur, was dir wirklich noch fehlt.'),
     section('Ausgewählte Rezepte', rangeBox, selectedBox, h('div', { class: 'form-actions' }, recomputeBtn)),
     section('Zu kaufen', h('p', { class: 'small muted' }, 'Trage bei Bedarf die tatsächlich gekaufte Menge ein und hake den Artikel ab – er wird automatisch in deinen Vorrat übernommen.'), h('div', { class: 'form-actions' }, allBtn, shareBtn), shareOut, listBox),
     doneBox,
