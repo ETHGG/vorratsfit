@@ -11,13 +11,26 @@ def register(g, l):
     today = datetime.date.today()
     iso = lambda d: (today + datetime.timedelta(days=d)).isoformat()  # noqa: E731
 
+    def legacy_profile(pg):
+        """Simuliert ein Profil aus 0.2 (Alter statt Geburtsdatum, noch nie nach dem Datum gefragt)."""
+        pg.evaluate("""() => new Promise((res, rej) => {
+            const q = indexedDB.open('vorratsfit-db');
+            q.onsuccess = () => {
+                const db = q.result; const t = db.transaction(['profile', 'metadata'], 'readwrite');
+                const ps = t.objectStore('profile');
+                ps.getAll().onsuccess = (e) => { for (const p of e.target.result) { delete p.birthDate; p.age = 30; ps.put(p); } };
+                t.objectStore('metadata').delete('birthDatePrompted');
+                t.oncomplete = () => { db.close(); res(); }; t.onerror = () => rej(t.error);
+            };
+        })""")
+
     def s_birth():
-        if not l['alt']:
-            check('G-E2E Geburtsdatum-Abfrage nach dem Update', False, 'nicht ausführbar: Vorgängerversion fehlt'); return
         c = browser.new_context(viewport={'width': 390, 'height': 844})
         bp = c.new_page(); bp.set_default_timeout(15000); open_pages.append(bp)
-        onboard(bp, alt_base, 'Geburt')
-        bp.goto(base + '#/start'); bp.wait_for_selector('dialog.dialog:has-text("Geburtsdatum")')
+        onboard(bp, base, 'Geburt')
+        g['dismiss_extra_dialogs'](bp)
+        legacy_profile(bp)
+        bp.goto(base + '#/start'); bp.reload(); bp.wait_for_selector('dialog.dialog:has-text("Geburtsdatum")')
         txt = bp.inner_text('dialog.dialog')
         check('G-E2E Nach dem Update: einmalige Abfrage „Geburtsdatum statt Alter“ mit bisherigem Alter', '30 Jahre' in txt and 'Später' in txt, txt)
         birth = today.replace(year=today.year - 25).isoformat()
@@ -32,8 +45,10 @@ def register(g, l):
         c.close()
         c2 = browser.new_context(viewport={'width': 390, 'height': 844})
         lp = c2.new_page(); lp.set_default_timeout(15000); open_pages.append(lp)
-        onboard(lp, alt_base, 'Später')
-        lp.goto(base + '#/start'); lp.wait_for_selector('dialog.dialog:has-text("Geburtsdatum")')
+        onboard(lp, base, 'Später')
+        g['dismiss_extra_dialogs'](lp)
+        legacy_profile(lp)
+        lp.goto(base + '#/start'); lp.reload(); lp.wait_for_selector('dialog.dialog:has-text("Geburtsdatum")')
         lp.click('dialog button[value=later]'); lp.wait_for_timeout(300)
         lp.reload(); lp.wait_for_selector('h1:has-text("Hallo Später")'); lp.wait_for_timeout(500)
         check('G-E2E „Später“: kein erneutes Nachfragen, bisheriges Alter bleibt (30)', lp.locator('dialog.dialog').count() == 0 and idb_all(lp, 'profile')[0].get('age') == 30)
@@ -41,9 +56,10 @@ def register(g, l):
 
     def s_weight():
         page.goto(base + '#/start'); page.wait_for_selector('h1')
-        check('W-E2E Startseite erinnert an den ersten Gewichtseintrag', 'noch kein Gewicht eingetragen' in page.inner_text('main'))
+        first = idb_all(page, 'weightLog')
+        check('W-E2E (0.4) Gewicht aus der Einrichtung ist erster Verlaufseintrag (95 kg, heute)', len(first) == 1 and first[0]['weightKg'] == 95 and first[0]['date'] == iso(0), str(first))
+        check('W-E2E (0.4) Startseite zeigt keine „noch kein Gewicht“-Erinnerung', 'noch kein Gewicht eingetragen' not in page.inner_text('main'))
         page.goto(base + '#/gewicht'); page.wait_for_selector('h1:text-is("Gewicht")')
-        check('W-E2E Gewicht-Seite: Erinnerung und leerer Verlauf', 'noch kein Gewicht' in page.inner_text('main') and 'Noch kein Verlauf' in page.inner_text('main'))
         for d, w in [(-60, '97.1'), (-14, '96.2'), (-7, '95.4'), (0, '94.9'), (0, '94.8')]:
             page.fill('[name=date]', iso(d)); page.fill('[name=weightKg]', w)
             page.click('button:has-text("Speichern")'); page.wait_for_selector('.toast'); page.wait_for_timeout(250)

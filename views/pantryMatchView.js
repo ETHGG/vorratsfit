@@ -1,6 +1,6 @@
 // views/pantryMatchView.js – „Aus meinem Vorrat“: Was kann ich mit meinen vorhandenen Lebensmitteln kochen?
 import { h, clear, stepper, emptyState, select, field } from './dom.js';
-import { pageHeader, recipeCard, filterChips, allergyDisclaimer } from './components.js';
+import { pageHeader, recipeCard, filterChips, allergyDisclaimer, recipeTabs } from './components.js';
 import { state, analysisContext, refreshFavorites } from './state.js';
 import { routeHref } from './router.js';
 import { analyzeAll, applyFilters, sortAnalyses, RECIPE_FILTERS, PANTRY_PAGE_FILTERS, toggleFavorite } from '../recipes.js';
@@ -42,6 +42,7 @@ export async function render(container) {
 
   container.append(
     pageHeader('Aus meinem Vorrat', 'Was kann ich mit meinen vorhandenen Lebensmitteln kochen?'),
+    recipeTabs('vorrat-rezepte'),
     h('div', { class: 'toolbar' },
       h('div', { class: 'field' }, h('span', { class: 'label' }, 'Für wie viele Personen?'), stepper({ value: servings, onChange: (v) => { servings = v; state.pantryServings = v; draw(); } })),
       field({ label: 'Sortierung', input: sortSel })),

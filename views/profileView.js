@@ -4,6 +4,7 @@ import { pageHeader, allergyDisclaimer } from './components.js';
 import { state, refreshProfile } from './state.js';
 import { navigate } from './router.js';
 import { saveProfile, PROFILE_LIMITS, validateProfileInput } from '../profile.js';
+import { listWeights, saveWeight } from '../weight.js';
 import { ACTIVITY_LEVELS, GOALS, SEXES, DEVICES, DIETS, ALLERGENS } from '../core/models.js';
 import { sanitizeText, todayString } from '../core/utils.js';
 
@@ -127,6 +128,7 @@ export async function render(container, { wizard = false } = {}) {
     e.preventDefault();
     await withBusy(save, async () => {
       formError.textContent = '';
+      const isNew = !state.profile;
       const res = await saveProfile(collect(), state.profile);
       if (!res.ok) {
         const firstField = Object.keys(res.errors)[0];
@@ -136,6 +138,8 @@ export async function render(container, { wizard = false } = {}) {
         formError.textContent = 'Bitte korrigiere die markierten Angaben.';
         return;
       }
+      // 0.4: Beim ersten Anlegen wird das Gewicht als erster Eintrag in den Verlauf übernommen.
+      if (isNew && res.profile.weightKg && !(await listWeights()).length) await saveWeight({ date: todayString(), weightKg: res.profile.weightKg });
       await refreshProfile();
       toast('Profil gespeichert. Die Daten bleiben auf diesem Gerät.', 'success');
       navigate(wizard ? 'vorrat' : 'tagesziel');

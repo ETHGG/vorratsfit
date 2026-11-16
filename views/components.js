@@ -111,11 +111,37 @@ export function recipeCard(a, { mode = 'discover', servings = null, onFavorite =
   return card;
 }
 
-export function filterChips(filterIds, filters, active, onChange) {
-  return h('div', { class: 'chips', role: 'group', 'aria-label': 'Filter' }, ...filterIds.map((id) => chip(filters[id].label, active.has(id), () => {
-    if (active.has(id)) active.delete(id); else active.add(id);
-    onChange();
-  })));
+/**
+ * Filter-Chips. 0.4: Nur die ersten Filter sind sofort sichtbar, der Rest liegt unter „Weitere Filter“.
+ * Aktive Filter bleiben immer sichtbar (der Bereich öffnet sich dann automatisch).
+ */
+export function filterChips(filterIds, filters, active, onChange, { visible = 5 } = {}) {
+  const make = (id) => {
+    const btn = chip(filters[id].label, active.has(id), () => {
+      if (active.has(id)) active.delete(id); else active.add(id);
+      btn.setAttribute('aria-pressed', active.has(id) ? 'true' : 'false');
+      updateCount();
+      onChange();
+    });
+    return btn;
+  };
+  const first = filterIds.slice(0, visible);
+  const rest = filterIds.slice(visible);
+  const wrap = h('div', { class: 'filter-box' }, h('div', { class: 'chips', role: 'group', 'aria-label': 'Filter' }, ...first.map(make)));
+  const countEl = h('span', { class: 'filter-count' });
+  function updateCount() {
+    const n = rest.filter((id) => active.has(id)).length;
+    countEl.textContent = n ? ` (${n} aktiv)` : '';
+  }
+  if (rest.length) {
+    const more = h('details', { class: 'more-filters' },
+      h('summary', {}, `Weitere Filter`, countEl),
+      h('div', { class: 'chips', role: 'group', 'aria-label': 'Weitere Filter' }, ...rest.map(make)));
+    if (rest.some((id) => active.has(id))) more.open = true;
+    wrap.append(more);
+  }
+  updateCount();
+  return wrap;
 }
 
 export function pageHeader(title, lead = null, ...extra) {
@@ -125,4 +151,11 @@ export function pageHeader(title, lead = null, ...extra) {
 export function section(title, ...children) {
   const id = `s-${Math.random().toString(36).slice(2, 8)}`;
   return h('section', { class: 'section', 'aria-labelledby': id }, h('h2', { id }, title), ...children);
+}
+
+/** 0.4: Umschalter zwischen den drei Rezept-Ansichten (ersetzt zwei getrennte Menüpunkte). */
+export function recipeTabs(current) {
+  const tabs = [['vorrat-rezepte', 'Mein Vorrat'], ['entdecken', 'Alle Rezepte'], ['favoriten', 'Favoriten']];
+  return h('nav', { class: 'segmented', 'aria-label': 'Rezept-Ansicht' }, ...tabs.map(([route, label]) =>
+    h('a', { href: routeHref(route), class: 'segment', 'aria-current': route === current ? 'page' : null }, label)));
 }

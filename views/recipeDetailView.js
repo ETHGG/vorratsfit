@@ -88,7 +88,7 @@ export async function render(container, { id, params }) {
       if (!res.ok) { toast(Object.values(res.errors).join(' '), 'error'); return; }
       toast(res.warning ? `Eingeplant. Hinweis: ${res.warning}` : 'Zum Wochenplan hinzugefügt.', res.warning ? 'warn' : 'success');
     }));
-    const prepBtn = h('button', { type: 'button', class: 'btn' }, '📦 Meal Prep planen');
+    const prepBtn = h('button', { type: 'button', class: 'btn' }, '🥡 Meal Prep planen');
     prepBtn.addEventListener('click', () => withBusy(prepBtn, () => planMealPrep(recipe)));
     actionsBox.append(shopBtn, planBtn, prepBtn, cookBtn);
   }

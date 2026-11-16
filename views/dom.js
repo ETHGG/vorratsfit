@@ -74,6 +74,8 @@ const ICONS = {
   offline: 'M2 8a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0M12 19h.01M3 3l18 18',
   scale: 'M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zM8 9a5 5 0 0 1 8 0M12 9l1.5-2',
   food: 'M7 3v8a2 2 0 0 0 2 2v8M11 3v8M15 3c-1.5 2-1.5 6 0 8v10',
+  chevronLeft: 'M15 5l-7 7 7 7',
+  chevronRight: 'M9 5l7 7-7 7',
 };
 
 /** SVG-Element sicher erzeugen (nur Attribute, kein Markup-Text). */
@@ -106,9 +108,10 @@ export function toast(message, type = 'info') {
   const region = document.getElementById('toast-region');
   if (!region) return;
   const el = h('div', { class: `toast toast-${type}`, role: type === 'error' ? 'alert' : 'status' }, message);
-  while (region.children.length >= 2) region.firstElementChild.remove();
+  // 0.4: immer nur ein Hinweis gleichzeitig – ein neuer ersetzt den alten, damit nichts den Inhalt verdeckt.
+  while (region.children.length >= 1) region.firstElementChild.remove();
   region.append(el);
-  const ms = type === 'error' ? 6000 : 3500;
+  const ms = type === 'error' ? 6000 : 2500;
   setTimeout(() => el.classList.add('toast-hide'), ms);
   setTimeout(() => el.remove(), ms + 500);
 }

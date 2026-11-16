@@ -97,7 +97,7 @@ export async function render(container, { params }) {
     }
     clear(daysBox);
     rangeLabel.textContent = formatWeekRange(monday);
-    if (!entries.length) daysBox.append(emptyState('Noch nichts geplant', 'Tippe bei einem Tag auf „+“, um ein Rezept einzuplanen – oder öffne ein Rezept und wähle „Zum Plan hinzufügen“.'));
+    if (!entries.length) daysBox.append(h('p', { class: 'notice notice-info' }, icon('info', { size: 16 }), h('span', {}, 'Noch nichts geplant. Tippe bei einem Tag auf „+“ – oder öffne ein Rezept und wähle „Zum Plan hinzufügen“.')));
     for (const d of days) daysBox.append(dayCard(d, entries.filter((e) => e.date === d)));
   }
 
@@ -153,7 +153,7 @@ export async function render(container, { params }) {
     }
     return h('li', { class: `plan-entry plan-${st.status}` },
       h('div', { class: 'plan-main' },
-        h('p', { class: 'plan-title' }, isBox ? h('span', { class: 'box-tag', 'aria-label': `Meal-Prep-Box ${e.mealPrepIndex} von ${e.mealPrepCount}` }, `📦 Box ${e.mealPrepIndex}/${e.mealPrepCount} `) : null, titleEl, e.cooked ? h('span', { class: 'badge badge-ok' }, icon('check', { size: 12 }), 'Gekocht') : null),
+        h('p', { class: 'plan-title' }, isBox ? h('span', { class: 'box-tag', 'aria-label': `Meal-Prep-Box ${e.mealPrepIndex} von ${e.mealPrepCount}` }, `🥡 Box ${e.mealPrepIndex}/${e.mealPrepCount} `) : null, titleEl, e.cooked ? h('span', { class: 'badge badge-ok' }, icon('check', { size: 12 }), 'Gekocht') : null),
         shelf ? h('p', { class: 'notice notice-warn small' }, icon('alert', { size: 14 }), h('span', {}, shelf)) : null,
         isBox ? h('p', { class: 'small muted' }, '1 Portion') : st.status === 'ok' || st.status === 'unknown' ? stepper({ value: e.servings, label: 'Portionen', singular: 'Portion', onChange: async (v) => { const r = await updatePlanEntry(e.id, { servings: v }, shoppingContext()); if (!r.ok) showErrors(r.errors); } }) : h('p', { class: 'small' }, `${e.servings} ${e.servings === 1 ? 'Portion' : 'Portionen'}`),
         st.message ? h('p', { class: `notice ${st.status === 'unknown' ? 'notice-warn' : 'notice-error'} small` }, icon('alert', { size: 14 }), h('span', {}, st.message)) : null),
@@ -163,21 +163,21 @@ export async function render(container, { params }) {
   function dayCard(date, entries) {
     const isToday = date === todayString();
     const id = `day-${date}`;
+    // 0.4: kompakt – nur belegte Mahlzeiten werden gezeigt, ein „+“-Knopf je Tag.
     const slots = MEAL_TYPES.map((m) => {
       const list = entries.filter((e) => e.mealType === m.id);
-      const add = h('button', { type: 'button', class: 'btn btn-link plan-add', 'aria-label': `${m.label} am ${formatDayLabel(date)} hinzufügen` }, icon('plus', { size: 16 }), ` ${m.label}`);
-      add.addEventListener('click', async () => {
-        const input = await planDialog({ title: `${m.label} am ${formatDayLabel(date)}`, date, mealType: m.id });
-        if (!input) return;
-        const res = await addPlanEntry(input, shoppingContext());
-        if (!res.ok) { showErrors(res.errors); return; }
-        toast(res.warning ? `Eingeplant. Hinweis: ${res.warning}` : 'Eingeplant.', res.warning ? 'warn' : 'success');
-        await reload();
-      });
-      return h('div', { class: 'plan-slot' },
-        list.length ? h('h3', { class: 'slot-title' }, m.label) : null,
-        list.length ? h('ul', { class: 'plain-list' }, ...list.map(entryRow)) : null,
-        add);
+      if (!list.length) return null;
+      return h('div', { class: 'plan-slot' }, h('h3', { class: 'slot-title' }, m.label), h('ul', { class: 'plain-list' }, ...list.map(entryRow)));
+    });
+    const nextFree = MEAL_TYPES.find((m) => !entries.some((e) => e.mealType === m.id)) ?? MEAL_TYPES[1];
+    const add = h('button', { type: 'button', class: 'btn btn-icon btn-add plan-add', 'aria-label': `Mahlzeit am ${formatDayLabel(date)} einplanen` }, icon('plus', { size: 20 }));
+    add.addEventListener('click', async () => {
+      const input = await planDialog({ title: `Mahlzeit am ${formatDayLabel(date)}`, date, mealType: nextFree.id });
+      if (!input) return;
+      const res = await addPlanEntry(input, shoppingContext());
+      if (!res.ok) { showErrors(res.errors); return; }
+      toast(res.warning ? `Eingeplant. Hinweis: ${res.warning}` : 'Eingeplant.', res.warning ? 'warn' : 'success');
+      await reload();
     });
     let kcal = 0;
     let complete = true;
@@ -185,14 +185,14 @@ export async function render(container, { params }) {
       const n = recipeNutritionFor(state.recipesById.get(e.recipeId), state.profile, state.catalog).perServing;
       if (typeof n?.kcal === 'number') kcal += n.kcal; else complete = false;
     }
-    return h('section', { class: `section day-card ${isToday ? 'is-today' : ''}`, 'aria-labelledby': id, 'data-date': date },
-      h('h2', { id }, formatDayLabel(date), isToday ? h('span', { class: 'badge badge-ok today-badge' }, 'Heute') : null),
+    return h('section', { class: `section day-card ${isToday ? 'is-today' : ''} ${entries.length ? '' : 'is-empty'}`, 'aria-labelledby': id, 'data-date': date },
+      h('div', { class: 'day-head' }, h('h2', { id }, formatDayLabel(date), isToday ? h('span', { class: 'badge badge-ok today-badge' }, 'Heute') : null), add),
       entries.length ? h('p', { class: 'small muted day-sum' }, `Geplant: ca. ${formatNumber(kcal, 0)} kcal (je 1 Portion)${complete ? '' : ', unvollständig'} · `, h('a', { href: routeHref(`heute?datum=${date}`) }, 'Tagesbilanz')) : null,
       ...slots);
   }
 
-  const prev = h('button', { type: 'button', class: 'btn', 'aria-label': 'Vorherige Woche' }, '← Vorwoche');
-  const next = h('button', { type: 'button', class: 'btn', 'aria-label': 'Nächste Woche' }, 'Nächste →');
+  const prev = h('button', { type: 'button', class: 'btn btn-icon', 'aria-label': 'Vorherige Woche' }, icon('chevronLeft'));
+  const next = h('button', { type: 'button', class: 'btn btn-icon', 'aria-label': 'Nächste Woche' }, icon('chevronRight'));
   const today = h('button', { type: 'button', class: 'btn' }, 'Heute');
   const go = (m) => { monday = m; history.replaceState(null, '', routeHref(`woche?start=${monday}`)); reload(); };
   prev.addEventListener('click', () => go(addDays(monday, -7)));
@@ -252,7 +252,8 @@ export async function render(container, { params }) {
 
   container.append(
     pageHeader('Woche', 'Plane deine Mahlzeiten. Geplante, noch nicht gekochte Mahlzeiten landen automatisch auf der Einkaufsliste.'),
-    h('div', { class: 'week-nav' }, prev, rangeLabel, next, today),
+    h('div', { class: 'day-nav' }, prev, rangeLabel, next),
+    h('p', { class: 'week-today' }, today),
     daysBox,
     section('Einkaufen und Aufräumen', h('div', { class: 'form-actions' }, weekShop, customShop, shopLink), rangeNote, h('div', { class: 'form-actions' }, clearBtn)),
   );

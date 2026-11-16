@@ -1,6 +1,6 @@
 // app.js – Einstiegspunkt: Initialisierung, Navigation, Datenschutzhinweis, Offline- und Update-Hinweise.
 import { h, clear, icon, dialog, errorBox, loading, toast } from './views/dom.js';
-import { NAV_ITEMS, parseHash, routeHref } from './views/router.js';
+import { NAV_ITEMS, PRIMARY_FOR, parseHash, routeHref } from './views/router.js';
 import { state, loadBase, refreshProfile } from './views/state.js';
 import { allergyDisclaimer } from './views/components.js';
 import { applyTheme, isPrivacyAcknowledged, acknowledgePrivacy } from './settings.js';
@@ -9,6 +9,7 @@ import { onVersionChange, onBlocked, NEWER_VERSION_TEXT, getMeta, setMeta } from
 import { saveProfile } from './profile.js';
 import { validateBirthDate } from './core/body.js';
 import { todayString } from './core/utils.js';
+import { APP_VERSION } from './core/models.js';
 
 export const PRIVACY_TEXT = 'Deine persönlichen Daten werden ausschließlich auf diesem Gerät gespeichert. Rezept- und Produktabfragen an externe Anbieter enthalten keine Angaben zu Alter, Gewicht, Kalorienziel oder persönlichen Gesundheitsdaten.';
 export const OFFLINE_TEXT = 'Du bist offline. Lokale und bereits gespeicherte Rezepte stehen weiterhin zur Verfügung.';
@@ -57,11 +58,15 @@ function buildNavigation() {
 
 function markActive(name) {
   const routeName = name === 'rezept' || name === 'eigenes-rezept' ? 'entdecken' : name === 'einrichtung' ? 'profil' : name;
+  const primary = NAV_ITEMS.find((n) => n.route === routeName)?.primary ? routeName : PRIMARY_FOR[routeName];
   document.querySelectorAll('[data-route]').forEach((a) => {
-    if (a.dataset.route === routeName) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    const inBottom = !!a.closest('#bottom-nav');
+    const current = inBottom ? a.dataset.route === primary : a.dataset.route === routeName;
+    if (current) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
   });
-  const moreActive = !NAV_ITEMS.find((n) => n.route === routeName)?.primary;
-  document.querySelector('.more-btn')?.classList.toggle('active', moreActive);
+  document.querySelector('.more-btn')?.classList.toggle('active', !primary);
+  const area = NAV_ITEMS.find((n) => n.route === routeName)?.area ?? (routeName === 'rezept' ? 'rezepte' : 'start');
+  document.body.dataset.area = area;
 }
 
 async function renderRoute() {
@@ -163,6 +168,7 @@ async function askBirthDateOnce() {
 }
 
 async function init() {
+  document.documentElement.dataset.appVersion = APP_VERSION;
   applyTheme();
   window.matchMedia?.('(prefers-color-scheme: dark)').addEventListener?.('change', () => applyTheme());
   buildNavigation();

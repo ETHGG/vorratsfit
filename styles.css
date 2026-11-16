@@ -73,7 +73,7 @@ main { padding: 1rem; min-width: 0; outline: none; }
 .app-footer { max-width: 820px; margin: 0 auto 1rem; padding: 0 1rem; }
 .side-nav { display: none; }
 .bottom-nav { position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--border); z-index: 30; padding-bottom: env(safe-area-inset-bottom, 0px); }
-.bottom-nav > ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); }
+.bottom-nav > ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); }
 .bottom-nav a, .more-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: var(--nav-h); padding: .3rem .1rem; font-size: .7rem; line-height: 1.1; color: var(--muted); text-decoration: none; background: none; border: 0; width: 100%; font-family: inherit; cursor: pointer; text-align: center; }
 .bottom-nav a[aria-current="page"], .more-btn.active { color: var(--primary-strong); font-weight: 700; }
 .bottom-nav a[aria-current="page"] .icon, .more-btn.active .icon { stroke-width: 2.6; }
@@ -321,3 +321,19 @@ table.weeks { font-size: .88rem; min-width: 0; }
 table.weeks th, table.weeks td { padding: .35rem .25rem; white-space: nowrap; }
 @media (max-width: 420px) { table.weeks th:nth-child(5), table.weeks td:nth-child(5) { display: none; } }
 .weight-item { justify-content: space-between; }
+
+/* ---------- 0.4 Bedienung ---------- */
+.segmented { display: grid; grid-template-columns: repeat(3, 1fr); gap: .25rem; padding: .25rem; background: var(--surface-2); border-radius: 12px; margin: 0 0 1rem; }
+.segment { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: .3rem .4rem; border-radius: 9px; text-align: center; font-weight: 600; font-size: .9rem; color: var(--muted); text-decoration: none; }
+.segment[aria-current="page"] { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+.filter-box { margin: .5rem 0 1rem; }
+.filter-box .chips { margin: 0 0 .4rem; }
+.more-filters summary { cursor: pointer; min-height: 44px; display: inline-flex; align-items: center; font-weight: 600; color: var(--primary-strong); }
+.day-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.day-head h2 { margin: 0; }
+.day-card.is-empty { padding-top: .5rem; padding-bottom: .5rem; box-shadow: none; }
+.btn-add { border-radius: 50%; background: var(--surface-2); color: var(--primary-strong); }
+.day-nav { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .5rem; margin-bottom: .5rem; }
+.day-nav .day-label { text-align: center; font-weight: 700; margin: 0; }
+.week-today { text-align: center; margin: 0 0 .6rem; }
+.day-nav .week-range { margin: 0; }

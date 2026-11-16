@@ -35,7 +35,7 @@ export function macroTable(b, { compact = false } = {}) {
   for (const m of b.macros ?? []) {
     const status = m.target === null ? '' : m.kind === 'min' ? (m.eaten >= m.target ? 'erreicht' : `noch ${formatNumber(m.target - m.eaten, 0)} g`)
       : m.kind === 'range' ? (m.eaten < m.target ? `noch ${formatNumber(m.target - m.eaten, 0)} g` : m.eaten > m.targetMax ? 'über dem Bereich' : 'im Bereich')
-        : (m.eaten > m.target * 1.1 ? 'über dem Richtwert' : `${m.percent} %`);
+        : (m.eaten > m.target * 1.1 ? 'über dem Richtwert' : m.eaten >= m.target * 0.9 ? 'erreicht' : `noch ${formatNumber(m.target - m.eaten, 0)} g`);
     list.append(h('li', { class: `macro macro-${m.id}` },
       h('span', { class: 'macro-name' }, m.label),
       h('span', { class: 'macro-val' }, h('strong', {}, gText(m.eaten)), m.target !== null ? ` / ${MACRO_TARGET_TEXT[m.kind](m)}` : ''),
@@ -324,15 +324,15 @@ export async function render(container, { params }) {
     });
   });
 
-  const prev = h('button', { type: 'button', class: 'btn', 'aria-label': 'Vorheriger Tag' }, '← Vortag');
-  const next = h('button', { type: 'button', class: 'btn', 'aria-label': 'Nächster Tag' }, 'Nächster →');
+  const prev = h('button', { type: 'button', class: 'btn btn-icon', 'aria-label': 'Vorheriger Tag' }, icon('chevronLeft'));
+  const next = h('button', { type: 'button', class: 'btn btn-icon', 'aria-label': 'Nächster Tag' }, icon('chevronRight'));
   const go = (d) => { date = d; history.replaceState(null, '', routeHref(`heute?datum=${date}`)); reload(); };
   prev.addEventListener('click', () => go(addDays(date, -1)));
   next.addEventListener('click', () => go(addDays(date, 1)));
 
   container.append(
     pageHeader('Heute', 'Tagesbilanz, geplante Mahlzeiten und was du gegessen hast. „Gegessen“ verändert deinen Vorrat nicht – nur „Gekocht“ zieht ab.'),
-    h('div', { class: 'week-nav' }, prev, title, next),
+    h('div', { class: 'day-nav' }, prev, title, next),
     section('Tagesbilanz', balanceBox),
     section('Geplante Mahlzeiten', mealsBox),
     section('Lebensmittel erfassen', fForm, h('details', { class: 'more' }, h('summary', {}, 'Eigene Werte eintragen (z. B. Restaurant)'), cForm)),

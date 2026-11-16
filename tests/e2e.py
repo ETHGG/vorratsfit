@@ -29,11 +29,14 @@ FAILED_SECTIONS = set()
 OPEN_PAGES = []
 
 # Vorgängerversion für Migrations- und Update-Tests
-OLD_TAG = os.environ.get('VF_OLD_TAG', 'v0.2.0')
+# Veröffentlichte Vorgängerversion 0.3.0 – über den Commit festgelegt (Tags lassen sich nicht immer übertragen).
+OLD_TAG = os.environ.get('VF_OLD_TAG', 'v0.3.0')
+OLD_COMMIT = os.environ.get('VF_OLD_COMMIT', 'da170a887c1e6633f6d8b4a0410c1000dcc42e0c')
 NEW_VERSION = json.load(open(os.path.join(ROOT, 'package.json'), encoding='utf-8'))['version']
 NEW_DB_VERSION = int(re.search(r'export const DB_VERSION = (\d+);', open(os.path.join(ROOT, 'db.js'), encoding='utf-8').read()).group(1))
-# Menüpunkt, der erst in der neuen Version existiert (Erkennungsmerkmal „neue Version aktiv“)
-NEW_ROUTE = os.environ.get('VF_NEW_ROUTE', 'gewicht')
+# Erkennungsmerkmal „neue Version aktiv“: <html data-app-version="…"> (gibt es seit 0.4)
+def app_version(page):
+    return page.evaluate("document.documentElement.dataset.appVersion || ''")
 
 
 class SkipSection(Exception):
@@ -145,7 +148,15 @@ def prepare_old_copy(tmp):
     """Legt die Vorgängerversion (Git-Tag OLD_TAG) unter /vorratsfit-alt/ ab."""
     dest = os.path.join(tmp, 'vorratsfit-alt')
     os.makedirs(dest, exist_ok=True)
-    arch = subprocess.run(['git', '-C', ROOT, 'archive', OLD_TAG], capture_output=True)
+    arch = None
+    for ref in (OLD_TAG, OLD_COMMIT):
+        arch = subprocess.run(['git', '-C', ROOT, 'archive', ref], capture_output=True)
+        if arch.returncode == 0:
+            break
+    else:
+        # Flacher Klon: Vorgänger-Commit gezielt nachladen
+        subprocess.run(['git', '-C', ROOT, 'fetch', '--depth=1', 'origin', OLD_COMMIT], capture_output=True)
+        arch = subprocess.run(['git', '-C', ROOT, 'archive', OLD_COMMIT], capture_output=True)
     if arch.returncode != 0:
         return None
     subprocess.run(['tar', '-x', '-C', dest], input=arch.stdout, check=True)
@@ -233,9 +244,14 @@ def _run_all(browser, base, alt, alt_base, site, tmp, args, errors):
         check(f'Migration: Daten aus {OLD_TAG} nach Upgrade vorhanden (Profil)', True)
         new.goto(base + '#/vorrat'); new.wait_for_selector('.pi-name:text-is("Reis (trocken)")')
         check(f'Migration: Vorrat aus {OLD_TAG} nach Upgrade vorhanden', '750 g' in new.inner_text('.pantry-list'))
-        old.wait_for_selector('#update-banner:not([hidden])', timeout=10000)
-        txt = old.inner_text('#update-banner')
-        check('Alter Tab zeigt verständlichen Hinweis statt technischem Fehler', 'anderen Tab aktualisiert' in txt and 'Daten bleiben erhalten' in txt and 'VersionError' not in txt, txt)
+        old_db = int(re.search(r'export const DB_VERSION = (\d+);', open(os.path.join(alt, 'db.js'), encoding='utf-8').read()).group(1))
+        if old_db < NEW_DB_VERSION:
+            old.wait_for_selector('#update-banner:not([hidden])', timeout=10000)
+            txt = old.inner_text('#update-banner')
+            check('Alter Tab zeigt verständlichen Hinweis statt technischem Fehler', 'anderen Tab aktualisiert' in txt and 'Daten bleiben erhalten' in txt and 'VersionError' not in txt, txt)
+        else:
+            old.reload(); old.wait_for_selector('.pi-name:text-is("Reis (trocken)")')
+            check(f'Gleiche Datenbankversion ({old_db}): alter Tab arbeitet ohne Fehler weiter', old.locator('#update-banner:not([hidden])').count() == 0)
         ver = new.evaluate("new Promise(r => { const q = indexedDB.open('vorratsfit-db'); q.onsuccess = () => { r(q.result.version); q.result.close(); }; })")
         check(f'Datenbank nach Upgrade auf Version {NEW_DB_VERSION}', ver == NEW_DB_VERSION, str(ver))
         check('Keine JavaScript-Fehler beim Upgrade', not new_errors, ' | '.join(new_errors))
@@ -322,6 +338,7 @@ def _run_all(browser, base, alt, alt_base, site, tmp, args, errors):
         page.click('summary:has-text("ausgeschlossen")')
         check('21 Erdnuss-Rezept wegen Allergie ausgeschlossen (mit Text)', 'Erdnuss-Hähnchen-Bowl' in page.inner_text('.excluded') and 'Erdnüsse' in page.inner_text('.excluded'))
         check('Erdnuss-Rezept nicht normal vorgeschlagen', page.locator('.recipe-card h3:has-text("Erdnuss-Hähnchen-Bowl")').count() == 0)
+        page.click('summary:has-text("Weitere Filter")')
         page.click('.chip:has-text("vegan")')
         check('Filter „vegan“ wirkt', all('Hähnchen' not in t for t in page.locator('.recipe-card h3').all_inner_texts()))
         page.click('.chip:has-text("vegan")')
@@ -436,7 +453,7 @@ def _run_all(browser, base, alt, alt_base, site, tmp, args, errors):
         monday = (datetime.date.today() + datetime.timedelta(days=1))
         monday = (monday - datetime.timedelta(days=monday.weekday())).isoformat()
         page.goto(base + '#/start'); page.wait_for_selector('h1')
-        check('P3-08 „Start“ im Menü „Mehr“: „Mehr“ ist aktiv markiert', 'active' in (page.get_attribute('.more-btn', 'class') or ''))
+        check('P3-08 (0.4) „Start“ in der unteren Leiste und aktiv markiert', page.get_attribute('.bottom-nav a[data-route="start"]', 'aria-current') == 'page' and 'active' not in (page.get_attribute('.more-btn', 'class') or ''))
         check('P3-08 Logo führt zur Startseite, „Woche“ in der unteren Leiste', page.get_attribute('.brand', 'href') == '#/start' and page.locator('.bottom-nav > ul a[data-route="woche"]').count() == 1)
         page.goto(base + '#/rezept/chili-sin-carne?portionen=4'); page.wait_for_selector('h1:has-text("Chili sin Carne")')
         page.click('button:has-text("Zum Plan hinzufügen")')
@@ -459,7 +476,7 @@ def _run_all(browser, base, alt, alt_base, site, tmp, args, errors):
         opt = page.locator('dialog select[name=recipeId] option', has_text='Erdnuss-Hähnchen-Bowl')
         check('N1-01 Im Planer ist das ausgeschlossene Rezept deaktiviert und begründet', opt.get_attribute('disabled') is not None and 'ausgeschlossen' in opt.inner_text())
         page.click('dialog button[value=cancel]')
-        page.locator(f'section.day-card[data-date="{tomorrow}"] .plan-add').nth(1).click()
+        page.locator(f'section.day-card[data-date="{tomorrow}"] .plan-add').first.click()
         page.wait_for_selector('dialog.dialog')
         page.select_option('dialog select[name=recipeId]', 'linsen-dal')
         page.fill('dialog [name=servings]', '2')
@@ -749,7 +766,7 @@ def _run_all(browser, base, alt, alt_base, site, tmp, args, errors):
         form.locator('[name=name]').fill('Reis (trocken)'); form.locator('[name=amount]').fill('321'); form.locator('[name=unit]').select_option('g')
         form.locator('button[type=submit]').click(); up.wait_for_selector('.pi-name:text-is("Reis (trocken)")')
         up.goto(ub + '#/start'); up.wait_for_function('navigator.serviceWorker.controller !== null', timeout=20000)
-        check(f'Update: vorher {OLD_TAG} aktiv (kein Menüpunkt „{NEW_ROUTE}“)', up.locator(f'a[data-route="{NEW_ROUTE}"]').count() == 0)
+        check(f'Update: vorher {OLD_TAG} aktiv (nicht {NEW_VERSION})', app_version(up) != NEW_VERSION, app_version(up))
         for name in os.listdir(upd):
             pth = os.path.join(upd, name)
             shutil.rmtree(pth) if os.path.isdir(pth) else os.remove(pth)
@@ -760,8 +777,8 @@ def _run_all(browser, base, alt, alt_base, site, tmp, args, errors):
         with up.expect_navigation():
             up.click('#update-banner button:has-text("Jetzt aktualisieren")')
         up.wait_for_selector('h1:has-text("Hallo Update")')
-        up.wait_for_selector(f'a[data-route="{NEW_ROUTE}"]', state='attached')
-        check(f'Nach Update: {NEW_VERSION} aktiv, Profil erhalten', up.locator(f'a[data-route="{NEW_ROUTE}"]').count() >= 1)
+        up.wait_for_function(f"document.documentElement.dataset.appVersion === '{NEW_VERSION}'", timeout=20000)
+        check(f'Nach Update: {NEW_VERSION} aktiv, Profil erhalten', app_version(up) == NEW_VERSION)
         dismiss_extra_dialogs(up)
         check(f'Nach Update: Vorrat aus {OLD_TAG} erhalten (321 g Reis)', pantry_amount(up, 'Reis (trocken)') == 321)
         caches = up.evaluate('caches.keys()')
@@ -832,8 +849,13 @@ def _run_all(browser, base, alt, alt_base, site, tmp, args, errors):
             p3.wait_for_selector('h1:text-is("Backup")')
             p3.fill('textarea[name=code]', code)
             p3.click('button:has-text("Backup prüfen")')
-            p3.wait_for_selector('.notice-error')
-            check(f'N0-04 {OLD_TAG} lehnt ein {NEW_VERSION}-Backup verständlich ab („neuere App-Version“)', 'neueren App-Version' in p3.inner_text('.notice-error'), p3.inner_text('.notice-error'))
+            ver = lambda f: int(re.search(r'export const BACKUP_VERSION = (\d+);', open(f, encoding='utf-8').read()).group(1))  # noqa: E731
+            if ver(os.path.join(alt, 'backup.js')) < ver(os.path.join(ROOT, 'backup.js')):
+                p3.wait_for_selector('.notice-error')
+                check(f'N0-04 {OLD_TAG} lehnt ein {NEW_VERSION}-Backup verständlich ab („neuere App-Version“)', 'neueren App-Version' in p3.inner_text('.notice-error'), p3.inner_text('.notice-error'))
+            else:
+                p3.wait_for_selector('text=Importvorschau')
+                check(f'N0-04 Gleiches Backup-Format: {OLD_TAG} liest ein {NEW_VERSION}-Backup', 'Vorrat' in p3.inner_text('table'))
             c3.close()
         else:
             check(f'N0-04 {OLD_TAG} lehnt ein neues Backup ab', False, f'nicht ausführbar: Git-Tag {OLD_TAG} fehlt')

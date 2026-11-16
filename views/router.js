@@ -1,19 +1,23 @@
 // views/router.js – Hash-Routing (funktioniert unter jedem GitHub-Pages-Unterpfad).
+// 0.4: Untere Leiste = die fünf meistgenutzten Bereiche. „Rezepte“ bündelt „Aus meinem Vorrat“ und „Entdecken“.
 export const NAV_ITEMS = Object.freeze([
-  { route: 'vorrat-rezepte', label: 'Aus meinem Vorrat', short: 'Vorrat-Rezepte', icon: 'pot', primary: true },
-  { route: 'entdecken', label: 'Rezepte entdecken', short: 'Entdecken', icon: 'search', primary: true },
-  { route: 'woche', label: 'Woche', icon: 'calendar', primary: true },
-  { route: 'einkauf', label: 'Einkaufsliste', short: 'Einkauf', icon: 'cart', primary: true },
-  { route: 'start', label: 'Start', icon: 'home' },
-  { route: 'heute', label: 'Heute gegessen', icon: 'check' },
-  { route: 'gewicht', label: 'Gewicht', icon: 'scale' },
-  { route: 'vorrat', label: 'Vorrat', icon: 'pantry' },
-  { route: 'favoriten', label: 'Favoriten', icon: 'heart' },
-  { route: 'tagesziel', label: 'Tagesziel', icon: 'target' },
+  { route: 'start', label: 'Start', icon: 'home', primary: true },
+  { route: 'vorrat-rezepte', label: 'Aus meinem Vorrat', short: 'Rezepte', icon: 'pot', primary: true, area: 'rezepte' },
+  { route: 'woche', label: 'Woche', icon: 'calendar', primary: true, area: 'woche' },
+  { route: 'einkauf', label: 'Einkaufsliste', short: 'Einkauf', icon: 'cart', primary: true, area: 'einkauf' },
+  { route: 'heute', label: 'Heute gegessen', short: 'Heute', icon: 'check', primary: true, area: 'heute' },
+  { route: 'entdecken', label: 'Rezepte entdecken', icon: 'search', area: 'rezepte' },
+  { route: 'vorrat', label: 'Vorrat', icon: 'pantry', area: 'vorrat' },
+  { route: 'gewicht', label: 'Gewicht', icon: 'scale', area: 'gewicht' },
+  { route: 'favoriten', label: 'Favoriten', icon: 'heart', area: 'rezepte' },
+  { route: 'tagesziel', label: 'Tagesziel', icon: 'target', area: 'heute' },
   { route: 'profil', label: 'Profil', icon: 'user' },
   { route: 'backup', label: 'Backup', icon: 'backup' },
   { route: 'einstellungen', label: 'Einstellungen', icon: 'settings' },
 ]);
+
+/** Welcher Eintrag der unteren Leiste gehört zu einer Seite? */
+export const PRIMARY_FOR = Object.freeze({ entdecken: 'vorrat-rezepte', favoriten: 'vorrat-rezepte', rezept: 'vorrat-rezepte', 'eigenes-rezept': 'vorrat-rezepte', tagesziel: 'heute' });
 
 export function parseHash(hash = location.hash) {
   const raw = hash.replace(/^#\/?/, '');

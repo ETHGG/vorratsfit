@@ -1,6 +1,6 @@
 // views/discoverView.js – „Rezepte entdecken“: Was möchte ich kochen? (unabhängig vom Vorrat)
 import { h, clear, select, field, emptyState, withBusy, errorBox, toast, icon } from './dom.js';
-import { pageHeader, recipeCard, filterChips, section, allergyDisclaimer } from './components.js';
+import { pageHeader, recipeCard, filterChips, section, allergyDisclaimer, recipeTabs } from './components.js';
 import { state, analysisContext, refreshFavorites, refreshRecipes } from './state.js';
 import { routeHref } from './router.js';
 import { analyzeAll, applyFilters, sortAnalyses, RECIPE_FILTERS, DISCOVER_FILTERS, SORT_OPTIONS, toggleFavorite } from '../recipes.js';
@@ -48,6 +48,7 @@ export async function render(container, { favoritesOnly = false } = {}) {
     favoritesOnly
       ? pageHeader('Favoriten', 'Deine gemerkten Rezepte – lokal gespeichert und offline verfügbar.')
       : pageHeader('Rezepte entdecken', 'Was möchte ich kochen?'),
+    recipeTabs(favoritesOnly ? 'favoriten' : 'entdecken'),
     h('div', { class: 'toolbar' }, field({ label: 'Suche', input: search }), field({ label: 'Sortierung', input: sortSel })),
     filterChips(DISCOVER_FILTERS, RECIPE_FILTERS, active, draw),
     results,

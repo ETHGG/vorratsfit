@@ -186,7 +186,7 @@ export const RECIPES = [
     prep: 10, cook: 20, difficulty: 'leicht', devices: ['airfryer'], cost: 2,
   },
   {
-    id: 'haehnchen-meal-prep-boxen', emoji: '📦', title: 'Hähnchen-Gemüse-Meal-Prep-Boxen', mealType: 'mittagessen', servings: 4,
+    id: 'haehnchen-meal-prep-boxen', emoji: '🥡', title: 'Hähnchen-Gemüse-Meal-Prep-Boxen', mealType: 'mittagessen', servings: 4,
     description: 'Vier Mittagessen auf einmal: Ofenhähnchen, Brokkoli, Paprika und Reis.',
     ingredients: [['haehnchenbrust', 800, 'g'], ['reis', 250, 'g'], ['brokkoli', 600, 'g'], ['paprika', 2, 'Stück'], ['olivenoel', 20, 'ml']],
     spices: [['paprikapulver', 2, 'TL'], ['currypulver', 1, 'TL'], ['salz', 1, 'TL']],
