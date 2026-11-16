@@ -1,0 +1,13 @@
+{
+  "name": "vorratsfit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Progressive Web App für Rezepte, Vorräte, Einkaufslisten und Ernährungsplanung – alle Daten lokal.",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/run-node.mjs && node tests/check-static.mjs",
+    "start": "python3 -m http.server 8080",
+    "build:recipes": "node tools/build-recipes.mjs"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,31 @@
+// tests/browser-runner.js – führt alle Tests im Browser aus und zeigt das Ergebnis an.
+import { buildTests, runTests } from './test-cases.js';
+import { buildDbTests, cleanupTestDb } from './db-tests.js';
+
+const list = document.getElementById('results');
+const summary = document.getElementById('summary');
+
+async function load(path) {
+  const res = await fetch(new URL(path, import.meta.url));
+  return res.json();
+}
+
+(async () => {
+  const [ingredients, recipes] = await Promise.all([load('../data/ingredients.json'), load('../data/recipes.json')]);
+  const tests = [...buildTests(ingredients), ...buildDbTests(ingredients, recipes)];
+  const results = await runTests(tests);
+  await cleanupTestDb();
+  for (const r of results) {
+    const li = document.createElement('li');
+    li.textContent = `${r.ok ? '✔ bestanden' : '✘ FEHLER'} – ${r.name}${r.ok ? '' : `: ${r.error}`}`;
+    li.className = r.ok ? 'ok' : 'fail';
+    list.append(li);
+  }
+  const failed = results.filter((r) => !r.ok).length;
+  summary.textContent = `${results.length - failed}/${results.length} Tests bestanden`;
+  document.body.dataset.done = failed ? 'failed' : 'passed';
+  window.__testResults = results;
+})().catch((err) => {
+  summary.textContent = `Testlauf abgebrochen: ${err.message}`;
+  document.body.dataset.done = 'error';
+});

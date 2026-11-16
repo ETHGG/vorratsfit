@@ -1,0 +1,5194 @@
+{
+ "version": 1,
+ "recipes": [
+  {
+   "id": "airfryer-haehnchen-paprika-reis",
+   "title": "Airfryer-Hähnchen mit Paprika-Reis",
+   "description": "Saftige Hähnchenstreifen aus dem Airfryer mit buntem Paprikareis – proteinreich und schnell.",
+   "emoji": "🍗",
+   "mealType": "mittagessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "haehnchenbrust",
+     "name": "Hähnchenbrustfilet",
+     "normalizedName": "hähnchenbrustfilet",
+     "amount": 400,
+     "unit": "g",
+     "category": "Fleisch und Fisch",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "reis",
+     "name": "Reis (trocken)",
+     "normalizedName": "reis trocken",
+     "amount": 150,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "paprika",
+     "name": "Paprika",
+     "normalizedName": "paprika",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zwiebel",
+     "name": "Zwiebel",
+     "normalizedName": "zwiebel",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "olivenoel",
+     "name": "Olivenöl",
+     "normalizedName": "olivenöl",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "paprikapulver",
+     "name": "Paprikapulver",
+     "normalizedName": "paprikapulver",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "pfeffer",
+     "name": "Pfeffer",
+     "normalizedName": "pfeffer",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Reis nach Packungsangabe in Salzwasser garen.",
+    "Hähnchen in Streifen schneiden, mit der Hälfte des Öls, Paprikapulver, Salz und Pfeffer mischen.",
+    "Hähnchen im Airfryer bei 190 °C etwa 12 Minuten garen, nach der Hälfte der Zeit wenden.",
+    "Paprika und Zwiebel würfeln und im restlichen Öl in einer Pfanne 5 Minuten anbraten.",
+    "Gemüse unter den Reis heben und mit dem Hähnchen servieren."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 20,
+   "totalMinutes": 30,
+   "difficulty": "leicht",
+   "devices": [
+    "airfryer",
+    "herd"
+   ],
+   "mealPrep": true,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 588,
+    "protein": 53.7,
+    "carbs": 69.7,
+    "fat": 8.6,
+    "fiber": 7.5,
+    "sugar": 8.6,
+    "salt": 0.3
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "glutenfrei",
+    "laktosefrei",
+    "proteinreich",
+    "Meal Prep",
+    "Airfryer"
+   ]
+  },
+  {
+   "id": "protein-overnight-oats",
+   "title": "Proteinreiche Overnight Oats",
+   "description": "Haferflocken mit Skyr und Beeren über Nacht im Kühlschrank quellen lassen – morgens nur noch mitnehmen.",
+   "emoji": "🥣",
+   "mealType": "fruehstueck",
+   "defaultServings": 1,
+   "ingredients": [
+    {
+     "ingredientId": "haferflocken",
+     "name": "Haferflocken",
+     "normalizedName": "haferflocken",
+     "amount": 60,
+     "unit": "g",
+     "category": "Getreide",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "skyr",
+     "name": "Skyr natur",
+     "normalizedName": "skyr natur",
+     "amount": 150,
+     "unit": "g",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "milch",
+     "name": "Milch (1,5 % Fett)",
+     "normalizedName": "milch 1 5 % fett",
+     "amount": 100,
+     "unit": "ml",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "beeren",
+     "name": "Beerenmischung (TK)",
+     "normalizedName": "beerenmischung tk",
+     "amount": 100,
+     "unit": "g",
+     "category": "Tiefkühlprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "chiasamen",
+     "name": "Chiasamen",
+     "normalizedName": "chiasamen",
+     "amount": 10,
+     "unit": "g",
+     "category": "Sonstiges",
+     "optional": true,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "zimt",
+     "name": "Zimt",
+     "normalizedName": "zimt",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Haferflocken, Skyr, Milch, Chiasamen und Zimt in einem Glas verrühren.",
+    "Beeren darauf geben.",
+    "Abgedeckt mindestens 6 Stunden oder über Nacht kühlen."
+   ],
+   "preparationMinutes": 5,
+   "cookingMinutes": 0,
+   "totalMinutes": 5,
+   "difficulty": "leicht",
+   "devices": [],
+   "mealPrep": true,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 404,
+    "protein": 28.8,
+    "carbs": 53.2,
+    "fat": 6.4,
+    "fiber": 10,
+    "sugar": 17.4,
+    "salt": 0.26
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "gluten",
+    "laktose",
+    "milch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegetarisch",
+    "laktosefrei möglich",
+    "proteinreich",
+    "kalorienarm",
+    "günstig",
+    "Meal Prep",
+    "schnell"
+   ]
+  },
+  {
+   "id": "ruehrei-spinat-vollkornbrot",
+   "title": "Rührei mit Spinat und Vollkornbrot",
+   "description": "Cremiges Rührei mit Blattspinat – ein sättigendes Frühstück oder schnelles Abendessen.",
+   "emoji": "🍳",
+   "mealType": "fruehstueck",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "eier",
+     "name": "Eier",
+     "normalizedName": "eier",
+     "amount": 6,
+     "unit": "Stück",
+     "category": "vegetarische Proteinquellen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "eier"
+     ]
+    },
+    {
+     "ingredientId": "spinat",
+     "name": "Blattspinat (TK)",
+     "normalizedName": "blattspinat tk",
+     "amount": 150,
+     "unit": "g",
+     "category": "Tiefkühlprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "vollkornbrot",
+     "name": "Vollkornbrot",
+     "normalizedName": "vollkornbrot",
+     "amount": 100,
+     "unit": "g",
+     "category": "Getreide",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "rapsoel",
+     "name": "Rapsöl",
+     "normalizedName": "rapsöl",
+     "amount": 5,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "pfeffer",
+     "name": "Pfeffer",
+     "normalizedName": "pfeffer",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Spinat in einer Pfanne mit dem Öl antauen lassen, bis die Flüssigkeit verdampft ist.",
+    "Eier verquirlen, salzen, pfeffern und zum Spinat geben.",
+    "Bei mittlerer Hitze unter Rühren stocken lassen.",
+    "Mit dem Vollkornbrot servieren."
+   ],
+   "preparationMinutes": 5,
+   "cookingMinutes": 10,
+   "totalMinutes": 15,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 399,
+    "protein": 28,
+    "carbs": 22,
+    "fat": 20.4,
+    "fiber": 5.6,
+    "sugar": 3.1,
+    "salt": 1.26
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "eier",
+    "gluten"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegetarisch",
+    "laktosefrei",
+    "proteinreich",
+    "kalorienarm",
+    "günstig",
+    "schnell"
+   ]
+  },
+  {
+   "id": "chili-sin-carne",
+   "title": "Chili sin Carne",
+   "description": "Würziges Bohnen-Chili mit Mais und Paprika – vegan, günstig und ideal zum Vorkochen.",
+   "emoji": "🌶️",
+   "mealType": "abendessen",
+   "defaultServings": 4,
+   "ingredients": [
+    {
+     "ingredientId": "kidneybohnen",
+     "name": "Kidneybohnen (Dose, abgetropft)",
+     "normalizedName": "kidneybohnen dose abgetropft",
+     "amount": 500,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "mais",
+     "name": "Mais (Dose, abgetropft)",
+     "normalizedName": "mais dose abgetropft",
+     "amount": 280,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "tomaten_dose",
+     "name": "Gehackte Tomaten (Dose)",
+     "normalizedName": "gehackte tomaten dose",
+     "amount": 800,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zwiebel",
+     "name": "Zwiebel",
+     "normalizedName": "zwiebel",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "paprika",
+     "name": "Paprika",
+     "normalizedName": "paprika",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "knoblauch",
+     "name": "Knoblauchzehe",
+     "normalizedName": "knoblauchzehe",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "reis",
+     "name": "Reis (trocken)",
+     "normalizedName": "reis trocken",
+     "amount": 200,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "olivenoel",
+     "name": "Olivenöl",
+     "normalizedName": "olivenöl",
+     "amount": 15,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "kreuzkuemmel",
+     "name": "Kreuzkümmel",
+     "normalizedName": "kreuzkümmel",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "chili",
+     "name": "Chiliflocken",
+     "normalizedName": "chiliflocken",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "paprikapulver",
+     "name": "Paprikapulver",
+     "normalizedName": "paprikapulver",
+     "amount": 2,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Zwiebeln, Knoblauch und Paprika würfeln und im Öl 5 Minuten anschwitzen.",
+    "Gewürze kurz mitrösten.",
+    "Tomaten, abgetropfte Bohnen und Mais zugeben und 20 Minuten köcheln lassen.",
+    "Währenddessen den Reis garen.",
+    "Chili abschmecken und mit Reis servieren."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 25,
+   "totalMinutes": 35,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": true,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 483,
+    "protein": 18.9,
+    "carbs": 81.8,
+    "fat": 5.9,
+    "fiber": 16.5,
+    "sugar": 14.7,
+    "salt": 1.3
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegan",
+    "vegetarisch",
+    "glutenfrei",
+    "laktosefrei",
+    "günstig",
+    "Meal Prep"
+   ]
+  },
+  {
+   "id": "chili-con-carne",
+   "title": "Chili con Carne mit magerem Rinderhack",
+   "description": "Klassisches Chili mit magerem Hackfleisch und Bohnen, reich an Protein.",
+   "emoji": "🥘",
+   "mealType": "abendessen",
+   "defaultServings": 4,
+   "ingredients": [
+    {
+     "ingredientId": "rinderhack",
+     "name": "Rinderhackfleisch (mager)",
+     "normalizedName": "rinderhackfleisch mager",
+     "amount": 500,
+     "unit": "g",
+     "category": "Fleisch und Fisch",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "kidneybohnen",
+     "name": "Kidneybohnen (Dose, abgetropft)",
+     "normalizedName": "kidneybohnen dose abgetropft",
+     "amount": 400,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "tomaten_dose",
+     "name": "Gehackte Tomaten (Dose)",
+     "normalizedName": "gehackte tomaten dose",
+     "amount": 800,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zwiebel",
+     "name": "Zwiebel",
+     "normalizedName": "zwiebel",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "paprika",
+     "name": "Paprika",
+     "normalizedName": "paprika",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "knoblauch",
+     "name": "Knoblauchzehe",
+     "normalizedName": "knoblauchzehe",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "reis",
+     "name": "Reis (trocken)",
+     "normalizedName": "reis trocken",
+     "amount": 200,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "kreuzkuemmel",
+     "name": "Kreuzkümmel",
+     "normalizedName": "kreuzkümmel",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "chili",
+     "name": "Chiliflocken",
+     "normalizedName": "chiliflocken",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "paprikapulver",
+     "name": "Paprikapulver",
+     "normalizedName": "paprikapulver",
+     "amount": 2,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Hackfleisch ohne zusätzliches Fett krümelig anbraten.",
+    "Zwiebeln, Knoblauch und Paprika gewürfelt zugeben und 3 Minuten mitbraten.",
+    "Gewürze, Tomaten und abgetropfte Bohnen einrühren, 25 Minuten köcheln lassen.",
+    "Reis garen und zum Chili servieren."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 30,
+   "totalMinutes": 40,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": true,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 542,
+    "protein": 40.9,
+    "carbs": 65.8,
+    "fat": 10.2,
+    "fiber": 11.4,
+    "sugar": 10.2,
+    "salt": 0.99
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "glutenfrei",
+    "laktosefrei",
+    "proteinreich",
+    "Meal Prep"
+   ]
+  },
+  {
+   "id": "thunfisch-wrap",
+   "title": "Thunfisch-Wrap mit Joghurt-Dip",
+   "description": "Kalter Wrap mit Thunfisch, Mais und knackiger Gurke – fertig in zehn Minuten.",
+   "emoji": "🌯",
+   "mealType": "mittagessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "wraps",
+     "name": "Weizen-Tortilla-Wraps",
+     "normalizedName": "weizen-tortilla-wraps",
+     "amount": 4,
+     "unit": "Stück",
+     "category": "Getreide",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "thunfisch",
+     "name": "Thunfisch (Dose, im eigenen Saft)",
+     "normalizedName": "thunfisch dose im eigenen saft",
+     "amount": 150,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "fisch"
+     ]
+    },
+    {
+     "ingredientId": "joghurt",
+     "name": "Naturjoghurt (1,5 % Fett)",
+     "normalizedName": "naturjoghurt 1 5 % fett",
+     "amount": 100,
+     "unit": "g",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "gurke",
+     "name": "Salatgurke",
+     "normalizedName": "salatgurke",
+     "amount": 150,
+     "unit": "g",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "mais",
+     "name": "Mais (Dose, abgetropft)",
+     "normalizedName": "mais dose abgetropft",
+     "amount": 100,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "pfeffer",
+     "name": "Pfeffer",
+     "normalizedName": "pfeffer",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Thunfisch abtropfen lassen und mit Joghurt, Salz und Pfeffer verrühren.",
+    "Gurke in feine Streifen schneiden, Mais abtropfen lassen.",
+    "Wraps mit Thunfischcreme bestreichen, Gemüse darauf verteilen und fest einrollen."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 0,
+   "totalMinutes": 10,
+   "difficulty": "leicht",
+   "devices": [],
+   "mealPrep": false,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 520,
+    "protein": 32,
+    "carbs": 71.3,
+    "fat": 10.6,
+    "fiber": 5.5,
+    "sugar": 9,
+    "salt": 2.42
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "fisch",
+    "gluten",
+    "laktose",
+    "milch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "laktosefrei möglich",
+    "proteinreich",
+    "günstig",
+    "schnell"
+   ]
+  },
+  {
+   "id": "linsen-dal",
+   "title": "Rotes Linsen-Dal mit Reis",
+   "description": "Cremiges Dal aus roten Linsen und Kokosmilch – vegan, sättigend und günstig.",
+   "emoji": "🍛",
+   "mealType": "abendessen",
+   "defaultServings": 4,
+   "ingredients": [
+    {
+     "ingredientId": "linsen_rot",
+     "name": "Rote Linsen (trocken)",
+     "normalizedName": "rote linsen trocken",
+     "amount": 250,
+     "unit": "g",
+     "category": "vegetarische Proteinquellen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "kokosmilch",
+     "name": "Kokosmilch (light)",
+     "normalizedName": "kokosmilch light",
+     "amount": 400,
+     "unit": "ml",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "tomaten_dose",
+     "name": "Gehackte Tomaten (Dose)",
+     "normalizedName": "gehackte tomaten dose",
+     "amount": 400,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zwiebel",
+     "name": "Zwiebel",
+     "normalizedName": "zwiebel",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "knoblauch",
+     "name": "Knoblauchzehe",
+     "normalizedName": "knoblauchzehe",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "gemuesebruehe",
+     "name": "Gemüsebrühe (zubereitet)",
+     "normalizedName": "gemüsebrühe zubereitet",
+     "amount": 600,
+     "unit": "ml",
+     "category": "Soßen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "sellerie"
+     ]
+    },
+    {
+     "ingredientId": "reis",
+     "name": "Reis (trocken)",
+     "normalizedName": "reis trocken",
+     "amount": 200,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "currypulver",
+     "name": "Currypulver",
+     "normalizedName": "currypulver",
+     "amount": 2,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "senf",
+      "sellerie"
+     ]
+    },
+    {
+     "ingredientId": "kurkuma",
+     "name": "Kurkuma",
+     "normalizedName": "kurkuma",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "kreuzkuemmel",
+     "name": "Kreuzkümmel",
+     "normalizedName": "kreuzkümmel",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Zwiebel und Knoblauch fein würfeln und in einem Topf kurz anschwitzen.",
+    "Gewürze zugeben und eine Minute rösten.",
+    "Linsen abspülen und mit Brühe, Tomaten und Kokosmilch in den Topf geben.",
+    "Etwa 20 Minuten köcheln lassen, bis die Linsen zerfallen.",
+    "Mit dem gegarten Reis servieren."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 25,
+   "totalMinutes": 35,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": true,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 503,
+    "protein": 21.4,
+    "carbs": 78.8,
+    "fat": 8.8,
+    "fiber": 8.9,
+    "sugar": 7.3,
+    "salt": 1.52
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "sellerie",
+    "senf"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegan",
+    "vegetarisch",
+    "glutenfrei",
+    "laktosefrei",
+    "günstig",
+    "Meal Prep"
+   ]
+  },
+  {
+   "id": "mikrowellen-omelett-becher",
+   "title": "Mikrowellen-Omelett im Becher",
+   "description": "Ein schnelles Omelett direkt in der Tasse – ohne Pfanne und ohne Abwasch.",
+   "emoji": "☕",
+   "mealType": "fruehstueck",
+   "defaultServings": 1,
+   "ingredients": [
+    {
+     "ingredientId": "eier",
+     "name": "Eier",
+     "normalizedName": "eier",
+     "amount": 3,
+     "unit": "Stück",
+     "category": "vegetarische Proteinquellen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "eier"
+     ]
+    },
+    {
+     "ingredientId": "spinat",
+     "name": "Blattspinat (TK)",
+     "normalizedName": "blattspinat tk",
+     "amount": 50,
+     "unit": "g",
+     "category": "Tiefkühlprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "reibekaese",
+     "name": "Geriebener Gouda",
+     "normalizedName": "geriebener gouda",
+     "amount": 30,
+     "unit": "g",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch"
+     ]
+    },
+    {
+     "ingredientId": "tomate",
+     "name": "Tomate",
+     "normalizedName": "tomate",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "pfeffer",
+     "name": "Pfeffer",
+     "normalizedName": "pfeffer",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Eier in einem großen, mikrowellengeeigneten Becher verquirlen.",
+    "Aufgetauten Spinat, gewürfelte Tomate und Käse unterrühren, würzen.",
+    "Bei 800 Watt 60 Sekunden garen, umrühren und weitere 45–60 Sekunden garen, bis das Ei gestockt ist."
+   ],
+   "preparationMinutes": 3,
+   "cookingMinutes": 2,
+   "totalMinutes": 5,
+   "difficulty": "leicht",
+   "devices": [
+    "mikrowelle"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 388,
+    "protein": 32.3,
+    "carbs": 4.8,
+    "fat": 25.6,
+    "fiber": 2.5,
+    "sugar": 4.1,
+    "salt": 1.28
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "eier",
+    "milch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegetarisch",
+    "glutenfrei",
+    "laktosefrei",
+    "proteinreich",
+    "kalorienarm",
+    "Low Carb",
+    "günstig",
+    "Mikrowelle",
+    "schnell"
+   ]
+  },
+  {
+   "id": "lachs-ofengemuese",
+   "title": "Lachs mit Ofengemüse und Kartoffeln",
+   "description": "Ein Blech, wenig Arbeit: Lachs, Kartoffeln und Gemüse garen gemeinsam im Ofen.",
+   "emoji": "🐟",
+   "mealType": "abendessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "lachs",
+     "name": "Lachsfilet",
+     "normalizedName": "lachsfilet",
+     "amount": 250,
+     "unit": "g",
+     "category": "Fleisch und Fisch",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "fisch"
+     ]
+    },
+    {
+     "ingredientId": "kartoffeln",
+     "name": "Kartoffeln",
+     "normalizedName": "kartoffeln",
+     "amount": 500,
+     "unit": "g",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zucchini",
+     "name": "Zucchini",
+     "normalizedName": "zucchini",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "paprika",
+     "name": "Paprika",
+     "normalizedName": "paprika",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "olivenoel",
+     "name": "Olivenöl",
+     "normalizedName": "olivenöl",
+     "amount": 15,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zitronensaft",
+     "name": "Zitronensaft",
+     "normalizedName": "zitronensaft",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Obst",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "italienische_kraeuter",
+     "name": "Italienische Kräuter",
+     "normalizedName": "italienische kräuter",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "pfeffer",
+     "name": "Pfeffer",
+     "normalizedName": "pfeffer",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Backofen auf 200 °C Ober-/Unterhitze vorheizen.",
+    "Kartoffeln vierteln, mit der Hälfte des Öls und Salz mischen und 15 Minuten backen.",
+    "Zucchini und Paprika in Stücke schneiden, mit restlichem Öl und Kräutern zu den Kartoffeln geben.",
+    "Lachs dazulegen, mit Zitronensaft beträufeln und alles weitere 15 Minuten garen."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 30,
+   "totalMinutes": 40,
+   "difficulty": "leicht",
+   "devices": [
+    "backofen"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 3,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 549,
+    "protein": 32.7,
+    "carbs": 45,
+    "fat": 24,
+    "fiber": 9.3,
+    "sugar": 7.8,
+    "salt": 0.13
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "fisch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "glutenfrei",
+    "laktosefrei",
+    "proteinreich"
+   ]
+  },
+  {
+   "id": "suesskartoffel-wedges-quarkdip",
+   "title": "Airfryer-Süßkartoffel-Wedges mit Kräuterquark",
+   "description": "Knusprige Süßkartoffelspalten mit eiweißreichem Knoblauch-Quark-Dip.",
+   "emoji": "🍠",
+   "mealType": "abendessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "suesskartoffel",
+     "name": "Süßkartoffel",
+     "normalizedName": "süsskartoffel",
+     "amount": 500,
+     "unit": "g",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "olivenoel",
+     "name": "Olivenöl",
+     "normalizedName": "olivenöl",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "magerquark",
+     "name": "Magerquark",
+     "normalizedName": "magerquark",
+     "amount": 250,
+     "unit": "g",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "knoblauch",
+     "name": "Knoblauchzehe",
+     "normalizedName": "knoblauchzehe",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "paprikapulver",
+     "name": "Paprikapulver",
+     "normalizedName": "paprikapulver",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "schnittlauch",
+     "name": "Schnittlauch",
+     "normalizedName": "schnittlauch",
+     "amount": 1,
+     "unit": "EL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Süßkartoffeln in Spalten schneiden, mit Öl, Paprikapulver und Salz mischen.",
+    "Im Airfryer bei 200 °C etwa 18 Minuten garen, zwischendurch schütteln.",
+    "Quark mit gepresstem Knoblauch, Schnittlauch und etwas Salz verrühren.",
+    "Wedges mit dem Dip servieren."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 18,
+   "totalMinutes": 28,
+   "difficulty": "leicht",
+   "devices": [
+    "airfryer"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 340,
+    "protein": 19.1,
+    "carbs": 50.6,
+    "fat": 5.2,
+    "fiber": 7.5,
+    "sugar": 15,
+    "salt": 0.38
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "laktose",
+    "milch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegetarisch",
+    "glutenfrei",
+    "laktosefrei möglich",
+    "kalorienarm",
+    "günstig",
+    "Airfryer"
+   ]
+  },
+  {
+   "id": "putenpfanne-brokkoli",
+   "title": "Putenpfanne mit Brokkoli und Reis",
+   "description": "Mageres Putenfleisch mit Brokkoli in würziger Sojasoße.",
+   "emoji": "🥦",
+   "mealType": "mittagessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "putenbrust",
+     "name": "Putenbrustfilet",
+     "normalizedName": "putenbrustfilet",
+     "amount": 300,
+     "unit": "g",
+     "category": "Fleisch und Fisch",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "brokkoli",
+     "name": "Brokkoli",
+     "normalizedName": "brokkoli",
+     "amount": 300,
+     "unit": "g",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "reis",
+     "name": "Reis (trocken)",
+     "normalizedName": "reis trocken",
+     "amount": 150,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "sojasosse",
+     "name": "Sojasoße",
+     "normalizedName": "sojasosse",
+     "amount": 20,
+     "unit": "ml",
+     "category": "Soßen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "soja",
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "rapsoel",
+     "name": "Rapsöl",
+     "normalizedName": "rapsöl",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "knoblauch",
+     "name": "Knoblauchzehe",
+     "normalizedName": "knoblauchzehe",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "ingwer",
+     "name": "Ingwerpulver",
+     "normalizedName": "ingwerpulver",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "chili",
+     "name": "Chiliflocken",
+     "normalizedName": "chiliflocken",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Reis garen.",
+    "Pute in Streifen schneiden und im Öl scharf anbraten.",
+    "Brokkoliröschen und gehackten Knoblauch zugeben, 5 Minuten mitbraten.",
+    "Mit Sojasoße, Ingwer und Chili abschmecken und mit Reis servieren."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 15,
+   "totalMinutes": 25,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": true,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 522,
+    "protein": 47,
+    "carbs": 64.2,
+    "fat": 7.1,
+    "fiber": 5.6,
+    "sugar": 2.5,
+    "salt": 1.76
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "gluten",
+    "soja"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "glutenfrei möglich",
+    "laktosefrei",
+    "proteinreich",
+    "Meal Prep"
+   ]
+  },
+  {
+   "id": "kichererbsen-curry-spinat",
+   "title": "Kichererbsen-Curry mit Spinat",
+   "description": "Mildes Curry mit Kichererbsen, Tomaten und Spinat – vegan und gut vorzubereiten.",
+   "emoji": "🥥",
+   "mealType": "abendessen",
+   "defaultServings": 3,
+   "ingredients": [
+    {
+     "ingredientId": "kichererbsen",
+     "name": "Kichererbsen (Dose, abgetropft)",
+     "normalizedName": "kichererbsen dose abgetropft",
+     "amount": 500,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "kokosmilch",
+     "name": "Kokosmilch (light)",
+     "normalizedName": "kokosmilch light",
+     "amount": 400,
+     "unit": "ml",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "spinat",
+     "name": "Blattspinat (TK)",
+     "normalizedName": "blattspinat tk",
+     "amount": 200,
+     "unit": "g",
+     "category": "Tiefkühlprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "tomaten_dose",
+     "name": "Gehackte Tomaten (Dose)",
+     "normalizedName": "gehackte tomaten dose",
+     "amount": 400,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zwiebel",
+     "name": "Zwiebel",
+     "normalizedName": "zwiebel",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "reis",
+     "name": "Reis (trocken)",
+     "normalizedName": "reis trocken",
+     "amount": 150,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "currypulver",
+     "name": "Currypulver",
+     "normalizedName": "currypulver",
+     "amount": 2,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "senf",
+      "sellerie"
+     ]
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Zwiebel würfeln und in einem Topf anschwitzen, Currypulver kurz mitrösten.",
+    "Tomaten, Kokosmilch und abgetropfte Kichererbsen zugeben, 15 Minuten köcheln lassen.",
+    "Spinat einrühren und weitere 5 Minuten garen.",
+    "Mit Reis servieren."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 20,
+   "totalMinutes": 30,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": true,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 530,
+    "protein": 20.1,
+    "carbs": 72.5,
+    "fat": 14.4,
+    "fiber": 14.1,
+    "sugar": 8.6,
+    "salt": 1.1
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "sellerie",
+    "senf"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegan",
+    "vegetarisch",
+    "glutenfrei",
+    "laktosefrei",
+    "günstig",
+    "Meal Prep"
+   ]
+  },
+  {
+   "id": "tofu-gemuese-reispfanne",
+   "title": "Tofu-Gemüse-Reispfanne",
+   "description": "Gebratener Tofu mit Pfannengemüse und Reis, abgerundet mit Sesamöl.",
+   "emoji": "🥢",
+   "mealType": "abendessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "tofu",
+     "name": "Tofu natur",
+     "normalizedName": "tofu natur",
+     "amount": 400,
+     "unit": "g",
+     "category": "vegetarische Proteinquellen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "soja"
+     ]
+    },
+    {
+     "ingredientId": "tk_gemuese",
+     "name": "Gemüsemischung (TK)",
+     "normalizedName": "gemüsemischung tk",
+     "amount": 400,
+     "unit": "g",
+     "category": "Tiefkühlprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "reis",
+     "name": "Reis (trocken)",
+     "normalizedName": "reis trocken",
+     "amount": 150,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "sojasosse",
+     "name": "Sojasoße",
+     "normalizedName": "sojasosse",
+     "amount": 30,
+     "unit": "ml",
+     "category": "Soßen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "soja",
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "sesamoel",
+     "name": "Sesamöl",
+     "normalizedName": "sesamöl",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "sesam"
+     ]
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "chili",
+     "name": "Chiliflocken",
+     "normalizedName": "chiliflocken",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Reis garen.",
+    "Tofu trocken tupfen, würfeln und im Sesamöl rundum goldbraun braten.",
+    "Gemüse zugeben und 8 Minuten mitbraten.",
+    "Reis unterheben und mit Sojasoße und Chili abschmecken."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 20,
+   "totalMinutes": 30,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 653,
+    "protein": 37.8,
+    "carbs": 74.4,
+    "fat": 20.8,
+    "fiber": 10,
+    "sugar": 7.3,
+    "salt": 2.39
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "gluten",
+    "sesam",
+    "soja"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegan",
+    "vegetarisch",
+    "glutenfrei möglich",
+    "laktosefrei",
+    "proteinreich"
+   ]
+  },
+  {
+   "id": "quark-beeren-bowl",
+   "title": "Quark-Beeren-Bowl",
+   "description": "Cremiger Magerquark mit Beeren und Haferflocken – viel Eiweiß, wenig Aufwand.",
+   "emoji": "🫐",
+   "mealType": "snack",
+   "defaultServings": 1,
+   "ingredients": [
+    {
+     "ingredientId": "magerquark",
+     "name": "Magerquark",
+     "normalizedName": "magerquark",
+     "amount": 250,
+     "unit": "g",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "beeren",
+     "name": "Beerenmischung (TK)",
+     "normalizedName": "beerenmischung tk",
+     "amount": 150,
+     "unit": "g",
+     "category": "Tiefkühlprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "haferflocken",
+     "name": "Haferflocken",
+     "normalizedName": "haferflocken",
+     "amount": 30,
+     "unit": "g",
+     "category": "Getreide",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "mandeln",
+     "name": "Mandeln",
+     "normalizedName": "mandeln",
+     "amount": 10,
+     "unit": "g",
+     "category": "Sonstiges",
+     "optional": true,
+     "substitutes": [],
+     "allergenTags": [
+      "nuesse"
+     ]
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "zimt",
+     "name": "Zimt",
+     "normalizedName": "zimt",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Beeren antauen lassen oder kurz in der Mikrowelle erwärmen.",
+    "Quark glatt rühren und in eine Schale geben.",
+    "Mit Beeren, Haferflocken, Zimt und optional gehackten Mandeln toppen."
+   ],
+   "preparationMinutes": 5,
+   "cookingMinutes": 0,
+   "totalMinutes": 5,
+   "difficulty": "leicht",
+   "devices": [],
+   "mealPrep": false,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 339,
+    "protein": 35.3,
+    "carbs": 38.2,
+    "fat": 3.5,
+    "fiber": 9,
+    "sugar": 19.3,
+    "salt": 0.26
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "gluten",
+    "laktose",
+    "milch",
+    "nuesse"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegetarisch",
+    "laktosefrei möglich",
+    "proteinreich",
+    "kalorienarm",
+    "günstig",
+    "schnell"
+   ]
+  },
+  {
+   "id": "protein-pfannkuchen",
+   "title": "Protein-Pfannkuchen mit Banane",
+   "description": "Fluffige Haferpfannkuchen mit Banane und Proteinpulver.",
+   "emoji": "🥞",
+   "mealType": "fruehstueck",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "eier",
+     "name": "Eier",
+     "normalizedName": "eier",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "vegetarische Proteinquellen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "eier"
+     ]
+    },
+    {
+     "ingredientId": "haferflocken",
+     "name": "Haferflocken",
+     "normalizedName": "haferflocken",
+     "amount": 80,
+     "unit": "g",
+     "category": "Getreide",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "banane",
+     "name": "Banane",
+     "normalizedName": "banane",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Obst",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "milch",
+     "name": "Milch (1,5 % Fett)",
+     "normalizedName": "milch 1 5 % fett",
+     "amount": 150,
+     "unit": "ml",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "proteinpulver",
+     "name": "Proteinpulver (Whey, neutral)",
+     "normalizedName": "proteinpulver whey neutral",
+     "amount": 30,
+     "unit": "g",
+     "category": "Sonstiges",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "rapsoel",
+     "name": "Rapsöl",
+     "normalizedName": "rapsöl",
+     "amount": 5,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "zimt",
+     "name": "Zimt",
+     "normalizedName": "zimt",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Haferflocken fein mahlen oder mit einer Gabel zerdrücken.",
+    "Banane zerdrücken und mit Eiern, Milch, Proteinpulver, Haferflocken und Zimt verrühren.",
+    "Teig 5 Minuten quellen lassen.",
+    "In einer leicht geölten Pfanne kleine Pfannkuchen von beiden Seiten je 2 Minuten backen."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 10,
+   "totalMinutes": 20,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 399,
+    "protein": 27.4,
+    "carbs": 40.8,
+    "fat": 13,
+    "fiber": 5.2,
+    "sugar": 15.4,
+    "salt": 0.37
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "eier",
+    "gluten",
+    "laktose",
+    "milch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegetarisch",
+    "laktosefrei möglich",
+    "proteinreich",
+    "kalorienarm",
+    "schnell"
+   ]
+  },
+  {
+   "id": "vollkornnudeln-haehnchen-tomate",
+   "title": "Vollkornnudeln mit Hähnchen-Tomatensoße",
+   "description": "Herzhafte Tomatensoße mit Hähnchenwürfeln zu Vollkornnudeln – gut für Meal Prep.",
+   "emoji": "🍝",
+   "mealType": "mittagessen",
+   "defaultServings": 3,
+   "ingredients": [
+    {
+     "ingredientId": "nudeln",
+     "name": "Vollkornnudeln (trocken)",
+     "normalizedName": "vollkornnudeln trocken",
+     "amount": 250,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "haehnchenbrust",
+     "name": "Hähnchenbrustfilet",
+     "normalizedName": "hähnchenbrustfilet",
+     "amount": 350,
+     "unit": "g",
+     "category": "Fleisch und Fisch",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "passierte_tomaten",
+     "name": "Passierte Tomaten",
+     "normalizedName": "passierte tomaten",
+     "amount": 500,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zwiebel",
+     "name": "Zwiebel",
+     "normalizedName": "zwiebel",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "knoblauch",
+     "name": "Knoblauchzehe",
+     "normalizedName": "knoblauchzehe",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "olivenoel",
+     "name": "Olivenöl",
+     "normalizedName": "olivenöl",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "oregano",
+     "name": "Oregano",
+     "normalizedName": "oregano",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "pfeffer",
+     "name": "Pfeffer",
+     "normalizedName": "pfeffer",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Nudeln nach Packungsangabe kochen.",
+    "Hähnchen würfeln und im Öl anbraten.",
+    "Zwiebel und Knoblauch zugeben, kurz mitbraten.",
+    "Passierte Tomaten und Oregano einrühren und 10 Minuten köcheln lassen.",
+    "Mit Salz und Pfeffer abschmecken und mit den Nudeln mischen."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 20,
+   "totalMinutes": 30,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": true,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 503,
+    "protein": 40.3,
+    "carbs": 62.9,
+    "fat": 7.3,
+    "fiber": 9.7,
+    "sugar": 9.7,
+    "salt": 0.36
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "gluten"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "glutenfrei möglich",
+    "laktosefrei",
+    "proteinreich",
+    "Meal Prep"
+   ]
+  },
+  {
+   "id": "bolognese-leicht",
+   "title": "Leichte Spaghetti Bolognese",
+   "description": "Bolognese mit magerem Hack und viel Gemüse in der Soße.",
+   "emoji": "🍅",
+   "mealType": "abendessen",
+   "defaultServings": 4,
+   "ingredients": [
+    {
+     "ingredientId": "rinderhack",
+     "name": "Rinderhackfleisch (mager)",
+     "normalizedName": "rinderhackfleisch mager",
+     "amount": 400,
+     "unit": "g",
+     "category": "Fleisch und Fisch",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "nudeln",
+     "name": "Vollkornnudeln (trocken)",
+     "normalizedName": "vollkornnudeln trocken",
+     "amount": 400,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "passierte_tomaten",
+     "name": "Passierte Tomaten",
+     "normalizedName": "passierte tomaten",
+     "amount": 700,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "karotte",
+     "name": "Karotte",
+     "normalizedName": "karotte",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zwiebel",
+     "name": "Zwiebel",
+     "normalizedName": "zwiebel",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "tomatenmark",
+     "name": "Tomatenmark",
+     "normalizedName": "tomatenmark",
+     "amount": 30,
+     "unit": "g",
+     "category": "Soßen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "oregano",
+     "name": "Oregano",
+     "normalizedName": "oregano",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "pfeffer",
+     "name": "Pfeffer",
+     "normalizedName": "pfeffer",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Karotten und Zwiebel fein würfeln.",
+    "Hack krümelig anbraten, Gemüse zugeben und 5 Minuten mitbraten.",
+    "Tomatenmark kurz anrösten, dann passierte Tomaten und Gewürze zugeben.",
+    "Soße 20 Minuten köcheln lassen, währenddessen Nudeln kochen."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 30,
+   "totalMinutes": 40,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": true,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 574,
+    "protein": 37.2,
+    "carbs": 76.8,
+    "fat": 10,
+    "fiber": 12.6,
+    "sugar": 13,
+    "salt": 0.39
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "gluten"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "glutenfrei möglich",
+    "laktosefrei",
+    "proteinreich",
+    "Meal Prep"
+   ]
+  },
+  {
+   "id": "seelachs-airfryer-kartoffeln",
+   "title": "Seelachs aus dem Airfryer mit Kartoffeln und Erbsen",
+   "description": "Zarter Seelachs mit Paprikakruste, dazu Salzkartoffeln und Erbsen.",
+   "emoji": "🐠",
+   "mealType": "mittagessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "seelachs",
+     "name": "Seelachsfilet (TK)",
+     "normalizedName": "seelachsfilet tk",
+     "amount": 300,
+     "unit": "g",
+     "category": "Tiefkühlprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "fisch"
+     ]
+    },
+    {
+     "ingredientId": "kartoffeln",
+     "name": "Kartoffeln",
+     "normalizedName": "kartoffeln",
+     "amount": 500,
+     "unit": "g",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "erbsen",
+     "name": "Erbsen (TK)",
+     "normalizedName": "erbsen tk",
+     "amount": 200,
+     "unit": "g",
+     "category": "Tiefkühlprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "rapsoel",
+     "name": "Rapsöl",
+     "normalizedName": "rapsöl",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zitronensaft",
+     "name": "Zitronensaft",
+     "normalizedName": "zitronensaft",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Obst",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "paprikapulver",
+     "name": "Paprikapulver",
+     "normalizedName": "paprikapulver",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "pfeffer",
+     "name": "Pfeffer",
+     "normalizedName": "pfeffer",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Kartoffeln schälen, halbieren und in Salzwasser 20 Minuten kochen.",
+    "Fisch antauen lassen, trocken tupfen, mit Öl und Gewürzen bestreichen.",
+    "Im Airfryer bei 190 °C etwa 12 Minuten garen.",
+    "Erbsen in wenig Wasser 4 Minuten garen, Fisch mit Zitronensaft beträufeln und alles servieren."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 22,
+   "totalMinutes": 32,
+   "difficulty": "leicht",
+   "devices": [
+    "airfryer",
+    "herd"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 430,
+    "protein": 37.5,
+    "carbs": 48.9,
+    "fat": 6.7,
+    "fiber": 10.5,
+    "sugar": 6.1,
+    "salt": 0.3
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "fisch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "glutenfrei",
+    "laktosefrei",
+    "proteinreich",
+    "kalorienarm",
+    "Airfryer"
+   ]
+  },
+  {
+   "id": "garnelen-reisnudel-pfanne",
+   "title": "Garnelen-Reisnudel-Pfanne",
+   "description": "Asiatisch inspirierte Pfanne mit Garnelen, Paprika und Frühlingszwiebeln.",
+   "emoji": "🦐",
+   "mealType": "abendessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "garnelen",
+     "name": "Garnelen (TK)",
+     "normalizedName": "garnelen tk",
+     "amount": 250,
+     "unit": "g",
+     "category": "Tiefkühlprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "schalentiere"
+     ]
+    },
+    {
+     "ingredientId": "reisnudeln",
+     "name": "Reisnudeln (trocken)",
+     "normalizedName": "reisnudeln trocken",
+     "amount": 150,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "paprika",
+     "name": "Paprika",
+     "normalizedName": "paprika",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "fruehlingszwiebel",
+     "name": "Frühlingszwiebel",
+     "normalizedName": "frühlingszwiebel",
+     "amount": 3,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "sojasosse",
+     "name": "Sojasoße",
+     "normalizedName": "sojasosse",
+     "amount": 20,
+     "unit": "ml",
+     "category": "Soßen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "soja",
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "rapsoel",
+     "name": "Rapsöl",
+     "normalizedName": "rapsöl",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "knoblauch",
+     "name": "Knoblauchzehe",
+     "normalizedName": "knoblauchzehe",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "chili",
+     "name": "Chiliflocken",
+     "normalizedName": "chiliflocken",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Reisnudeln nach Packungsangabe einweichen oder garen.",
+    "Garnelen auftauen und trocken tupfen.",
+    "Paprika in Streifen, Frühlingszwiebeln in Ringe schneiden.",
+    "Garnelen mit Knoblauch im Öl 3 Minuten braten, Gemüse zugeben und 3 Minuten mitbraten.",
+    "Nudeln und Sojasoße unterheben und mit Chili abschmecken."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 10,
+   "totalMinutes": 20,
+   "difficulty": "mittel",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 3,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 438,
+    "protein": 26.6,
+    "carbs": 66.3,
+    "fat": 6.6,
+    "fiber": 4.3,
+    "sugar": 3.8,
+    "salt": 2.29
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "gluten",
+    "schalentiere",
+    "soja"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "glutenfrei möglich",
+    "laktosefrei",
+    "proteinreich",
+    "kalorienarm",
+    "schnell"
+   ]
+  },
+  {
+   "id": "griechischer-kichererbsensalat",
+   "title": "Griechischer Salat mit Kichererbsen",
+   "description": "Frischer Salat mit Kichererbsen, Feta und Zitronendressing – ohne Kochen.",
+   "emoji": "🥗",
+   "mealType": "mittagessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "kichererbsen",
+     "name": "Kichererbsen (Dose, abgetropft)",
+     "normalizedName": "kichererbsen dose abgetropft",
+     "amount": 250,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "gurke",
+     "name": "Salatgurke",
+     "normalizedName": "salatgurke",
+     "amount": 300,
+     "unit": "g",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "tomate",
+     "name": "Tomate",
+     "normalizedName": "tomate",
+     "amount": 3,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "feta",
+     "name": "Feta",
+     "normalizedName": "feta",
+     "amount": 100,
+     "unit": "g",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "zwiebel",
+     "name": "Zwiebel",
+     "normalizedName": "zwiebel",
+     "amount": 0.5,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "olivenoel",
+     "name": "Olivenöl",
+     "normalizedName": "olivenöl",
+     "amount": 15,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zitronensaft",
+     "name": "Zitronensaft",
+     "normalizedName": "zitronensaft",
+     "amount": 15,
+     "unit": "ml",
+     "category": "Obst",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "oregano",
+     "name": "Oregano",
+     "normalizedName": "oregano",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Kichererbsen abspülen und abtropfen lassen.",
+    "Gurke, Tomaten und Zwiebel in mundgerechte Stücke schneiden.",
+    "Öl, Zitronensaft, Oregano und Salz verrühren.",
+    "Alles mischen und den Feta darüberbröseln."
+   ],
+   "preparationMinutes": 15,
+   "cookingMinutes": 0,
+   "totalMinutes": 15,
+   "difficulty": "leicht",
+   "devices": [],
+   "mealPrep": false,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 401,
+    "protein": 19.9,
+    "carbs": 27.4,
+    "fat": 21,
+    "fiber": 10.4,
+    "sugar": 8.2,
+    "salt": 2.13
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "laktose",
+    "milch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegetarisch",
+    "glutenfrei",
+    "kalorienarm",
+    "schnell"
+   ]
+  },
+  {
+   "id": "huettenkaese-gemuese-wrap",
+   "title": "Hüttenkäse-Gemüse-Wrap",
+   "description": "Leichter Wrap mit Hüttenkäse, Paprika, Karotte und Mais.",
+   "emoji": "🫔",
+   "mealType": "snack",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "wraps",
+     "name": "Weizen-Tortilla-Wraps",
+     "normalizedName": "weizen-tortilla-wraps",
+     "amount": 4,
+     "unit": "Stück",
+     "category": "Getreide",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "huettenkaese",
+     "name": "Hüttenkäse",
+     "normalizedName": "hüttenkäse",
+     "amount": 400,
+     "unit": "g",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "paprika",
+     "name": "Paprika",
+     "normalizedName": "paprika",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "karotte",
+     "name": "Karotte",
+     "normalizedName": "karotte",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "mais",
+     "name": "Mais (Dose, abgetropft)",
+     "normalizedName": "mais dose abgetropft",
+     "amount": 100,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "pfeffer",
+     "name": "Pfeffer",
+     "normalizedName": "pfeffer",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "schnittlauch",
+     "name": "Schnittlauch",
+     "normalizedName": "schnittlauch",
+     "amount": 1,
+     "unit": "EL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Paprika würfeln, Karotte raspeln, Mais abtropfen lassen.",
+    "Hüttenkäse mit Gemüse, Schnittlauch und Pfeffer mischen.",
+    "Füllung auf die Wraps verteilen und einrollen."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 0,
+   "totalMinutes": 10,
+   "difficulty": "leicht",
+   "devices": [],
+   "mealPrep": false,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 643,
+    "protein": 36.2,
+    "carbs": 80.7,
+    "fat": 18.3,
+    "fiber": 9.2,
+    "sugar": 16.8,
+    "salt": 3.33
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "gluten",
+    "laktose",
+    "milch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegetarisch",
+    "laktosefrei möglich",
+    "proteinreich",
+    "günstig",
+    "schnell"
+   ]
+  },
+  {
+   "id": "mikrowellen-kartoffeln-kraeuterquark",
+   "title": "Mikrowellen-Kartoffeln mit Kräuterquark",
+   "description": "Kartoffeln in der Mikrowelle gegart, dazu frischer Kräuterquark – günstig und eiweißreich.",
+   "emoji": "🥔",
+   "mealType": "abendessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "kartoffeln",
+     "name": "Kartoffeln",
+     "normalizedName": "kartoffeln",
+     "amount": 600,
+     "unit": "g",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "magerquark",
+     "name": "Magerquark",
+     "normalizedName": "magerquark",
+     "amount": 300,
+     "unit": "g",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "fruehlingszwiebel",
+     "name": "Frühlingszwiebel",
+     "normalizedName": "frühlingszwiebel",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "schnittlauch",
+     "name": "Schnittlauch",
+     "normalizedName": "schnittlauch",
+     "amount": 1,
+     "unit": "EL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "pfeffer",
+     "name": "Pfeffer",
+     "normalizedName": "pfeffer",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Kartoffeln waschen, mehrfach einstechen und in eine mikrowellengeeignete Schale mit 2 EL Wasser geben.",
+    "Abgedeckt bei 800 Watt 10–12 Minuten garen, bis sie weich sind.",
+    "Quark mit Frühlingszwiebeln, Schnittlauch, Salz und Pfeffer verrühren.",
+    "Kartoffeln aufschneiden und mit dem Quark servieren."
+   ],
+   "preparationMinutes": 5,
+   "cookingMinutes": 12,
+   "totalMinutes": 17,
+   "difficulty": "leicht",
+   "devices": [
+    "mikrowelle"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 330,
+    "protein": 24.3,
+    "carbs": 51.8,
+    "fat": 0.8,
+    "fiber": 6.4,
+    "sugar": 8.7,
+    "salt": 0.15
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "laktose",
+    "milch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegetarisch",
+    "glutenfrei",
+    "laktosefrei möglich",
+    "kalorienarm",
+    "günstig",
+    "Mikrowelle",
+    "schnell"
+   ]
+  },
+  {
+   "id": "airfryer-tofu-brokkoli",
+   "title": "Knusprige Airfryer-Tofuwürfel mit Brokkoli",
+   "description": "Tofu wird im Airfryer außen knusprig – dazu gerösteter Brokkoli.",
+   "emoji": "🧆",
+   "mealType": "abendessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "tofu",
+     "name": "Tofu natur",
+     "normalizedName": "tofu natur",
+     "amount": 400,
+     "unit": "g",
+     "category": "vegetarische Proteinquellen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "soja"
+     ]
+    },
+    {
+     "ingredientId": "brokkoli",
+     "name": "Brokkoli",
+     "normalizedName": "brokkoli",
+     "amount": 400,
+     "unit": "g",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "sojasosse",
+     "name": "Sojasoße",
+     "normalizedName": "sojasosse",
+     "amount": 20,
+     "unit": "ml",
+     "category": "Soßen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "soja",
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "rapsoel",
+     "name": "Rapsöl",
+     "normalizedName": "rapsöl",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "knoblauchpulver",
+     "name": "Knoblauchpulver",
+     "normalizedName": "knoblauchpulver",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "paprikapulver",
+     "name": "Paprikapulver",
+     "normalizedName": "paprikapulver",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Tofu gut ausdrücken und würfeln, mit Sojasoße, Öl und Gewürzen mischen.",
+    "Im Airfryer bei 200 °C 12 Minuten garen.",
+    "Brokkoliröschen zugeben und weitere 8 Minuten garen, dabei einmal schütteln."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 20,
+   "totalMinutes": 30,
+   "difficulty": "leicht",
+   "devices": [
+    "airfryer"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 367,
+    "protein": 32.8,
+    "carbs": 9.6,
+    "fat": 20.4,
+    "fiber": 8.1,
+    "sugar": 4.1,
+    "salt": 1.64
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "gluten",
+    "soja"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegan",
+    "vegetarisch",
+    "glutenfrei möglich",
+    "laktosefrei",
+    "proteinreich",
+    "kalorienarm",
+    "Low Carb",
+    "Airfryer"
+   ]
+  },
+  {
+   "id": "haehnchen-meal-prep-boxen",
+   "title": "Hähnchen-Gemüse-Meal-Prep-Boxen",
+   "description": "Vier Mittagessen auf einmal: Ofenhähnchen, Brokkoli, Paprika und Reis.",
+   "emoji": "📦",
+   "mealType": "mittagessen",
+   "defaultServings": 4,
+   "ingredients": [
+    {
+     "ingredientId": "haehnchenbrust",
+     "name": "Hähnchenbrustfilet",
+     "normalizedName": "hähnchenbrustfilet",
+     "amount": 800,
+     "unit": "g",
+     "category": "Fleisch und Fisch",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "reis",
+     "name": "Reis (trocken)",
+     "normalizedName": "reis trocken",
+     "amount": 250,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "brokkoli",
+     "name": "Brokkoli",
+     "normalizedName": "brokkoli",
+     "amount": 600,
+     "unit": "g",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "paprika",
+     "name": "Paprika",
+     "normalizedName": "paprika",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "olivenoel",
+     "name": "Olivenöl",
+     "normalizedName": "olivenöl",
+     "amount": 20,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "paprikapulver",
+     "name": "Paprikapulver",
+     "normalizedName": "paprikapulver",
+     "amount": 2,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "currypulver",
+     "name": "Currypulver",
+     "normalizedName": "currypulver",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "senf",
+      "sellerie"
+     ]
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Backofen auf 200 °C vorheizen, Reis garen.",
+    "Hähnchen würfeln und mit der Hälfte des Öls und den Gewürzen mischen.",
+    "Hähnchen, Brokkoli und Paprikastücke auf einem Blech verteilen, mit restlichem Öl beträufeln.",
+    "Etwa 20 Minuten backen.",
+    "Alles auf vier Boxen verteilen, abkühlen lassen und bis zu drei Tage kühlen."
+   ],
+   "preparationMinutes": 15,
+   "cookingMinutes": 25,
+   "totalMinutes": 40,
+   "difficulty": "leicht",
+   "devices": [
+    "backofen",
+    "herd"
+   ],
+   "mealPrep": true,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 556,
+    "protein": 56,
+    "carbs": 57.3,
+    "fat": 8.8,
+    "fiber": 8.2,
+    "sugar": 5.6,
+    "salt": 0.38
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "sellerie",
+    "senf"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "glutenfrei",
+    "laktosefrei",
+    "proteinreich",
+    "Meal Prep"
+   ]
+  },
+  {
+   "id": "linsen-bolognese",
+   "title": "Rote-Linsen-Bolognese",
+   "description": "Vegane Bolognese mit roten Linsen – herzhaft, ballaststoffreich und günstig.",
+   "emoji": "🫘",
+   "mealType": "abendessen",
+   "defaultServings": 4,
+   "ingredients": [
+    {
+     "ingredientId": "linsen_rot",
+     "name": "Rote Linsen (trocken)",
+     "normalizedName": "rote linsen trocken",
+     "amount": 200,
+     "unit": "g",
+     "category": "vegetarische Proteinquellen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "nudeln",
+     "name": "Vollkornnudeln (trocken)",
+     "normalizedName": "vollkornnudeln trocken",
+     "amount": 400,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "passierte_tomaten",
+     "name": "Passierte Tomaten",
+     "normalizedName": "passierte tomaten",
+     "amount": 700,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "karotte",
+     "name": "Karotte",
+     "normalizedName": "karotte",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zwiebel",
+     "name": "Zwiebel",
+     "normalizedName": "zwiebel",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "knoblauch",
+     "name": "Knoblauchzehe",
+     "normalizedName": "knoblauchzehe",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "olivenoel",
+     "name": "Olivenöl",
+     "normalizedName": "olivenöl",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "oregano",
+     "name": "Oregano",
+     "normalizedName": "oregano",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "pfeffer",
+     "name": "Pfeffer",
+     "normalizedName": "pfeffer",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Zwiebel, Knoblauch und Karotten fein würfeln und im Öl anschwitzen.",
+    "Linsen abspülen und mit den passierten Tomaten und 300 ml Wasser zugeben.",
+    "Etwa 15 Minuten köcheln lassen, bis die Linsen weich sind.",
+    "Nudeln kochen und mit der Soße servieren."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 20,
+   "totalMinutes": 30,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": true,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 611,
+    "protein": 28,
+    "carbs": 101.4,
+    "fat": 6,
+    "fiber": 17.8,
+    "sugar": 13.1,
+    "salt": 0.25
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "gluten"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegan",
+    "vegetarisch",
+    "glutenfrei möglich",
+    "laktosefrei",
+    "proteinreich",
+    "günstig",
+    "Meal Prep"
+   ]
+  },
+  {
+   "id": "shakshuka",
+   "title": "Shakshuka mit Vollkornbrot",
+   "description": "In würziger Tomaten-Paprika-Soße pochierte Eier.",
+   "emoji": "🍳",
+   "mealType": "fruehstueck",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "eier",
+     "name": "Eier",
+     "normalizedName": "eier",
+     "amount": 5,
+     "unit": "Stück",
+     "category": "vegetarische Proteinquellen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "eier"
+     ]
+    },
+    {
+     "ingredientId": "tomaten_dose",
+     "name": "Gehackte Tomaten (Dose)",
+     "normalizedName": "gehackte tomaten dose",
+     "amount": 400,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "paprika",
+     "name": "Paprika",
+     "normalizedName": "paprika",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zwiebel",
+     "name": "Zwiebel",
+     "normalizedName": "zwiebel",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "knoblauch",
+     "name": "Knoblauchzehe",
+     "normalizedName": "knoblauchzehe",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "olivenoel",
+     "name": "Olivenöl",
+     "normalizedName": "olivenöl",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "vollkornbrot",
+     "name": "Vollkornbrot",
+     "normalizedName": "vollkornbrot",
+     "amount": 100,
+     "unit": "g",
+     "category": "Getreide",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "kreuzkuemmel",
+     "name": "Kreuzkümmel",
+     "normalizedName": "kreuzkümmel",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "paprikapulver",
+     "name": "Paprikapulver",
+     "normalizedName": "paprikapulver",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "chili",
+     "name": "Chiliflocken",
+     "normalizedName": "chiliflocken",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Zwiebel, Knoblauch und Paprika würfeln und im Öl 5 Minuten anbraten.",
+    "Gewürze und Tomaten zugeben, 10 Minuten einköcheln lassen.",
+    "Mulden in die Soße drücken, Eier hineingleiten lassen.",
+    "Zugedeckt 6–8 Minuten stocken lassen und mit Brot servieren."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 20,
+   "totalMinutes": 30,
+   "difficulty": "mittel",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 475,
+    "protein": 27,
+    "carbs": 40.4,
+    "fat": 20.5,
+    "fiber": 12.3,
+    "sugar": 17,
+    "salt": 1.28
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "eier",
+    "gluten"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegetarisch",
+    "laktosefrei",
+    "proteinreich",
+    "günstig"
+   ]
+  },
+  {
+   "id": "erdnuss-haehnchen-bowl",
+   "title": "Erdnuss-Hähnchen-Bowl",
+   "description": "Hähnchen mit cremiger Erdnusssoße, Reis, Karotte und Gurke.",
+   "emoji": "🥜",
+   "mealType": "mittagessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "haehnchenbrust",
+     "name": "Hähnchenbrustfilet",
+     "normalizedName": "hähnchenbrustfilet",
+     "amount": 300,
+     "unit": "g",
+     "category": "Fleisch und Fisch",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "reis",
+     "name": "Reis (trocken)",
+     "normalizedName": "reis trocken",
+     "amount": 150,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "erdnussmus",
+     "name": "Erdnussmus",
+     "normalizedName": "erdnussmus",
+     "amount": 30,
+     "unit": "g",
+     "category": "Sonstiges",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "erdnuesse"
+     ]
+    },
+    {
+     "ingredientId": "sojasosse",
+     "name": "Sojasoße",
+     "normalizedName": "sojasosse",
+     "amount": 20,
+     "unit": "ml",
+     "category": "Soßen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "soja",
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "karotte",
+     "name": "Karotte",
+     "normalizedName": "karotte",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "gurke",
+     "name": "Salatgurke",
+     "normalizedName": "salatgurke",
+     "amount": 150,
+     "unit": "g",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zitronensaft",
+     "name": "Zitronensaft",
+     "normalizedName": "zitronensaft",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Obst",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "chili",
+     "name": "Chiliflocken",
+     "normalizedName": "chiliflocken",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Reis garen.",
+    "Hähnchen in Streifen schneiden und ohne viel Fett anbraten.",
+    "Erdnussmus mit Sojasoße, Zitronensaft und 3 EL warmem Wasser glatt rühren.",
+    "Karotten raspeln, Gurke in Scheiben schneiden.",
+    "Reis, Hähnchen und Gemüse in Schalen anrichten und mit der Soße beträufeln."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 15,
+   "totalMinutes": 25,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 567,
+    "protein": 45.9,
+    "carbs": 69.1,
+    "fat": 10.5,
+    "fiber": 5,
+    "sugar": 6.3,
+    "salt": 1.81
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "erdnuesse",
+    "gluten",
+    "soja"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "glutenfrei möglich",
+    "laktosefrei",
+    "proteinreich"
+   ]
+  },
+  {
+   "id": "bananen-protein-shake",
+   "title": "Bananen-Protein-Shake",
+   "description": "Cremiger Shake nach dem Training – in zwei Minuten fertig.",
+   "emoji": "🥤",
+   "mealType": "snack",
+   "defaultServings": 1,
+   "ingredients": [
+    {
+     "ingredientId": "milch",
+     "name": "Milch (1,5 % Fett)",
+     "normalizedName": "milch 1 5 % fett",
+     "amount": 300,
+     "unit": "ml",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "proteinpulver",
+     "name": "Proteinpulver (Whey, neutral)",
+     "normalizedName": "proteinpulver whey neutral",
+     "amount": 30,
+     "unit": "g",
+     "category": "Sonstiges",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "banane",
+     "name": "Banane",
+     "normalizedName": "banane",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Obst",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "haferflocken",
+     "name": "Haferflocken",
+     "normalizedName": "haferflocken",
+     "amount": 20,
+     "unit": "g",
+     "category": "Getreide",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    }
+   ],
+   "spices": [],
+   "instructions": [
+    "Alle Zutaten in einen Mixer oder hohen Becher geben.",
+    "Fein pürieren und sofort trinken."
+   ],
+   "preparationMinutes": 2,
+   "cookingMinutes": 0,
+   "totalMinutes": 2,
+   "difficulty": "leicht",
+   "devices": [],
+   "mealPrep": false,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 437,
+    "protein": 36.7,
+    "carbs": 52.6,
+    "fat": 8.1,
+    "fiber": 4.4,
+    "sugar": 36.5,
+    "salt": 0.45
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "gluten",
+    "laktose",
+    "milch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegetarisch",
+    "laktosefrei möglich",
+    "proteinreich",
+    "kalorienarm",
+    "günstig",
+    "schnell"
+   ]
+  },
+  {
+   "id": "skyr-apfel-zimt",
+   "title": "Skyr-Bowl mit Apfel und Zimt",
+   "description": "Erfrischender Snack mit viel Eiweiß und einem Hauch Honig.",
+   "emoji": "🍎",
+   "mealType": "snack",
+   "defaultServings": 1,
+   "ingredients": [
+    {
+     "ingredientId": "skyr",
+     "name": "Skyr natur",
+     "normalizedName": "skyr natur",
+     "amount": 200,
+     "unit": "g",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "apfel",
+     "name": "Apfel",
+     "normalizedName": "apfel",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Obst",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "mandeln",
+     "name": "Mandeln",
+     "normalizedName": "mandeln",
+     "amount": 10,
+     "unit": "g",
+     "category": "Sonstiges",
+     "optional": true,
+     "substitutes": [],
+     "allergenTags": [
+      "nuesse"
+     ]
+    },
+    {
+     "ingredientId": "honig",
+     "name": "Honig",
+     "normalizedName": "honig",
+     "amount": 5,
+     "unit": "g",
+     "category": "Sonstiges",
+     "optional": true,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "zimt",
+     "name": "Zimt",
+     "normalizedName": "zimt",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Apfel würfeln.",
+    "Skyr in eine Schale geben, Apfel darauf verteilen.",
+    "Mit Zimt bestreuen und nach Wunsch Mandeln und Honig ergänzen."
+   ],
+   "preparationMinutes": 5,
+   "cookingMinutes": 0,
+   "totalMinutes": 5,
+   "difficulty": "leicht",
+   "devices": [],
+   "mealPrep": false,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 220,
+    "protein": 22.5,
+    "carbs": 29.6,
+    "fat": 0.8,
+    "fiber": 4.3,
+    "sugar": 26,
+    "salt": 0.2
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "laktose",
+    "milch",
+    "nuesse"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegetarisch",
+    "glutenfrei",
+    "laktosefrei möglich",
+    "proteinreich",
+    "kalorienarm",
+    "günstig",
+    "schnell"
+   ]
+  },
+  {
+   "id": "kartoffel-ei-pfanne",
+   "title": "Kartoffel-Ei-Pfanne mit Schinken",
+   "description": "Leichtes Bauernfrühstück aus gekochten Kartoffeln, Ei und magerem Kochschinken.",
+   "emoji": "🥓",
+   "mealType": "abendessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "kartoffeln",
+     "name": "Kartoffeln",
+     "normalizedName": "kartoffeln",
+     "amount": 500,
+     "unit": "g",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "eier",
+     "name": "Eier",
+     "normalizedName": "eier",
+     "amount": 4,
+     "unit": "Stück",
+     "category": "vegetarische Proteinquellen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "eier"
+     ]
+    },
+    {
+     "ingredientId": "zwiebel",
+     "name": "Zwiebel",
+     "normalizedName": "zwiebel",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "kochschinken",
+     "name": "Kochschinken",
+     "normalizedName": "kochschinken",
+     "amount": 50,
+     "unit": "g",
+     "category": "Fleisch und Fisch",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "rapsoel",
+     "name": "Rapsöl",
+     "normalizedName": "rapsöl",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "pfeffer",
+     "name": "Pfeffer",
+     "normalizedName": "pfeffer",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "schnittlauch",
+     "name": "Schnittlauch",
+     "normalizedName": "schnittlauch",
+     "amount": 1,
+     "unit": "EL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Kartoffeln kochen (oder Reste vom Vortag nutzen), abkühlen lassen und in Scheiben schneiden.",
+    "Kartoffeln im Öl goldbraun braten, gewürfelte Zwiebel und Schinken zugeben.",
+    "Eier verquirlen, würzen und darübergießen.",
+    "Bei mittlerer Hitze stocken lassen und mit Schnittlauch servieren."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 20,
+   "totalMinutes": 30,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 440,
+    "protein": 25.5,
+    "carbs": 41.8,
+    "fat": 17,
+    "fiber": 5.7,
+    "sugar": 5.1,
+    "salt": 0.97
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "eier"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "glutenfrei",
+    "laktosefrei",
+    "proteinreich",
+    "kalorienarm",
+    "günstig"
+   ]
+  },
+  {
+   "id": "haehnchen-champignon-rahm",
+   "title": "Hähnchen-Champignon-Rahmpfanne",
+   "description": "Cremige Pfanne mit Hähnchen, Champignons und Nudeln – mit laktosefreier Kochsahne möglich.",
+   "emoji": "🍄",
+   "mealType": "abendessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "haehnchenbrust",
+     "name": "Hähnchenbrustfilet",
+     "normalizedName": "hähnchenbrustfilet",
+     "amount": 300,
+     "unit": "g",
+     "category": "Fleisch und Fisch",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "kochsahne",
+     "name": "Kochsahne (15 % Fett)",
+     "normalizedName": "kochsahne 15 % fett",
+     "amount": 200,
+     "unit": "ml",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "champignons",
+     "name": "Champignons",
+     "normalizedName": "champignons",
+     "amount": 200,
+     "unit": "g",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "nudeln",
+     "name": "Vollkornnudeln (trocken)",
+     "normalizedName": "vollkornnudeln trocken",
+     "amount": 150,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "zwiebel",
+     "name": "Zwiebel",
+     "normalizedName": "zwiebel",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "rapsoel",
+     "name": "Rapsöl",
+     "normalizedName": "rapsöl",
+     "amount": 5,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "italienische_kraeuter",
+     "name": "Italienische Kräuter",
+     "normalizedName": "italienische kräuter",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "pfeffer",
+     "name": "Pfeffer",
+     "normalizedName": "pfeffer",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Nudeln kochen.",
+    "Hähnchen würfeln und im Öl anbraten, herausnehmen.",
+    "Zwiebel und Champignons in der Pfanne 5 Minuten braten.",
+    "Kochsahne und Kräuter zugeben, kurz aufkochen, Hähnchen zurück in die Pfanne geben.",
+    "Mit den Nudeln vermengen und abschmecken."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 20,
+   "totalMinutes": 30,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 646,
+    "protein": 50.7,
+    "carbs": 55.7,
+    "fat": 21.8,
+    "fiber": 9.5,
+    "sugar": 8.6,
+    "salt": 0.34
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "gluten",
+    "laktose",
+    "milch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "glutenfrei möglich",
+    "laktosefrei möglich",
+    "proteinreich"
+   ]
+  },
+  {
+   "id": "thunfisch-reissalat",
+   "title": "Thunfisch-Reissalat für Meal Prep",
+   "description": "Kalter Reissalat mit Thunfisch, Mais und Paprika – hält sich mehrere Tage im Kühlschrank.",
+   "emoji": "🍱",
+   "mealType": "mittagessen",
+   "defaultServings": 3,
+   "ingredients": [
+    {
+     "ingredientId": "thunfisch",
+     "name": "Thunfisch (Dose, im eigenen Saft)",
+     "normalizedName": "thunfisch dose im eigenen saft",
+     "amount": 300,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "fisch"
+     ]
+    },
+    {
+     "ingredientId": "reis",
+     "name": "Reis (trocken)",
+     "normalizedName": "reis trocken",
+     "amount": 200,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "mais",
+     "name": "Mais (Dose, abgetropft)",
+     "normalizedName": "mais dose abgetropft",
+     "amount": 200,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "paprika",
+     "name": "Paprika",
+     "normalizedName": "paprika",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "joghurt",
+     "name": "Naturjoghurt (1,5 % Fett)",
+     "normalizedName": "naturjoghurt 1 5 % fett",
+     "amount": 200,
+     "unit": "g",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "fruehlingszwiebel",
+     "name": "Frühlingszwiebel",
+     "normalizedName": "frühlingszwiebel",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "pfeffer",
+     "name": "Pfeffer",
+     "normalizedName": "pfeffer",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Reis garen und vollständig abkühlen lassen.",
+    "Paprika würfeln, Frühlingszwiebeln in Ringe schneiden.",
+    "Thunfisch und Mais abtropfen lassen.",
+    "Alles mit Joghurt, Salz und Pfeffer vermengen und auf Boxen verteilen."
+   ],
+   "preparationMinutes": 15,
+   "cookingMinutes": 15,
+   "totalMinutes": 30,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": true,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 468,
+    "protein": 35.4,
+    "carbs": 70.8,
+    "fat": 3.6,
+    "fiber": 7,
+    "sugar": 10.3,
+    "salt": 1.3
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "fisch",
+    "laktose",
+    "milch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "glutenfrei",
+    "laktosefrei möglich",
+    "proteinreich",
+    "Meal Prep"
+   ]
+  },
+  {
+   "id": "couscous-kichererbsen-salat",
+   "title": "Couscous-Salat mit Kichererbsen",
+   "description": "Orientalisch gewürzter Couscous mit Gemüse und Kichererbsen – vegan und schnell.",
+   "emoji": "🥙",
+   "mealType": "mittagessen",
+   "defaultServings": 3,
+   "ingredients": [
+    {
+     "ingredientId": "couscous",
+     "name": "Couscous (trocken)",
+     "normalizedName": "couscous trocken",
+     "amount": 200,
+     "unit": "g",
+     "category": "Getreide",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "gemuesebruehe",
+     "name": "Gemüsebrühe (zubereitet)",
+     "normalizedName": "gemüsebrühe zubereitet",
+     "amount": 250,
+     "unit": "ml",
+     "category": "Soßen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "sellerie"
+     ]
+    },
+    {
+     "ingredientId": "kichererbsen",
+     "name": "Kichererbsen (Dose, abgetropft)",
+     "normalizedName": "kichererbsen dose abgetropft",
+     "amount": 250,
+     "unit": "g",
+     "category": "Konserven",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "gurke",
+     "name": "Salatgurke",
+     "normalizedName": "salatgurke",
+     "amount": 300,
+     "unit": "g",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "tomate",
+     "name": "Tomate",
+     "normalizedName": "tomate",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "olivenoel",
+     "name": "Olivenöl",
+     "normalizedName": "olivenöl",
+     "amount": 15,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "zitronensaft",
+     "name": "Zitronensaft",
+     "normalizedName": "zitronensaft",
+     "amount": 15,
+     "unit": "ml",
+     "category": "Obst",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "kreuzkuemmel",
+     "name": "Kreuzkümmel",
+     "normalizedName": "kreuzkümmel",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "petersilie",
+     "name": "Petersilie",
+     "normalizedName": "petersilie",
+     "amount": 1,
+     "unit": "EL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Brühe aufkochen, über den Couscous gießen und 5 Minuten zugedeckt quellen lassen.",
+    "Gurke und Tomaten würfeln, Kichererbsen abspülen.",
+    "Couscous auflockern, mit Gemüse, Kichererbsen, Öl, Zitronensaft und Gewürzen mischen."
+   ],
+   "preparationMinutes": 15,
+   "cookingMinutes": 5,
+   "totalMinutes": 20,
+   "difficulty": "leicht",
+   "devices": [
+    "herd"
+   ],
+   "mealPrep": true,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 413,
+    "protein": 15.3,
+    "carbs": 64.5,
+    "fat": 8.4,
+    "fiber": 9.6,
+    "sugar": 4.7,
+    "salt": 1.18
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "gluten",
+    "sellerie"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegan",
+    "vegetarisch",
+    "laktosefrei",
+    "kalorienarm",
+    "günstig",
+    "Meal Prep",
+    "schnell"
+   ]
+  },
+  {
+   "id": "mikrowellen-haferbrei-banane",
+   "title": "Mikrowellen-Haferbrei mit Banane und Erdnussmus",
+   "description": "Warmer Haferbrei in drei Minuten – mit Banane und einem Löffel Erdnussmus.",
+   "emoji": "🍌",
+   "mealType": "fruehstueck",
+   "defaultServings": 1,
+   "ingredients": [
+    {
+     "ingredientId": "haferflocken",
+     "name": "Haferflocken",
+     "normalizedName": "haferflocken",
+     "amount": 60,
+     "unit": "g",
+     "category": "Getreide",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "milch",
+     "name": "Milch (1,5 % Fett)",
+     "normalizedName": "milch 1 5 % fett",
+     "amount": 250,
+     "unit": "ml",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "banane",
+     "name": "Banane",
+     "normalizedName": "banane",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Obst",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "erdnussmus",
+     "name": "Erdnussmus",
+     "normalizedName": "erdnussmus",
+     "amount": 15,
+     "unit": "g",
+     "category": "Sonstiges",
+     "optional": true,
+     "substitutes": [],
+     "allergenTags": [
+      "erdnuesse"
+     ]
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "zimt",
+     "name": "Zimt",
+     "normalizedName": "zimt",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Haferflocken und Milch in einer großen mikrowellengeeigneten Schale verrühren.",
+    "Bei 800 Watt 90 Sekunden garen, umrühren und weitere 60 Sekunden garen.",
+    "Mit Bananenscheiben, Zimt und optional Erdnussmus servieren."
+   ],
+   "preparationMinutes": 2,
+   "cookingMinutes": 3,
+   "totalMinutes": 5,
+   "difficulty": "leicht",
+   "devices": [
+    "mikrowelle"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 448,
+    "protein": 17.9,
+    "carbs": 71.4,
+    "fat": 8.3,
+    "fiber": 8.4,
+    "sugar": 33,
+    "salt": 0.26
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "erdnuesse",
+    "gluten",
+    "laktose",
+    "milch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegetarisch",
+    "laktosefrei möglich",
+    "kalorienarm",
+    "günstig",
+    "Mikrowelle",
+    "schnell"
+   ]
+  },
+  {
+   "id": "putenwrap-airfryer",
+   "title": "Knusprige Puten-Wraps aus dem Airfryer",
+   "description": "Gefüllte Wraps mit Pute, Paprika und Käse – im Airfryer kurz knusprig gebacken.",
+   "emoji": "🌮",
+   "mealType": "abendessen",
+   "defaultServings": 2,
+   "ingredients": [
+    {
+     "ingredientId": "putenbrust",
+     "name": "Putenbrustfilet",
+     "normalizedName": "putenbrustfilet",
+     "amount": 250,
+     "unit": "g",
+     "category": "Fleisch und Fisch",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "wraps",
+     "name": "Weizen-Tortilla-Wraps",
+     "normalizedName": "weizen-tortilla-wraps",
+     "amount": 4,
+     "unit": "Stück",
+     "category": "Getreide",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "gluten"
+     ]
+    },
+    {
+     "ingredientId": "paprika",
+     "name": "Paprika",
+     "normalizedName": "paprika",
+     "amount": 1,
+     "unit": "Stück",
+     "category": "Gemüse",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "reibekaese",
+     "name": "Geriebener Gouda",
+     "normalizedName": "geriebener gouda",
+     "amount": 40,
+     "unit": "g",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch"
+     ]
+    },
+    {
+     "ingredientId": "joghurt",
+     "name": "Naturjoghurt (1,5 % Fett)",
+     "normalizedName": "naturjoghurt 1 5 % fett",
+     "amount": 100,
+     "unit": "g",
+     "category": "Milchprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "milch",
+      "laktose"
+     ]
+    },
+    {
+     "ingredientId": "rapsoel",
+     "name": "Rapsöl",
+     "normalizedName": "rapsöl",
+     "amount": 5,
+     "unit": "ml",
+     "category": "Öle und Fette",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "paprikapulver",
+     "name": "Paprikapulver",
+     "normalizedName": "paprikapulver",
+     "amount": 1,
+     "unit": "TL",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "salz",
+     "name": "Salz",
+     "normalizedName": "salz",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Pute in feine Streifen schneiden, würzen und im Öl 5 Minuten braten.",
+    "Paprika in Streifen schneiden.",
+    "Wraps mit Joghurt bestreichen, Pute, Paprika und Käse daraufgeben und einrollen.",
+    "Im Airfryer bei 180 °C 5–6 Minuten knusprig backen."
+   ],
+   "preparationMinutes": 10,
+   "cookingMinutes": 12,
+   "totalMinutes": 22,
+   "difficulty": "leicht",
+   "devices": [
+    "airfryer",
+    "herd"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 2,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 631,
+    "protein": 47.2,
+    "carbs": 66.3,
+    "fat": 18.3,
+    "fiber": 6.5,
+    "sugar": 9.1,
+    "salt": 2.04
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "gluten",
+    "laktose",
+    "milch"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "laktosefrei möglich",
+    "proteinreich",
+    "Airfryer"
+   ]
+  },
+  {
+   "id": "gemuese-reis-ei-mikrowelle",
+   "title": "Gemüse-Ei-Reis aus der Mikrowelle",
+   "description": "Restereis mit TK-Gemüse und Ei – eine Mahlzeit in fünf Minuten.",
+   "emoji": "🍚",
+   "mealType": "mittagessen",
+   "defaultServings": 1,
+   "ingredients": [
+    {
+     "ingredientId": "reis",
+     "name": "Reis (trocken)",
+     "normalizedName": "reis trocken",
+     "amount": 70,
+     "unit": "g",
+     "category": "Reis und Nudeln",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "tk_gemuese",
+     "name": "Gemüsemischung (TK)",
+     "normalizedName": "gemüsemischung tk",
+     "amount": 150,
+     "unit": "g",
+     "category": "Tiefkühlprodukte",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    },
+    {
+     "ingredientId": "eier",
+     "name": "Eier",
+     "normalizedName": "eier",
+     "amount": 2,
+     "unit": "Stück",
+     "category": "vegetarische Proteinquellen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "eier"
+     ]
+    },
+    {
+     "ingredientId": "sojasosse",
+     "name": "Sojasoße",
+     "normalizedName": "sojasosse",
+     "amount": 10,
+     "unit": "ml",
+     "category": "Soßen",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": [
+      "soja",
+      "gluten"
+     ]
+    }
+   ],
+   "spices": [
+    {
+     "ingredientId": "chili",
+     "name": "Chiliflocken",
+     "normalizedName": "chiliflocken",
+     "amount": 1,
+     "unit": "Prise",
+     "category": "Gewürze",
+     "optional": false,
+     "substitutes": [],
+     "allergenTags": []
+    }
+   ],
+   "instructions": [
+    "Reis garen (oder 200 g gekochten Reis vom Vortag verwenden).",
+    "Gemüse in einer mikrowellengeeigneten Schale 3 Minuten bei 800 Watt garen.",
+    "Reis und verquirlte Eier unterrühren, weitere 90 Sekunden garen, umrühren und 30 Sekunden nachgaren.",
+    "Mit Sojasoße und Chili abschmecken."
+   ],
+   "preparationMinutes": 3,
+   "cookingMinutes": 5,
+   "totalMinutes": 8,
+   "difficulty": "leicht",
+   "devices": [
+    "mikrowelle"
+   ],
+   "mealPrep": false,
+   "estimatedCostLevel": 1,
+   "source": "VorratsFit (eigene Rezepte)",
+   "sourceUrl": null,
+   "license": "MIT – selbst formuliert für VorratsFit",
+   "origin": "local",
+   "nutritionPerServing": {
+    "kcal": 487,
+    "protein": 24.8,
+    "carbs": 65,
+    "fat": 12.4,
+    "fiber": 6.2,
+    "sugar": 5.6,
+    "salt": 2
+   },
+   "nutritionStatus": "calculated",
+   "nutritionConfidence": "medium",
+   "nutritionCoverage": 1,
+   "allergens": [
+    "eier",
+    "gluten",
+    "soja"
+   ],
+   "allergenDataComplete": true,
+   "dietaryTags": [
+    "vegetarisch",
+    "glutenfrei möglich",
+    "laktosefrei",
+    "günstig",
+    "Mikrowelle",
+    "schnell"
+   ]
+  }
+ ]
+}

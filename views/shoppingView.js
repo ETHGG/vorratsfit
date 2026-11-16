@@ -1,0 +1,218 @@
+// views/shoppingView.js – „Einkaufsliste“: Was muss ich dafür kaufen?
+import { h, clear, field, select, stepper, toast, withBusy, icon, dialog, emptyState, showFieldErrors, confirmDialog, announce } from './dom.js';
+import { pageHeader, section } from './components.js';
+import { state, shoppingContext } from './state.js';
+import { routeHref } from './router.js';
+import {
+  getShoppingState, recomputeShoppingList, updateSelectedServings, removeSelectedRecipe, addManualItem,
+  setPurchasedAmount, checkShoppingItem, getUndoInfo, undoCheck, startNewPurchase, deleteShoppingItem, clearCompleted,
+} from '../shopping.js';
+import { sortShoppingItems } from '../core/shopping-logic.js';
+import { SHOPPING_GROUPS, CATEGORIES } from '../core/models.js';
+import { formatAmount, SELECTABLE_UNITS, CHECK_QUANTITY_TEXT } from '../units.js';
+
+export async function render(container) {
+  const selectedBox = h('div', {});
+  const listBox = h('div', { 'aria-live': 'polite' });
+  const doneBox = h('div', {});
+  let data = { items: [], selected: [] };
+
+  async function reload({ recompute = false } = {}) {
+    if (recompute) {
+      try {
+        const res = await recomputeShoppingList(shoppingContext());
+        if (res.skipped.length) toast(`${res.skipped.length} Rezept(e) übersprungen: ${res.skipped.map((s) => `${s.title} (${s.reason})`).join(', ')}`, 'warn');
+      } catch (err) { toast(`Neuberechnung fehlgeschlagen: ${err.message}`, 'error'); }
+    }
+    data = await getShoppingState();
+    draw();
+  }
+
+  function drawSelected() {
+    clear(selectedBox);
+    if (!data.selected.length) {
+      selectedBox.append(h('p', { class: 'small muted' }, 'Noch keine Rezepte ausgewählt. Öffne ein Rezept und tippe auf „Fehlende Zutaten prüfen“.'));
+      return;
+    }
+    selectedBox.append(h('ul', { class: 'plain-list' }, ...data.selected.map((s) => {
+      const title = state.recipesById.get(s.recipeId)?.title ?? s.title ?? 'Unbekanntes Rezept';
+      const remove = h('button', { type: 'button', class: 'btn btn-icon', 'aria-label': `${title} aus der Auswahl entfernen` }, icon('x'));
+      remove.addEventListener('click', () => withBusy(remove, async () => {
+        await removeSelectedRecipe(s.recipeId, shoppingContext());
+        toast(`${title} entfernt. Gemeinsame Zutaten wurden neu berechnet; gekaufte Artikel bleiben im Vorrat.`);
+        await reload();
+      }));
+      return h('li', { class: 'selected-recipe' },
+        h('a', { href: routeHref(`rezept/${encodeURIComponent(s.recipeId)}?portionen=${s.servings}`) }, title),
+        stepper({ value: s.servings, onChange: async (v) => { await updateSelectedServings(s.recipeId, v, shoppingContext()); await reload(); } }),
+        remove);
+    })));
+  }
+
+  function amountLine(it) {
+    if (it.quantityCheck && typeof it.amountToBuy !== 'number') return h('span', { class: 'badge badge-warn' }, icon('info', { size: 14 }), CHECK_QUANTITY_TEXT);
+    return h('span', {}, h('strong', {}, formatAmount(it.amountToBuy, it.unit)), it.quantityCheck ? h('span', { class: 'badge badge-warn' }, icon('info', { size: 14 }), CHECK_QUANTITY_TEXT) : null);
+  }
+
+  function sourcesDetails(it) {
+    if (!it.recipeSources.length) return h('p', { class: 'small muted' }, 'Manuell hinzugefügt');
+    const label = it.recipeSources.length > 1 ? `Benötigt für ${it.recipeSources.length} Rezepte` : `Für ${it.recipeSources[0].title}`;
+    return h('details', { class: 'sources' }, h('summary', {}, label),
+      h('dl', { class: 'kv-list small' },
+        ...it.recipeSources.map((s) => h('div', { class: 'kv' }, h('dt', {}, `Bedarf ${s.title} (${s.servings} P.)`), h('dd', {}, formatAmount(s.amount, s.unit)))),
+        h('div', { class: 'kv' }, h('dt', {}, 'Gesamtbedarf'), h('dd', {}, formatAmount(it.amountNeeded, it.unit))),
+        h('div', { class: 'kv' }, h('dt', {}, 'Vorrat'), h('dd', {}, formatAmount(it.amountAvailable ?? 0, it.unit))),
+        h('div', { class: 'kv' }, h('dt', {}, 'Einkaufsmenge'), h('dd', {}, typeof it.amountToBuy === 'number' ? formatAmount(it.amountToBuy, it.unit) : CHECK_QUANTITY_TEXT))));
+  }
+
+  function openItem(it) {
+    const checkBtn = h('button', { type: 'button', class: 'check-btn', 'aria-label': `${it.name} abhaken und in den Vorrat übernehmen` }, icon('check', { size: 22 }));
+    const purchased = h('input', { type: 'number', name: `p-${it.id}`, min: '0', max: '1000000', step: 'any', inputmode: 'decimal', value: it.amountPurchased ?? '', placeholder: typeof it.amountToBuy === 'number' ? String(it.amountToBuy).replace('.', ',') : '', disabled: it.addedToPantry });
+    purchased.id = `pur-${it.id}`;
+    const purchasedField = h('div', { class: 'purchased' }, h('label', { for: `pur-${it.id}` }, `Tatsächlich gekauft (${it.unit})`), purchased);
+    const err = h('p', { class: 'field-error', role: 'alert' });
+    purchased.addEventListener('change', async () => {
+      const res = await setPurchasedAmount(it.id, purchased.value.trim());
+      err.textContent = res.ok ? '' : res.error;
+      if (res.ok) announce(`Gekaufte Menge für ${it.name} gespeichert.`);
+    });
+    checkBtn.addEventListener('click', () => withBusy(checkBtn, async () => {
+      // Sicherstellen, dass eine gerade getippte Menge gespeichert ist
+      if (!it.addedToPantry && purchased.value.trim() !== String(it.amountPurchased ?? '')) {
+        const res = await setPurchasedAmount(it.id, purchased.value.trim());
+        if (!res.ok) { err.textContent = res.error; purchased.focus(); return; }
+      }
+      try {
+        const res = await checkShoppingItem(it.id, state.catalog);
+        if (res.status === 'added') toast(`${it.name}: ${formatAmount(res.amount, res.unit)} in den Vorrat übernommen (jetzt ${formatAmount(res.pantryAmountAfter, res.unit)}).`, 'success');
+        else if (res.status === 'checkedWithoutAdding') toast(`${it.name} abgehakt. Die Menge war bereits im Vorrat und wurde nicht erneut addiert.`);
+        await reload();
+      } catch (e) {
+        err.textContent = e.message;
+        purchased.focus();
+      }
+    }));
+    const actions = [];
+    if (it.manuallyAdded) {
+      const del = h('button', { type: 'button', class: 'btn btn-icon', 'aria-label': `${it.name} löschen` }, icon('trash'));
+      del.addEventListener('click', () => withBusy(del, async () => { await deleteShoppingItem(it.id); await reload(); }));
+      actions.push(del);
+    }
+    let resetNote = null;
+    if (it.addedToPantry) {
+      const again = h('button', { type: 'button', class: 'btn btn-link' }, 'Als neuen Kauf erfassen');
+      again.addEventListener('click', () => withBusy(again, async () => { await startNewPurchase(it.id); toast('Neuer Kauf: Beim Abhaken wird die Menge wieder in den Vorrat übernommen.'); await reload(); }));
+      resetNote = h('p', { class: 'notice notice-info small' }, icon('info', { size: 14 }), h('span', {}, `Die gekaufte Menge (${formatAmount(it.pantryAmountAdded, it.pantryUnit ?? it.unit)}) ist bereits im Vorrat. Erneutes Abhaken addiert sie nicht noch einmal. `, again));
+    }
+    return h('li', { class: 'shop-item' },
+      checkBtn,
+      h('div', { class: 'shop-main' },
+        h('p', { class: 'shop-name' }, it.name, ' – ', amountLine(it)),
+        sourcesDetails(it),
+        it.addedToPantry ? null : purchasedField,
+        err,
+        resetNote),
+      h('div', { class: 'shop-actions' }, ...actions));
+  }
+
+  async function reopen(it) {
+    const info = await getUndoInfo(it.id);
+    const body = [h('p', {}, 'Die gekaufte Menge wurde bereits deinem Vorrat hinzugefügt. Was möchtest du tun?')];
+    if (info.missingEntry) body.push(h('p', { class: 'notice notice-warn' }, icon('alert', { size: 16 }), 'Der zugehörige Vorratseintrag existiert nicht mehr. Es kann nichts entfernt werden.'));
+    else if (info.changed) body.push(h('p', { class: 'notice notice-warn' }, icon('alert', { size: 16 }), `Achtung: Der Bestand wurde inzwischen verändert (aktuell ${formatAmount(info.current, info.item.pantryUnit ?? it.unit)}). Es werden höchstens ${formatAmount(info.removable, info.item.pantryUnit ?? it.unit)} entfernt – nie mehr als vorhanden.`));
+    else body.push(h('p', { class: 'small' }, `Aus dem Vorrat würden ${formatAmount(info.removable, info.item.pantryUnit ?? it.unit)} entfernt.`));
+    const choice = await dialog({
+      title: `${it.name} wieder öffnen`, body,
+      buttons: [{ label: 'Abbrechen', value: 'cancel' }, { label: 'Nur auf Einkaufsliste zurücksetzen', value: 'resetOnly' }, { label: 'Aus Vorrat entfernen', value: 'removeFromPantry', variant: 'danger' }],
+      dismissValue: 'cancel',
+    });
+    if (choice !== 'resetOnly' && choice !== 'removeFromPantry') return;
+    const res = await undoCheck(it.id, choice);
+    toast(res.status === 'removed' ? `${formatAmount(res.removed, res.unit)} aus dem Vorrat entfernt.` : 'Auf die Einkaufsliste zurückgesetzt. Der Vorrat bleibt unverändert.');
+    await reload();
+  }
+
+  function doneItem(it) {
+    const btn = h('button', { type: 'button', class: 'check-btn is-checked', 'aria-label': `${it.name} wieder öffnen` }, icon('check', { size: 22 }));
+    btn.addEventListener('click', () => withBusy(btn, () => reopen(it)));
+    const del = h('button', { type: 'button', class: 'btn btn-icon', 'aria-label': `${it.name} von der Liste entfernen` }, icon('trash'));
+    del.addEventListener('click', () => withBusy(del, async () => { await deleteShoppingItem(it.id); await reload(); }));
+    return h('li', { class: 'shop-item done' }, btn,
+      h('div', { class: 'shop-main' },
+        h('p', { class: 'shop-name' }, h('span', { class: 'sr-only' }, 'Erledigt: '), it.name),
+        h('p', { class: 'small' }, it.addedToPantry ? `Gekauft: ${formatAmount(it.amountPurchased, it.unit)} · in den Vorrat übernommen` : 'Abgehakt')),
+      h('div', { class: 'shop-actions' }, del));
+  }
+
+  function draw() {
+    drawSelected();
+    clear(listBox);
+    clear(doneBox);
+    const open = sortShoppingItems(data.items.filter((i) => !i.checked), SHOPPING_GROUPS);
+    const done = sortShoppingItems(data.items.filter((i) => i.checked), SHOPPING_GROUPS);
+    if (!open.length) {
+      listBox.append(emptyState(data.items.length ? 'Alles erledigt!' : 'Die Einkaufsliste ist leer', data.selected.length ? 'Für die ausgewählten Rezepte ist alles im Vorrat.' : 'Füge Rezepte hinzu oder trage Artikel manuell ein.'));
+    } else {
+      listBox.append(h('p', { class: 'small muted' }, `${open.length} offene ${open.length === 1 ? 'Position' : 'Positionen'}`));
+      for (const group of SHOPPING_GROUPS) {
+        const items = open.filter((i) => i.shoppingGroup === group);
+        if (!items.length) continue;
+        listBox.append(h('h3', { class: 'group-title' }, group), h('ul', { class: 'plain-list shop-list' }, ...items.map(openItem)));
+      }
+    }
+    if (done.length) {
+      const clearBtn = h('button', { type: 'button', class: 'btn' }, 'Erledigte von der Liste entfernen');
+      clearBtn.addEventListener('click', () => withBusy(clearBtn, async () => {
+        if (!(await confirmDialog('Erledigte entfernen?', 'Die abgehakten Artikel werden von der Liste entfernt. Dein Vorrat bleibt unverändert.', { confirmLabel: 'Entfernen' }))) return;
+        const n = await clearCompleted();
+        toast(`${n} erledigte Artikel entfernt.`);
+        await reload();
+      }));
+      doneBox.append(section(`Erledigt (${done.length})`, h('ul', { class: 'plain-list shop-list' }, ...done.map(doneItem)), clearBtn));
+    }
+  }
+
+  // Manuelle Artikel
+  const mName = h('input', { type: 'text', name: 'name', maxlength: '80', autocomplete: 'off', required: true });
+  const mAmount = h('input', { type: 'number', name: 'amount', min: '0', step: 'any', inputmode: 'decimal', value: '1', required: true });
+  const mUnit = select('unit', SELECTABLE_UNITS.map((u) => ({ id: u, label: u })), 'Stück');
+  const mCat = select('category', CATEGORIES.map((c) => ({ id: c, label: c })), 'Sonstiges');
+  const mBtn = h('button', { type: 'submit', class: 'btn btn-primary' }, 'Artikel hinzufügen');
+  const mForm = h('form', { class: 'form grid-form', novalidate: true },
+    field({ label: 'Artikel', input: mName }),
+    h('div', { class: 'row-2' }, field({ label: 'Menge', input: mAmount }), field({ label: 'Einheit', input: mUnit })),
+    field({ label: 'Kategorie', input: mCat }),
+    h('div', { class: 'form-actions' }, mBtn));
+  mName.addEventListener('change', () => {
+    const e = state.catalog.resolve(mName.value);
+    if (e) { mCat.value = e.category; if (e.defaultUnit) mUnit.value = e.defaultUnit; }
+  });
+  mForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    withBusy(mBtn, async () => {
+      const res = await addManualItem({ name: mName.value, amount: mAmount.value, unit: mUnit.value, category: mCat.value }, state.catalog);
+      if (!res.ok) { showFieldErrors(mForm, res.errors); return; }
+      showFieldErrors(mForm, {});
+      mName.value = '';
+      mAmount.value = '1';
+      toast(`${res.item.name} hinzugefügt.`, 'success');
+      await reload();
+      mName.focus();
+    });
+  });
+
+  const recomputeBtn = h('button', { type: 'button', class: 'btn' }, 'Mit aktuellem Vorrat abgleichen');
+  recomputeBtn.addEventListener('click', () => withBusy(recomputeBtn, async () => { await reload({ recompute: true }); toast('Einkaufsliste mit dem Vorrat abgeglichen.'); }));
+
+  container.append(
+    pageHeader('Einkaufsliste', 'Was muss ich dafür kaufen?'),
+    section('Ausgewählte Rezepte', selectedBox, h('div', { class: 'form-actions' }, recomputeBtn)),
+    section('Zu kaufen', h('p', { class: 'small muted' }, 'Trage bei Bedarf die tatsächlich gekaufte Menge ein und hake den Artikel ab – er wird automatisch in deinen Vorrat übernommen.'), listBox),
+    doneBox,
+    section('Artikel manuell hinzufügen', mForm),
+  );
+  // Beim Öffnen einmal mit dem aktuellen Vorrat abgleichen (falls Rezepte ausgewählt sind)
+  data = await getShoppingState();
+  if (data.selected.length) await reload({ recompute: true });
+  else draw();
+}

@@ -1,0 +1,2408 @@
+[
+ {
+  "id": "haehnchenbrust",
+  "name": "Hähnchenbrustfilet",
+  "aliases": [
+   "Hähnchen",
+   "Hähnchenbrust",
+   "Hühnchen",
+   "Hühnerbrust",
+   "Hähnchenfilet",
+   "Chicken",
+   "Chicken breast"
+  ],
+  "category": "Fleisch und Fisch",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 110,
+   "protein": 23,
+   "carbs": 0,
+   "fat": 1.5,
+   "fiber": 0,
+   "sugar": 0,
+   "salt": 0.15
+  },
+  "allergenTags": [],
+  "animal": "meat",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "putenbrust",
+  "name": "Putenbrustfilet",
+  "aliases": [
+   "Pute",
+   "Putenbrust",
+   "Putenfilet",
+   "Truthahn"
+  ],
+  "category": "Fleisch und Fisch",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 105,
+   "protein": 24,
+   "carbs": 0,
+   "fat": 1,
+   "fiber": 0,
+   "sugar": 0,
+   "salt": 0.12
+  },
+  "allergenTags": [],
+  "animal": "meat",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "rinderhack",
+  "name": "Rinderhackfleisch (mager)",
+  "aliases": [
+   "Rinderhack",
+   "Hackfleisch",
+   "Hack",
+   "Beef mince",
+   "Minced beef",
+   "Ground beef"
+  ],
+  "category": "Fleisch und Fisch",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 150,
+   "protein": 21,
+   "carbs": 0,
+   "fat": 7,
+   "fiber": 0,
+   "sugar": 0,
+   "salt": 0.15
+  },
+  "allergenTags": [],
+  "animal": "meat",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "kochschinken",
+  "name": "Kochschinken",
+  "aliases": [
+   "Schinken",
+   "Ham"
+  ],
+  "category": "Fleisch und Fisch",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 110,
+   "protein": 20,
+   "carbs": 1,
+   "fat": 3,
+   "fiber": 0,
+   "sugar": 1,
+   "salt": 2.2
+  },
+  "allergenTags": [],
+  "animal": "meat",
+  "pork": true,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "lachs",
+  "name": "Lachsfilet",
+  "aliases": [
+   "Lachs",
+   "Salmon"
+  ],
+  "category": "Fleisch und Fisch",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 200,
+   "protein": 20,
+   "carbs": 0,
+   "fat": 13,
+   "fiber": 0,
+   "sugar": 0,
+   "salt": 0.1
+  },
+  "allergenTags": [
+   "fisch"
+  ],
+  "animal": "fish",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "seelachs",
+  "name": "Seelachsfilet (TK)",
+  "aliases": [
+   "Seelachs",
+   "Alaska-Seelachs",
+   "Fischfilet",
+   "White fish",
+   "Cod"
+  ],
+  "category": "Tiefkühlprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 80,
+   "protein": 18,
+   "carbs": 0,
+   "fat": 0.9,
+   "fiber": 0,
+   "sugar": 0,
+   "salt": 0.2
+  },
+  "allergenTags": [
+   "fisch"
+  ],
+  "animal": "fish",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "garnelen",
+  "name": "Garnelen (TK)",
+  "aliases": [
+   "Garnele",
+   "Shrimps",
+   "Prawns",
+   "Krabben"
+  ],
+  "category": "Tiefkühlprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 70,
+   "protein": 16,
+   "carbs": 0,
+   "fat": 1,
+   "fiber": 0,
+   "sugar": 0,
+   "salt": 0.6
+  },
+  "allergenTags": [
+   "schalentiere"
+  ],
+  "animal": "fish",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "thunfisch",
+  "name": "Thunfisch (Dose, im eigenen Saft)",
+  "aliases": [
+   "Thunfisch",
+   "Tuna"
+  ],
+  "category": "Konserven",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 110,
+   "protein": 25,
+   "carbs": 0,
+   "fat": 1,
+   "fiber": 0,
+   "sugar": 0,
+   "salt": 0.9
+  },
+  "allergenTags": [
+   "fisch"
+  ],
+  "animal": "fish",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "eier",
+  "name": "Eier",
+  "aliases": [
+   "Ei",
+   "Eier (Größe M)",
+   "Egg",
+   "Eggs"
+  ],
+  "category": "vegetarische Proteinquellen",
+  "shoppingGroup": "Milchprodukte und Ersatzprodukte",
+  "defaultUnit": "Stück",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 140,
+   "protein": 12.5,
+   "carbs": 0.7,
+   "fat": 9.5,
+   "fiber": 0,
+   "sugar": 0.7,
+   "salt": 0.35
+  },
+  "gramsPerPiece": 60,
+  "allergenTags": [
+   "eier"
+  ],
+  "animal": "egg",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "tofu",
+  "name": "Tofu natur",
+  "aliases": [
+   "Tofu"
+  ],
+  "category": "vegetarische Proteinquellen",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 125,
+   "protein": 13,
+   "carbs": 1.5,
+   "fat": 7.5,
+   "fiber": 1,
+   "sugar": 0.5,
+   "salt": 0.02
+  },
+  "allergenTags": [
+   "soja"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "linsen_rot",
+  "name": "Rote Linsen (trocken)",
+  "aliases": [
+   "Rote Linsen",
+   "Linsen",
+   "Red lentils",
+   "Lentils"
+  ],
+  "category": "vegetarische Proteinquellen",
+  "shoppingGroup": "Getreide, Reis und Nudeln",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 340,
+   "protein": 24,
+   "carbs": 50,
+   "fat": 1.5,
+   "fiber": 11,
+   "sugar": 2,
+   "salt": 0.03
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "kichererbsen",
+  "name": "Kichererbsen (Dose, abgetropft)",
+  "aliases": [
+   "Kichererbsen",
+   "Chickpeas"
+  ],
+  "category": "Konserven",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 120,
+   "protein": 7,
+   "carbs": 14,
+   "fat": 2.5,
+   "fiber": 6,
+   "sugar": 0.5,
+   "salt": 0.5
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "kidneybohnen",
+  "name": "Kidneybohnen (Dose, abgetropft)",
+  "aliases": [
+   "Kidneybohnen",
+   "Rote Bohnen",
+   "Kidney beans"
+  ],
+  "category": "Konserven",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 105,
+   "protein": 7.5,
+   "carbs": 14,
+   "fat": 0.5,
+   "fiber": 6.5,
+   "sugar": 0.5,
+   "salt": 0.6
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "huettenkaese",
+  "name": "Hüttenkäse",
+  "aliases": [
+   "Körniger Frischkäse",
+   "Cottage cheese"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 100,
+   "protein": 12,
+   "carbs": 3,
+   "fat": 4.5,
+   "fiber": 0,
+   "sugar": 3,
+   "salt": 0.8
+  },
+  "allergenTags": [
+   "milch",
+   "laktose"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {
+   "laktose": "huettenkaese_lf"
+  }
+ },
+ {
+  "id": "huettenkaese_lf",
+  "name": "Laktosefreier Hüttenkäse",
+  "aliases": [
+   "Hüttenkäse laktosefrei"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 100,
+   "protein": 12,
+   "carbs": 3,
+   "fat": 4.5,
+   "fiber": 0,
+   "sugar": 3,
+   "salt": 0.8
+  },
+  "allergenTags": [
+   "milch"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "milch",
+  "name": "Milch (1,5 % Fett)",
+  "aliases": [
+   "Milch",
+   "Fettarme Milch",
+   "Milk"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "ml",
+  "nutritionBasis": "100ml",
+  "nutrition": {
+   "kcal": 47,
+   "protein": 3.4,
+   "carbs": 4.8,
+   "fat": 1.5,
+   "fiber": 0,
+   "sugar": 4.8,
+   "salt": 0.1
+  },
+  "allergenTags": [
+   "milch",
+   "laktose"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {
+   "laktose": "milch_lf"
+  }
+ },
+ {
+  "id": "milch_lf",
+  "name": "Laktosefreie Milch (1,5 % Fett)",
+  "aliases": [
+   "Laktosefreie Milch",
+   "Milch laktosefrei"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "ml",
+  "nutritionBasis": "100ml",
+  "nutrition": {
+   "kcal": 47,
+   "protein": 3.4,
+   "carbs": 4.8,
+   "fat": 1.5,
+   "fiber": 0,
+   "sugar": 4.8,
+   "salt": 0.1
+  },
+  "allergenTags": [
+   "milch"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "skyr",
+  "name": "Skyr natur",
+  "aliases": [
+   "Skyr"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 63,
+   "protein": 11,
+   "carbs": 4,
+   "fat": 0.2,
+   "fiber": 0,
+   "sugar": 4,
+   "salt": 0.1
+  },
+  "allergenTags": [
+   "milch",
+   "laktose"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {
+   "laktose": "skyr_lf"
+  }
+ },
+ {
+  "id": "skyr_lf",
+  "name": "Laktosefreier Skyr",
+  "aliases": [
+   "Skyr laktosefrei"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 63,
+   "protein": 11,
+   "carbs": 4,
+   "fat": 0.2,
+   "fiber": 0,
+   "sugar": 4,
+   "salt": 0.1
+  },
+  "allergenTags": [
+   "milch"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "magerquark",
+  "name": "Magerquark",
+  "aliases": [
+   "Quark",
+   "Speisequark mager"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 67,
+   "protein": 12,
+   "carbs": 4,
+   "fat": 0.3,
+   "fiber": 0,
+   "sugar": 4,
+   "salt": 0.1
+  },
+  "allergenTags": [
+   "milch",
+   "laktose"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {
+   "laktose": "magerquark_lf"
+  }
+ },
+ {
+  "id": "magerquark_lf",
+  "name": "Laktosefreier Magerquark",
+  "aliases": [
+   "Magerquark laktosefrei",
+   "Quark laktosefrei"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 67,
+   "protein": 12,
+   "carbs": 4,
+   "fat": 0.3,
+   "fiber": 0,
+   "sugar": 4,
+   "salt": 0.1
+  },
+  "allergenTags": [
+   "milch"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "joghurt",
+  "name": "Naturjoghurt (1,5 % Fett)",
+  "aliases": [
+   "Joghurt",
+   "Naturjoghurt",
+   "Yogurt",
+   "Yoghurt"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 50,
+   "protein": 3.5,
+   "carbs": 4.5,
+   "fat": 1.5,
+   "fiber": 0,
+   "sugar": 4.5,
+   "salt": 0.1
+  },
+  "allergenTags": [
+   "milch",
+   "laktose"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {
+   "laktose": "joghurt_lf"
+  }
+ },
+ {
+  "id": "joghurt_lf",
+  "name": "Laktosefreier Naturjoghurt",
+  "aliases": [
+   "Joghurt laktosefrei"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 50,
+   "protein": 3.5,
+   "carbs": 4.5,
+   "fat": 1.5,
+   "fiber": 0,
+   "sugar": 4.5,
+   "salt": 0.1
+  },
+  "allergenTags": [
+   "milch"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "kochsahne",
+  "name": "Kochsahne (15 % Fett)",
+  "aliases": [
+   "Kochsahne",
+   "Sahne",
+   "Cream"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "ml",
+  "nutritionBasis": "100ml",
+  "nutrition": {
+   "kcal": 160,
+   "protein": 3,
+   "carbs": 4,
+   "fat": 15,
+   "fiber": 0,
+   "sugar": 4,
+   "salt": 0.1
+  },
+  "allergenTags": [
+   "milch",
+   "laktose"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {
+   "laktose": "kochsahne_lf"
+  }
+ },
+ {
+  "id": "kochsahne_lf",
+  "name": "Laktosefreie Kochsahne",
+  "aliases": [
+   "Kochsahne laktosefrei"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "ml",
+  "nutritionBasis": "100ml",
+  "nutrition": {
+   "kcal": 160,
+   "protein": 3,
+   "carbs": 4,
+   "fat": 15,
+   "fiber": 0,
+   "sugar": 4,
+   "salt": 0.1
+  },
+  "allergenTags": [
+   "milch"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "feta",
+  "name": "Feta",
+  "aliases": [
+   "Fetakäse",
+   "Schafskäse",
+   "Feta cheese"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 260,
+   "protein": 17,
+   "carbs": 0.5,
+   "fat": 21,
+   "fiber": 0,
+   "sugar": 0.5,
+   "salt": 3
+  },
+  "allergenTags": [
+   "milch",
+   "laktose"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "reibekaese",
+  "name": "Geriebener Gouda",
+  "aliases": [
+   "Reibekäse",
+   "Käse",
+   "Gouda",
+   "Cheese"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 350,
+   "protein": 25,
+   "carbs": 0,
+   "fat": 27,
+   "fiber": 0,
+   "sugar": 0,
+   "salt": 2
+  },
+  "allergenTags": [
+   "milch"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "mozzarella",
+  "name": "Mozzarella light",
+  "aliases": [
+   "Mozzarella"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 160,
+   "protein": 19,
+   "carbs": 1,
+   "fat": 9,
+   "fiber": 0,
+   "sugar": 1,
+   "salt": 0.5
+  },
+  "allergenTags": [
+   "milch",
+   "laktose"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {
+   "laktose": "mozzarella_lf"
+  }
+ },
+ {
+  "id": "mozzarella_lf",
+  "name": "Laktosefreier Mozzarella",
+  "aliases": [
+   "Mozzarella laktosefrei"
+  ],
+  "category": "Milchprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 230,
+   "protein": 18,
+   "carbs": 1,
+   "fat": 17,
+   "fiber": 0,
+   "sugar": 1,
+   "salt": 0.5
+  },
+  "allergenTags": [
+   "milch"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "proteinpulver",
+  "name": "Proteinpulver (Whey, neutral)",
+  "aliases": [
+   "Whey",
+   "Eiweißpulver",
+   "Proteinpulver"
+  ],
+  "category": "Sonstiges",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 380,
+   "protein": 75,
+   "carbs": 8,
+   "fat": 6,
+   "fiber": 0,
+   "sugar": 5,
+   "salt": 0.5
+  },
+  "allergenTags": [
+   "milch",
+   "laktose"
+  ],
+  "animal": "dairy",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {
+   "laktose": "proteinpulver_vegan"
+  }
+ },
+ {
+  "id": "proteinpulver_vegan",
+  "name": "Veganes Proteinpulver (Erbse)",
+  "aliases": [
+   "Erbsenprotein",
+   "Pflanzliches Proteinpulver"
+  ],
+  "category": "Sonstiges",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 380,
+   "protein": 75,
+   "carbs": 5,
+   "fat": 7,
+   "fiber": 3,
+   "sugar": 1,
+   "salt": 1
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "sojadrink",
+  "name": "Sojadrink",
+  "aliases": [
+   "Sojamilch",
+   "Soy milk"
+  ],
+  "category": "Ersatzprodukte",
+  "defaultUnit": "ml",
+  "nutritionBasis": "100ml",
+  "nutrition": {
+   "kcal": 40,
+   "protein": 3.3,
+   "carbs": 2.5,
+   "fat": 1.8,
+   "fiber": 0.5,
+   "sugar": 2.5,
+   "salt": 0.1
+  },
+  "allergenTags": [
+   "soja"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "haferdrink",
+  "name": "Haferdrink",
+  "aliases": [
+   "Hafermilch",
+   "Oat milk"
+  ],
+  "category": "Ersatzprodukte",
+  "defaultUnit": "ml",
+  "nutritionBasis": "100ml",
+  "nutrition": {
+   "kcal": 45,
+   "protein": 0.5,
+   "carbs": 7,
+   "fat": 1.5,
+   "fiber": 0.8,
+   "sugar": 4,
+   "salt": 0.1
+  },
+  "allergenTags": [
+   "gluten"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "paprika",
+  "name": "Paprika",
+  "aliases": [
+   "Paprikaschote",
+   "Rote Paprika",
+   "Bell pepper",
+   "Red pepper"
+  ],
+  "category": "Gemüse",
+  "defaultUnit": "Stück",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 30,
+   "protein": 1,
+   "carbs": 5,
+   "fat": 0.3,
+   "fiber": 3.6,
+   "sugar": 4,
+   "salt": 0
+  },
+  "gramsPerPiece": 160,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "zwiebel",
+  "name": "Zwiebel",
+  "aliases": [
+   "Zwiebeln",
+   "Onion",
+   "Onions"
+  ],
+  "category": "Gemüse",
+  "defaultUnit": "Stück",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 40,
+   "protein": 1.2,
+   "carbs": 8,
+   "fat": 0.2,
+   "fiber": 1.8,
+   "sugar": 5,
+   "salt": 0
+  },
+  "gramsPerPiece": 80,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "knoblauch",
+  "name": "Knoblauchzehe",
+  "aliases": [
+   "Knoblauch",
+   "Knoblauchzehen",
+   "Garlic",
+   "Garlic clove"
+  ],
+  "category": "Gemüse",
+  "defaultUnit": "Stück",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 140,
+   "protein": 6,
+   "carbs": 28,
+   "fat": 0.5,
+   "fiber": 2,
+   "sugar": 1,
+   "salt": 0.05
+  },
+  "gramsPerPiece": 4,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "brokkoli",
+  "name": "Brokkoli",
+  "aliases": [
+   "Broccoli"
+  ],
+  "category": "Gemüse",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 35,
+   "protein": 3,
+   "carbs": 3,
+   "fat": 0.4,
+   "fiber": 3,
+   "sugar": 1.5,
+   "salt": 0.05
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "zucchini",
+  "name": "Zucchini",
+  "aliases": [
+   "Courgette"
+  ],
+  "category": "Gemüse",
+  "defaultUnit": "Stück",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 20,
+   "protein": 1.5,
+   "carbs": 2.5,
+   "fat": 0.3,
+   "fiber": 1.1,
+   "sugar": 2,
+   "salt": 0
+  },
+  "gramsPerPiece": 250,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "karotte",
+  "name": "Karotte",
+  "aliases": [
+   "Möhre",
+   "Möhren",
+   "Karotten",
+   "Carrot",
+   "Carrots"
+  ],
+  "category": "Gemüse",
+  "defaultUnit": "Stück",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 40,
+   "protein": 0.9,
+   "carbs": 8,
+   "fat": 0.2,
+   "fiber": 3,
+   "sugar": 5,
+   "salt": 0.1
+  },
+  "gramsPerPiece": 80,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "tomate",
+  "name": "Tomate",
+  "aliases": [
+   "Tomaten",
+   "Tomato",
+   "Tomatoes"
+  ],
+  "category": "Gemüse",
+  "defaultUnit": "Stück",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 20,
+   "protein": 1,
+   "carbs": 3,
+   "fat": 0.2,
+   "fiber": 1.2,
+   "sugar": 2.6,
+   "salt": 0
+  },
+  "gramsPerPiece": 100,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "gurke",
+  "name": "Salatgurke",
+  "aliases": [
+   "Gurke",
+   "Cucumber"
+  ],
+  "category": "Gemüse",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 13,
+   "protein": 0.6,
+   "carbs": 2,
+   "fat": 0.1,
+   "fiber": 0.5,
+   "sugar": 1.5,
+   "salt": 0
+  },
+  "gramsPerPiece": 400,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "champignons",
+  "name": "Champignons",
+  "aliases": [
+   "Pilze",
+   "Champignon",
+   "Mushrooms"
+  ],
+  "category": "Gemüse",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 22,
+   "protein": 3,
+   "carbs": 0.5,
+   "fat": 0.3,
+   "fiber": 2,
+   "sugar": 0.3,
+   "salt": 0
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "kartoffeln",
+  "name": "Kartoffeln",
+  "aliases": [
+   "Kartoffel",
+   "Potatoes",
+   "Potato"
+  ],
+  "category": "Gemüse",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 75,
+   "protein": 2,
+   "carbs": 15,
+   "fat": 0.1,
+   "fiber": 2,
+   "sugar": 0.8,
+   "salt": 0
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "suesskartoffel",
+  "name": "Süßkartoffel",
+  "aliases": [
+   "Süßkartoffeln",
+   "Sweet potato"
+  ],
+  "category": "Gemüse",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 85,
+   "protein": 1.6,
+   "carbs": 18,
+   "fat": 0.1,
+   "fiber": 3,
+   "sugar": 4,
+   "salt": 0.1
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "fruehlingszwiebel",
+  "name": "Frühlingszwiebel",
+  "aliases": [
+   "Frühlingszwiebeln",
+   "Lauchzwiebel",
+   "Spring onion",
+   "Spring onions"
+  ],
+  "category": "Gemüse",
+  "defaultUnit": "Stück",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 30,
+   "protein": 1.8,
+   "carbs": 5,
+   "fat": 0.3,
+   "fiber": 2.5,
+   "sugar": 2,
+   "salt": 0
+  },
+  "gramsPerPiece": 15,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "avocado",
+  "name": "Avocado",
+  "aliases": [
+   "Avocados"
+  ],
+  "category": "Gemüse",
+  "defaultUnit": "Stück",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 160,
+   "protein": 2,
+   "carbs": 2,
+   "fat": 15,
+   "fiber": 6.5,
+   "sugar": 0.7,
+   "salt": 0
+  },
+  "gramsPerPiece": 150,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "spinat",
+  "name": "Blattspinat (TK)",
+  "aliases": [
+   "Spinat",
+   "Rahmspinat",
+   "Spinach"
+  ],
+  "category": "Tiefkühlprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 22,
+   "protein": 2.6,
+   "carbs": 1,
+   "fat": 0.4,
+   "fiber": 2.5,
+   "sugar": 0.5,
+   "salt": 0.1
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "tk_gemuese",
+  "name": "Gemüsemischung (TK)",
+  "aliases": [
+   "TK-Gemüse",
+   "Pfannengemüse",
+   "Asia-Gemüse",
+   "Mixed vegetables"
+  ],
+  "category": "Tiefkühlprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 45,
+   "protein": 2.5,
+   "carbs": 6,
+   "fat": 0.4,
+   "fiber": 3.5,
+   "sugar": 3,
+   "salt": 0.05
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "erbsen",
+  "name": "Erbsen (TK)",
+  "aliases": [
+   "Erbsen",
+   "Peas"
+  ],
+  "category": "Tiefkühlprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 80,
+   "protein": 5.5,
+   "carbs": 11,
+   "fat": 0.5,
+   "fiber": 5.5,
+   "sugar": 4,
+   "salt": 0
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "mais",
+  "name": "Mais (Dose, abgetropft)",
+  "aliases": [
+   "Mais",
+   "Sweetcorn",
+   "Corn"
+  ],
+  "category": "Konserven",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 85,
+   "protein": 2.8,
+   "carbs": 15,
+   "fat": 1.2,
+   "fiber": 3,
+   "sugar": 4,
+   "salt": 0.5
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "tomaten_dose",
+  "name": "Gehackte Tomaten (Dose)",
+  "aliases": [
+   "Dosentomaten",
+   "Stückige Tomaten",
+   "Chopped tomatoes"
+  ],
+  "category": "Konserven",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 22,
+   "protein": 1.2,
+   "carbs": 3.5,
+   "fat": 0.2,
+   "fiber": 1,
+   "sugar": 3,
+   "salt": 0.1
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "passierte_tomaten",
+  "name": "Passierte Tomaten",
+  "aliases": [
+   "Passata",
+   "Tomatenpüree"
+  ],
+  "category": "Konserven",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 25,
+   "protein": 1.3,
+   "carbs": 4,
+   "fat": 0.2,
+   "fiber": 1,
+   "sugar": 3.5,
+   "salt": 0.1
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "kokosmilch",
+  "name": "Kokosmilch (light)",
+  "aliases": [
+   "Kokosmilch",
+   "Coconut milk"
+  ],
+  "category": "Konserven",
+  "defaultUnit": "ml",
+  "nutritionBasis": "100ml",
+  "nutrition": {
+   "kcal": 75,
+   "protein": 0.8,
+   "carbs": 2,
+   "fat": 7,
+   "fiber": 0,
+   "sugar": 1.5,
+   "salt": 0.05
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "banane",
+  "name": "Banane",
+  "aliases": [
+   "Bananen",
+   "Banana"
+  ],
+  "category": "Obst",
+  "defaultUnit": "Stück",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 90,
+   "protein": 1.1,
+   "carbs": 20,
+   "fat": 0.3,
+   "fiber": 2,
+   "sugar": 17,
+   "salt": 0
+  },
+  "gramsPerPiece": 120,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "apfel",
+  "name": "Apfel",
+  "aliases": [
+   "Äpfel",
+   "Apple"
+  ],
+  "category": "Obst",
+  "defaultUnit": "Stück",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 52,
+   "protein": 0.3,
+   "carbs": 12,
+   "fat": 0.2,
+   "fiber": 2.4,
+   "sugar": 10,
+   "salt": 0
+  },
+  "gramsPerPiece": 180,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "beeren",
+  "name": "Beerenmischung (TK)",
+  "aliases": [
+   "Beeren",
+   "TK-Beeren",
+   "Heidelbeeren",
+   "Himbeeren",
+   "Berries"
+  ],
+  "category": "Tiefkühlprodukte",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 40,
+   "protein": 0.8,
+   "carbs": 7,
+   "fat": 0.4,
+   "fiber": 4,
+   "sugar": 6,
+   "salt": 0
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "zitronensaft",
+  "name": "Zitronensaft",
+  "aliases": [
+   "Zitrone",
+   "Limettensaft",
+   "Lemon juice",
+   "Lemon"
+  ],
+  "category": "Obst",
+  "defaultUnit": "ml",
+  "nutritionBasis": "100ml",
+  "nutrition": {
+   "kcal": 25,
+   "protein": 0.4,
+   "carbs": 7,
+   "fat": 0.2,
+   "fiber": 0.3,
+   "sugar": 2.5,
+   "salt": 0
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "haferflocken",
+  "name": "Haferflocken",
+  "aliases": [
+   "Hafer",
+   "Oats",
+   "Rolled oats"
+  ],
+  "category": "Getreide",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 370,
+   "protein": 13.5,
+   "carbs": 59,
+   "fat": 7,
+   "fiber": 10,
+   "sugar": 1,
+   "salt": 0.02
+  },
+  "allergenTags": [
+   "gluten"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "vollkornbrot",
+  "name": "Vollkornbrot",
+  "aliases": [
+   "Brot",
+   "Bread",
+   "Wholegrain bread"
+  ],
+  "category": "Getreide",
+  "shoppingGroup": "Brot und Backwaren",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 220,
+   "protein": 7,
+   "carbs": 40,
+   "fat": 1.5,
+   "fiber": 7.5,
+   "sugar": 3,
+   "salt": 1.1
+  },
+  "gramsPerPiece": 50,
+  "allergenTags": [
+   "gluten"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "wraps",
+  "name": "Weizen-Tortilla-Wraps",
+  "aliases": [
+   "Wraps",
+   "Tortillas",
+   "Tortilla"
+  ],
+  "category": "Getreide",
+  "shoppingGroup": "Brot und Backwaren",
+  "defaultUnit": "Stück",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 300,
+   "protein": 8,
+   "carbs": 50,
+   "fat": 7,
+   "fiber": 3,
+   "sugar": 3,
+   "salt": 1.2
+  },
+  "gramsPerPiece": 60,
+  "allergenTags": [
+   "gluten"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "couscous",
+  "name": "Couscous (trocken)",
+  "aliases": [
+   "Couscous"
+  ],
+  "category": "Getreide",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 360,
+   "protein": 12,
+   "carbs": 72,
+   "fat": 2,
+   "fiber": 5,
+   "sugar": 1,
+   "salt": 0.02
+  },
+  "allergenTags": [
+   "gluten"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "reis",
+  "name": "Reis (trocken)",
+  "aliases": [
+   "Basmatireis",
+   "Langkornreis",
+   "Jasminreis",
+   "Rice"
+  ],
+  "category": "Reis und Nudeln",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 350,
+   "protein": 7.5,
+   "carbs": 78,
+   "fat": 0.6,
+   "fiber": 1.3,
+   "sugar": 0.2,
+   "salt": 0
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "nudeln",
+  "name": "Vollkornnudeln (trocken)",
+  "aliases": [
+   "Nudeln",
+   "Pasta",
+   "Spaghetti",
+   "Penne",
+   "Vollkornspaghetti"
+  ],
+  "category": "Reis und Nudeln",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 350,
+   "protein": 13,
+   "carbs": 64,
+   "fat": 2.5,
+   "fiber": 9,
+   "sugar": 3,
+   "salt": 0.02
+  },
+  "allergenTags": [
+   "gluten"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {
+   "gluten": "nudeln_gf"
+  }
+ },
+ {
+  "id": "nudeln_gf",
+  "name": "Glutenfreie Nudeln (trocken)",
+  "aliases": [
+   "Glutenfreie Pasta"
+  ],
+  "category": "Reis und Nudeln",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 355,
+   "protein": 7,
+   "carbs": 77,
+   "fat": 1.5,
+   "fiber": 2,
+   "sugar": 1,
+   "salt": 0.02
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "reisnudeln",
+  "name": "Reisnudeln (trocken)",
+  "aliases": [
+   "Rice noodles"
+  ],
+  "category": "Reis und Nudeln",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 360,
+   "protein": 6,
+   "carbs": 80,
+   "fat": 0.6,
+   "fiber": 1,
+   "sugar": 0,
+   "salt": 0.05
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "mehl",
+  "name": "Weizenmehl Type 405",
+  "aliases": [
+   "Mehl",
+   "Flour"
+  ],
+  "category": "Backzutaten",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 340,
+   "protein": 10,
+   "carbs": 71,
+   "fat": 1,
+   "fiber": 4,
+   "sugar": 0.5,
+   "salt": 0
+  },
+  "allergenTags": [
+   "gluten"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "sojasosse",
+  "name": "Sojasoße",
+  "aliases": [
+   "Sojasauce",
+   "Soy sauce",
+   "Sojasosse"
+  ],
+  "category": "Soßen",
+  "defaultUnit": "ml",
+  "nutritionBasis": "100ml",
+  "nutrition": {
+   "kcal": 60,
+   "protein": 8,
+   "carbs": 6,
+   "fat": 0.1,
+   "fiber": 0.5,
+   "sugar": 1,
+   "salt": 15
+  },
+  "allergenTags": [
+   "soja",
+   "gluten"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {
+   "gluten": "tamari"
+  }
+ },
+ {
+  "id": "tamari",
+  "name": "Tamari (glutenfreie Sojasoße)",
+  "aliases": [
+   "Tamari"
+  ],
+  "category": "Soßen",
+  "defaultUnit": "ml",
+  "nutritionBasis": "100ml",
+  "nutrition": {
+   "kcal": 70,
+   "protein": 10,
+   "carbs": 6,
+   "fat": 0.1,
+   "fiber": 0.5,
+   "sugar": 1,
+   "salt": 15
+  },
+  "allergenTags": [
+   "soja"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "tomatenmark",
+  "name": "Tomatenmark",
+  "aliases": [
+   "Tomato paste",
+   "Tomato puree"
+  ],
+  "category": "Soßen",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 85,
+   "protein": 4.5,
+   "carbs": 13,
+   "fat": 0.5,
+   "fiber": 4,
+   "sugar": 12,
+   "salt": 0.1
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "senf",
+  "name": "Senf (mittelscharf)",
+  "aliases": [
+   "Senf",
+   "Mustard"
+  ],
+  "category": "Soßen",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 90,
+   "protein": 6,
+   "carbs": 5,
+   "fat": 4,
+   "fiber": 2,
+   "sugar": 2,
+   "salt": 3
+  },
+  "allergenTags": [
+   "senf"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "gemuesebruehe",
+  "name": "Gemüsebrühe (zubereitet)",
+  "aliases": [
+   "Gemüsebrühe",
+   "Brühe",
+   "Vegetable stock",
+   "Stock"
+  ],
+  "category": "Soßen",
+  "defaultUnit": "ml",
+  "nutritionBasis": "100ml",
+  "nutrition": {
+   "kcal": 5,
+   "protein": 0.2,
+   "carbs": 0.6,
+   "fat": 0.2,
+   "fiber": 0,
+   "sugar": 0.3,
+   "salt": 0.9
+  },
+  "allergenTags": [
+   "sellerie"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "erdnussmus",
+  "name": "Erdnussmus",
+  "aliases": [
+   "Erdnussbutter",
+   "Peanut butter"
+  ],
+  "category": "Sonstiges",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 600,
+   "protein": 25,
+   "carbs": 12,
+   "fat": 50,
+   "fiber": 8,
+   "sugar": 5,
+   "salt": 0.05
+  },
+  "allergenTags": [
+   "erdnuesse"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "honig",
+  "name": "Honig",
+  "aliases": [
+   "Honey"
+  ],
+  "category": "Sonstiges",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 320,
+   "protein": 0.4,
+   "carbs": 80,
+   "fat": 0,
+   "fiber": 0,
+   "sugar": 80,
+   "salt": 0
+  },
+  "allergenTags": [],
+  "animal": "honey",
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "mandeln",
+  "name": "Mandeln",
+  "aliases": [
+   "Mandel",
+   "Almonds"
+  ],
+  "category": "Sonstiges",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 600,
+   "protein": 21,
+   "carbs": 6,
+   "fat": 52,
+   "fiber": 12,
+   "sugar": 4,
+   "salt": 0
+  },
+  "allergenTags": [
+   "nuesse"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "chiasamen",
+  "name": "Chiasamen",
+  "aliases": [
+   "Chia",
+   "Chia seeds"
+  ],
+  "category": "Sonstiges",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 490,
+   "protein": 17,
+   "carbs": 8,
+   "fat": 31,
+   "fiber": 34,
+   "sugar": 0,
+   "salt": 0.02
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "sesam",
+  "name": "Sesamsaat",
+  "aliases": [
+   "Sesam",
+   "Sesame seeds"
+  ],
+  "category": "Sonstiges",
+  "defaultUnit": "g",
+  "nutritionBasis": "100g",
+  "nutrition": {
+   "kcal": 570,
+   "protein": 18,
+   "carbs": 12,
+   "fat": 50,
+   "fiber": 12,
+   "sugar": 0.5,
+   "salt": 0
+  },
+  "allergenTags": [
+   "sesam"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "olivenoel",
+  "name": "Olivenöl",
+  "aliases": [
+   "Olivenöl",
+   "Olive oil",
+   "Öl"
+  ],
+  "category": "Öle und Fette",
+  "defaultUnit": "ml",
+  "nutritionBasis": "100ml",
+  "nutrition": {
+   "kcal": 820,
+   "protein": 0,
+   "carbs": 0,
+   "fat": 91,
+   "fiber": 0,
+   "sugar": 0,
+   "salt": 0
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "rapsoel",
+  "name": "Rapsöl",
+  "aliases": [
+   "Rapsöl",
+   "Pflanzenöl",
+   "Sonnenblumenöl",
+   "Vegetable oil"
+  ],
+  "category": "Öle und Fette",
+  "defaultUnit": "ml",
+  "nutritionBasis": "100ml",
+  "nutrition": {
+   "kcal": 820,
+   "protein": 0,
+   "carbs": 0,
+   "fat": 91,
+   "fiber": 0,
+   "sugar": 0,
+   "salt": 0
+  },
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "sesamoel",
+  "name": "Sesamöl",
+  "aliases": [
+   "Sesame oil"
+  ],
+  "category": "Öle und Fette",
+  "defaultUnit": "ml",
+  "nutritionBasis": "100ml",
+  "nutrition": {
+   "kcal": 820,
+   "protein": 0,
+   "carbs": 0,
+   "fat": 91,
+   "fiber": 0,
+   "sugar": 0,
+   "salt": 0
+  },
+  "allergenTags": [
+   "sesam"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": false,
+  "alternatives": {}
+ },
+ {
+  "id": "salz",
+  "name": "Salz",
+  "aliases": [
+   "Speisesalz",
+   "Salt"
+  ],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ },
+ {
+  "id": "pfeffer",
+  "name": "Pfeffer",
+  "aliases": [
+   "Schwarzer Pfeffer",
+   "Pepper",
+   "Black pepper"
+  ],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ },
+ {
+  "id": "paprikapulver",
+  "name": "Paprikapulver",
+  "aliases": [
+   "Paprika edelsüß",
+   "Paprika rosenscharf",
+   "Paprika powder",
+   "Smoked paprika"
+  ],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ },
+ {
+  "id": "currypulver",
+  "name": "Currypulver",
+  "aliases": [
+   "Curry",
+   "Curry powder"
+  ],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [
+   "senf",
+   "sellerie"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ },
+ {
+  "id": "kreuzkuemmel",
+  "name": "Kreuzkümmel",
+  "aliases": [
+   "Cumin"
+  ],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ },
+ {
+  "id": "oregano",
+  "name": "Oregano",
+  "aliases": [],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ },
+ {
+  "id": "chili",
+  "name": "Chiliflocken",
+  "aliases": [
+   "Chili",
+   "Chilipulver",
+   "Chili flakes"
+  ],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ },
+ {
+  "id": "knoblauchpulver",
+  "name": "Knoblauchpulver",
+  "aliases": [
+   "Garlic powder"
+  ],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ },
+ {
+  "id": "zimt",
+  "name": "Zimt",
+  "aliases": [
+   "Cinnamon"
+  ],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ },
+ {
+  "id": "italienische_kraeuter",
+  "name": "Italienische Kräuter",
+  "aliases": [
+   "Kräuter",
+   "Pizzagewürz",
+   "Mixed herbs"
+  ],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ },
+ {
+  "id": "ingwer",
+  "name": "Ingwerpulver",
+  "aliases": [
+   "Ingwer",
+   "Ginger"
+  ],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ },
+ {
+  "id": "kurkuma",
+  "name": "Kurkuma",
+  "aliases": [
+   "Turmeric"
+  ],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ },
+ {
+  "id": "schnittlauch",
+  "name": "Schnittlauch",
+  "aliases": [
+   "Chives"
+  ],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ },
+ {
+  "id": "petersilie",
+  "name": "Petersilie",
+  "aliases": [
+   "Parsley"
+  ],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ },
+ {
+  "id": "bruehpulver",
+  "name": "Gemüsebrühe (Pulver)",
+  "aliases": [
+   "Brühpulver",
+   "Gemüsebrühpulver"
+  ],
+  "category": "Gewürze",
+  "defaultUnit": "TL",
+  "nutritionBasis": "100g",
+  "nutrition": null,
+  "allergenTags": [
+   "sellerie"
+  ],
+  "animal": null,
+  "pork": false,
+  "isSpice": true,
+  "alternatives": {}
+ }
+]
