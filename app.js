@@ -101,7 +101,16 @@ async function renderRoute() {
     console.error(err);
     if (token !== renderToken) return;
     clear(main);
-    main.append(errorBox(`Diese Seite konnte nicht geladen werden: ${err.message}`));
+    // 0.7.5: verständliche Meldung statt technischem Text (z. B. offline, bevor die Seite einmal geladen wurde)
+    const loadFail = /dynamically imported module|Failed to fetch|Importing a module script failed|error loading dynamically/i.test(String(err?.message));
+    const retry = h('button', { type: 'button', class: 'btn btn-primary' }, 'Erneut versuchen');
+    retry.addEventListener('click', () => renderRoute());
+    main.append(
+      h('h1', { tabindex: '-1' }, loadFail ? 'Seite gerade nicht erreichbar' : 'Da ist etwas schiefgelaufen'),
+      errorBox(loadFail
+        ? (navigator.onLine ? 'Diese Seite konnte nicht geladen werden. Bitte prüfe deine Verbindung und versuche es erneut.' : 'Du bist offline und diese Seite wurde auf diesem Gerät noch nicht gespeichert. Öffne sie einmal mit Internet – danach funktioniert sie auch offline. Deine Daten sind sicher.')
+        : `Diese Seite konnte nicht angezeigt werden. Deine Daten sind sicher. (Technischer Hinweis: ${err.message})`),
+      h('div', { class: 'form-actions' }, retry, h('a', { class: 'btn', href: routeHref('start') }, 'Zur Startseite')));
   }
 }
 

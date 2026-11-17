@@ -2,7 +2,7 @@
 
 **Progressive Web App für Rezepte, Vorräte, Wochenplanung, Einkaufslisten, Ernährungs- und Gewichtstracking – ohne Backend, ohne Konto, alle Daten lokal.**
 
-Version 0.7.4 · Live: <https://ethgg.github.io/vorratsfit/>
+Version 0.7.5 · Live: <https://ethgg.github.io/vorratsfit/>
 
 ## Funktionen
 
@@ -17,7 +17,9 @@ Version 0.7.4 · Live: <https://ethgg.github.io/vorratsfit/>
 | Profil | **Geburtsdatum** statt Alter – das Alter läuft automatisch weiter; unter 18 gelten die Schutzregeln automatisch |
 | Darstellung | Hell, Dunkel (seit 0.3 mit ruhigerem Kontrast), System |
 
-## Neu in 0.7.1–0.7.4 (Nutzungstest über Nacht)
+## Neu in 0.7.1–0.7.5 (Nutzungstest über Nacht)
+- **Verständliche Fehlerseite** (z. B. offline vor dem ersten Laden) mit „Erneut versuchen“ statt technischer Meldung.
+- Geprüft und in Ordnung: eigenes Rezept mit Foto → Backup senden → auf zweitem Gerät einlesen (Foto kommt mit), Meal Prep, Dunkelmodus.
 - **Vorrat:** passendes Symbol je Lebensmittel (🥚 🥛 🍌 …), kompaktere Zeilen, Löschen im Bearbeiten-Dialog; aufgebrauchte Einträge ohne Ablaufwarnung.
 - **Rezeptseite:** Kamera-Knopf direkt auf dem Bild; Zubereitung und Nährwerte vor den Allergen-Hinweisen.
 - **Erster Start:** Während der Einrichtung keine Navigation (weniger Ablenkung); danach drei kurze Tipps zum Loslegen.
@@ -72,7 +74,7 @@ Version 0.7.4 · Live: <https://ethgg.github.io/vorratsfit/>
 
 ## Veröffentlichen (GitHub Pages)
 Settings → Pages → Deploy from a branch → `main` / `(root)`. `.nojekyll` muss im Repository liegen.
-**Bei jeder neuen Version `CACHE_VERSION` in `service-worker.js` erhöhen** (0.7.4 ist gesetzt).
+**Bei jeder neuen Version `CACHE_VERSION` in `service-worker.js` erhöhen** (0.7.5 ist gesetzt).
 
 ## Daten, Update, Datenschutz
 - Persönliche Daten: IndexedDB `vorratsfit-db`, Version 5 (neu: `recipePhotos`). Das Update erweitert die Datenbank, es wird nichts gelöscht.
