@@ -3,7 +3,7 @@
 import { uuid, nowIso, sanitizeText, sanitizeMultiline, normalizeText, parseNumber, isValidDateString, isPlainObject, isSafeHttpUrl, ageFromBirthDate, roundTo } from './utils.js';
 import { normalizeUnit, roundQuantity } from '../units.js';
 
-export const APP_VERSION = '0.7.5';
+export const APP_VERSION = '0.7.6';
 
 export const CATEGORIES = Object.freeze([
   'Fleisch und Fisch', 'vegetarische Proteinquellen', 'Milchprodukte', 'Ersatzprodukte', 'Gemüse', 'Obst',

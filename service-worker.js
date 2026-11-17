@@ -2,7 +2,7 @@
 // WICHTIG: Dieser Service Worker verwaltet ausschließlich Programmdateien (Cache Storage).
 // Persönliche Daten liegen in IndexedDB und werden hier niemals gelesen, verändert oder gelöscht.
 const CACHE_PREFIX = 'vorratsfit-app-';
-const CACHE_VERSION = '0.7.5';
+const CACHE_VERSION = '0.7.6';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 
 // Relative Pfade: funktionieren unter jedem Unterpfad (z. B. /vorratsfit/ auf GitHub Pages).

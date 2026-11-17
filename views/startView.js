@@ -61,7 +61,9 @@ export async function render(container) {
       h('span', { class: 'emoji', 'aria-hidden': 'true' }, r?.emoji || '🍽️'),
       h('span', {}, h('span', { class: 'meal' }, mealTypeLabel(e.mealType)),
         r ? h('a', { href: routeHref(`rezept/${encodeURIComponent(r.id)}?portionen=${e.servings}`) }, r.title) : h('span', {}, e.recipeTitle || 'Rezept')),
-      e.eaten ? h('span', { class: 'badge badge-ok' }, icon('check', { size: 12 }), 'Gegessen') : e.cooked ? h('span', { class: 'badge badge-ok' }, 'Gekocht') : null);
+      e.eaten ? h('span', { class: 'badge badge-ok' }, icon('check', { size: 12 }), 'Gegessen')
+        : e.cooked ? h('span', { class: 'badge badge-ok' }, 'Gekocht')
+          : r && r.instructions?.length ? h('a', { class: 'cook-chip', href: routeHref(`kochen/${encodeURIComponent(r.id)}?portionen=${e.servings}`), 'aria-label': `${r.title} jetzt kochen` }, '👩‍🍳 Kochen') : null);
   });
   const todaySec = section('Heute',
     balanceCard(today.balance, { compact: true }),

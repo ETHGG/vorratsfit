@@ -181,7 +181,7 @@ export async function render(container) {
     if (!open.length) {
       listBox.append(emptyState(data.items.length ? 'Alles erledigt!' : 'Die Einkaufsliste ist leer', data.selected.length ? 'Für die ausgewählten Rezepte ist alles im Vorrat.' : 'Füge Rezepte hinzu oder trage Artikel manuell ein.', null, 'einkauf'));
     } else {
-      listBox.append(h('p', { class: 'small muted' }, `${open.length} offene ${open.length === 1 ? 'Position' : 'Positionen'}`));
+      listBox.append(h('p', { class: 'small muted' }, `Noch ${open.length} Artikel zu besorgen`));
       for (const group of groups) {
         const items = open.filter((i) => i.shoppingGroup === group);
         if (!items.length) continue;
